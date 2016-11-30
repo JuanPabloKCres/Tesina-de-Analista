@@ -7,24 +7,13 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-pencil"></i>
-                    {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'campo requerido', 'maxlength' => '50', 'required']) !!}
+                    {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'campo requerido', 'maxlength' => '50', 'required', 'id'=>'nombreArticulo_text']) !!}
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="form-group"><label class="col-sm-3 control-label">Proveedor</label>
-    <div class="col-sm-9 controls">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="input-icon right">
-                    <i class="fa fa-pencil"></i>
-                    {!! Form::select('proveedor_id', $proveedores, null, ['class' => 'form-control selectBoot', 'placeholder' =>'Seleccione el proveedor','data-live-search' => 'true', 'required']) !!}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 <div class="form-group"><label class="col-sm-3 control-label">Tipo</label>
     <div class="col-sm-9 controls">
         <div class="row">
@@ -37,18 +26,22 @@
         </div>
     </div>
 </div>
+<!--
 <div class="form-group"><label class="col-sm-3 control-label">Material</label>
     <div class="col-sm-9 controls">
         <div class="row">
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-pencil"></i>
+                    {{--
                     {!! Form::select('material_id', $materiales, null, ['class' => 'form-control selectBoot', 'id'=>'material_id','placeholder' =>'Seleccione material..','data-live-search' => 'true']) !!}
+                    --}}
                 </div>
             </div>
         </div>
     </div>
 </div>
+-->
 
 <div class="form-group"><label class="col-sm-3 control-label">Talle</label>
     <div class="col-sm-9 controls">
@@ -99,37 +92,14 @@
         </div>
     </div>
 </div>
-<div class="form-group"><label class="col-sm-3 control-label">Stock actual</label>
-    <div class="col-sm-9 controls">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="input-icon right">
-                    <i class="fa fa-pencil"></i>
-                    {!! Form::number('stock', null, ['class' => 'form-control', 'placeholder'=>'campo requerido', 'required']) !!}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="form-group"><label class="col-sm-3 control-label">Stock mínimo</label>
-    <div class="col-sm-9 controls">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="input-icon right">
-                    <i class="fa fa-pencil"></i>
-                    {!! Form::number('stockMinimo', null, ['class' => 'form-control', 'placeholder'=>'campo requerido', 'required']) !!}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="form-group"><label class="col-sm-3 control-label">Costo</label>
+
+<div class="form-group"><label class="col-sm-3 control-label">Costo ($)</label>
     <div class="col-sm-9 controls">
         <div class="row">
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-money"></i>
-                    {!! Form::number('costo', null, ['class' => 'form-control', 'placeholder'=>'campo no requerido']) !!}
+                    {!! Form::number('costo', null, ['class' => 'form-control', 'placeholder'=>'campo no requerido', 'id'=>'costoArticulo_text']) !!}
                 </div>
             </div>
         </div>
@@ -141,31 +111,31 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-percent"></i>
-                    {!! Form::number('margen', null, ['class' => 'form-control', 'placeholder'=>'campo no requerido']) !!}
+                    {!! Form::number('margen', null, ['class' => 'form-control', 'placeholder'=>'campo no requerido', 'id'=>'gananciaPorcent_number']) !!}
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="form-group"><label class="col-sm-3 control-label">Ganancia por unidad</label>
+<div class="form-group"><label class="col-sm-3 control-label">Ganancia por unidad ($)</label>
     <div class="col-sm-9 controls">
         <div class="row">
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-money"></i>
-                    {!! Form::number('ganancia', null, ['class' => 'form-control', 'placeholder'=>'campo no requerido']) !!}
+                    {!! Form::number('ganancia', null, ['class' => 'form-control', 'placeholder'=>'campo no requerido', 'id'=>'gananciaDinero_text']) !!}
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="form-group"><label class="col-sm-3 control-label">Precio Venta</label>
+<div class="form-group"><label class="col-sm-3 control-label">Precio Venta ($)</label>
     <div class="col-sm-9 controls">
         <div class="row">
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-money"></i>
-                    {!! Form::number('precioVta', null, ['class' => 'form-control', 'placeholder'=>'campo no requerido']) !!}
+                    {!! Form::number('precioVta', null, ['class' => 'form-control', 'placeholder'=>'campo no requerido', 'id'=>'precioVta_text']) !!}
                 </div>
             </div>
         </div>

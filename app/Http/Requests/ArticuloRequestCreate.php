@@ -25,10 +25,9 @@ class ArticuloRequestCreate extends Request
     {
         return [
             'nombre' => 'required|max:50',
-            'proveedor_id' => 'required',
             'tipo_id' => 'required',
             //'talle_id'=> 'required',
-            'material_id'=> 'required'
+
         ];
     }
 }

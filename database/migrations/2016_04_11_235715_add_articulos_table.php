@@ -15,10 +15,23 @@ class AddArticulosTable extends Migration
         Schema::create('articulos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre');
+            $table->integer('cantidad_insumos');
             $table->string('alto');
             $table->string('ancho');
             $table->string('estado');
+            $table->integer('tipo_id')->unsigned();
+            $table->foreign('tipo_id')->references('id')->on('tipos')->onDelete('cascade');
 
+            $table->integer('color_id')
+                ->unsigned()
+                ->nullable();
+            $table->foreign('color_id')->references('id')->on('colores')->onDelete('cascade');
+
+
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            /*
             $table->integer('material_id')->unsigned();
             $table->foreign('material_id')->references('id')->on('materiales')->onDelete('cascade');
 
@@ -30,20 +43,13 @@ class AddArticulosTable extends Migration
                 ->nullable();
             $table->foreign('talle_id')->references('id')->on('talles')->onDelete('cascade');
 
-            $table->integer('tipo_id')->unsigned();
-            $table->foreign('tipo_id')->references('id')->on('tipos')->onDelete('cascade');
 
-            $table->integer('color_id')
-                ->unsigned()
-                ->nullable();
-            $table->foreign('color_id')->references('id')->on('colores')->onDelete('cascade');
 
-            $table->integer('stockMinimo');
-            $table->integer('stock');
-
+            */
+            //$table->integer('stock');
             $table->double('costo');
-            $table->double('margen');
-            $table->double('ganancia');
+            $table->double('margen');   //%
+            $table->double('ganancia'); //$
             $table->double('precioVta');
 
 

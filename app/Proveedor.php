@@ -17,9 +17,14 @@ class Proveedor extends Model
         return $this->belongsTo('App\Rubro');
     }
     
-    public function articulos()
+    public function articulos() // esto hay que sacar, ya que ahora un proveedor esta vinculado con un insumo y no con un articulo (que tiene varios insumos)
     {
         return $this->hasMany('App\Articulo');
+    }
+
+    public function insumos()
+    {
+        return $this->hasMany('App\Insumo');
     }
 
     public function localidad()

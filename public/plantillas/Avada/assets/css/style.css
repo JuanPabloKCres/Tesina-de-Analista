@@ -226,12 +226,12 @@ h1.logo {
   text-decoration: none;
 }
 
-#header .slogan{
-  font-size: 8em;
+#header .slogan{    /* Modificado--Portada Sitio Web */
+  font-size: 11em;
   margin-bottom: 15px;
   line-height: 1em;
   font-family: 'Raleway', sans-serif;
-  color: yellow;
+  color: black;
   border-color: black;
   font-weight: bold;
 

@@ -52,6 +52,7 @@
                                         </thead>
                                         <tbody>
                                         @foreach($talles as $talle)
+                                            @if($talle->talle != "Ninguno")
                                             <tr>
                                                 <td>{{ $talle->talle }}</td>
                                                 <td>{{ $talle->alto }} x {{ $talle->ancho }}</td>
@@ -59,6 +60,7 @@
                                                     <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá acceder acciones como actualización y eliminación del mismo" href="{{ route('admin.talles.show', $talle->id) }}" class="btn btn-info"> <span class="fa fa-eye" aria-hidden="true"></span></a>
                                                 </td>
                                             </tr>
+                                            @endif
                                         @endforeach
                                         </tbody>
                                     </table>

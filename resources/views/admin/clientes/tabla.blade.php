@@ -44,12 +44,13 @@
                                     <table class="display dataTable table table-hover table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Apellido/s</th>
-                                                <th>Nombre/s</th>
-                                                <th>Responsabilidad ante el IVA</th>
-                                                <th>CUIT</th>
-                                                <th>Localidad y dirección</th>
-                                                <th>Teléfono</th>
+                                                <th class="text-center">Apellido/s</th>
+                                                <th class="text-center">Nombre/s</th>
+                                                <th class="text-center">Responsabilidad ante el IVA</th>
+                                                <th class="text-center">CUIT</th>
+                                                <th class="text-center">DNI</th>
+                                                <th class="text-center">Localidad y dirección</th>
+                                                <th class="text-center">Teléfono</th>
                                                 <th class="text-center">Acciones</th>
                                             </tr>
                                         </thead>
@@ -61,6 +62,11 @@
                                                 <td class="text-center">{{ $cliente->responiva->nombre }}</td>
                                                   @if ( $cliente->cuit)
                                                      <td>{{ $cliente->cuit }}</td>
+                                                  @else
+                                                     <td>{{ "No se registró" }}</td>
+                                                  @endif
+                                                  @if ( $cliente->dni)
+                                                     <td>{{ $cliente->dni }}</td>
                                                   @else
                                                      <td>{{ "No se registró" }}</td>
                                                   @endif

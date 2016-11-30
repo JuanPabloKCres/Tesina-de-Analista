@@ -5,11 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class MigracionArticulosVentas extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+
     public function up()
     {
         Schema::create('articulos_ventas', function (Blueprint $table) {
@@ -27,11 +23,7 @@ class MigracionArticulosVentas extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+
     public function down()
     {
         Schema::drop('articulos_ventas');

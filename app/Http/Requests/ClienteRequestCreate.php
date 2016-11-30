@@ -25,6 +25,7 @@ class ClienteRequestCreate extends Request
             'telefono' => 'required|max:100|unique:clientes',
             'empresa',
             'direccion',
+            'provincia_id' => 'required',
             'localidad_id' => 'required',
             'descripcion'
         ];

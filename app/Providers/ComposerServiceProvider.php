@@ -30,7 +30,14 @@ class ComposerServiceProvider extends ServiceProvider
             'App\Http\ViewComposers\ProductoFrontComposer' => 'front.productos.cabeceraTabla',
             'App\Http\ViewComposers\ProductoFrontIndexComposer' => 'front.partes.productos',
             'App\Http\ViewComposers\TipoFrontIndexComposer' => 'front.partes.tipos',
-            'App\Http\ViewComposers\TipoParaFrontComposer' => 'front.partes.tipos'
+            'App\Http\ViewComposers\TipoParaFrontComposer' => 'front.partes.tipos',
+
+            /** Noviembre 19**/
+            'App\Http\ViewComposers\InsumoComposer' => ['admin.insumos.contenidoForm', 'admin.insumos.cabeceraTabla', 'front.insumos.cabeceraTabla'],
+
+            /** Noviembre 24 **/
+            'App\Http\ViewComposers\ProveedoresComposer' => ['admin.compras.proveedorSelect' , 'admin.insumoCompra.contenidoForm', 'admin.insumoArticulo.contenidoForm'],
+            'App\Http\ViewComposers\InsumosComposer' => ['admin.insumoCompra.contenidoForm' , 'admin.insumoArticulo.contenidoForm'],
         ]);
     }
 

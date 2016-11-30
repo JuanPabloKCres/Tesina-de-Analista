@@ -10,9 +10,9 @@ class Material extends Model
 
     protected $fillable = ['nombre','descripcion'];
 
-    public function articulos()
+    public function insumos()
     {
-        return $this->hasMany('App\Articulo');
+        return $this->hasMany('App\Insumo');
     }
 
     /*************************************************************/

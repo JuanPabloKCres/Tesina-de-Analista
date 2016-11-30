@@ -7,12 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Insumo extends Model
 {
     protected $table =  "insumos";
-    protected $fillable = ['nombre', 'unidad_medida', 'stock','stockMinimo', 'costo', 'descripcion', 'proveedor_id'];
+    protected $fillable = ['nombre', 'unidad_medida_id', 'stock','stockMinimo', 'costo', 'descripcion', 'talle_id', 'tipo_id', 'color_id', 'material_id'];
 
-    public function proveedor()
-    {
-        return $this->belongsTo('App\Proveedor');
-    }
 
     public function insumos_compra()
     {
@@ -33,9 +29,20 @@ class Insumo extends Model
         return $existencia;
     }
 
+    //se llama cuando se toma un pedido-venta
     public function descontarStock($cant)
     {
         $this->stock = $this->stock - $cant;
+    }
+
+    /* ***** se llaman cuando se oompran insumos******/
+    public function incrementarStock($cant)
+    {
+        $this->stock = $this->stock + $cant;
+    }
+    public function actualizarCosto($costo_nvo)
+    {
+        $this->costo = $costo_nvo;
     }
 
 /******************************************************************************************************/
@@ -59,15 +66,6 @@ class Insumo extends Model
         }
     }
 
-    public function scopeSearchProveedor($query, $idproveedor)
-    {
-        if ($idproveedor == "-1")
-        {
-            return $query;
-        } else {
-            return $query->where('proveedor_id', 'LIKE', $idproveedor);
-        }
-    }
 
     public function scopeSearchActivos($query)
     {
@@ -84,6 +82,16 @@ class Insumo extends Model
         }
     }
 
+    public function scopeSearchUnidad($query, $idunidad)
+    {
+        if ($idunidad == "-1")
+        {
+            return $query;
+        } else {
+            return $query->where('unidad_medida_id', 'LIKE', $idunidad);
+        }
+    }
+
     public function scopeSearchTalle($query, $idtalle)
     {
         if ($idtalle == "-1")
@@ -91,6 +99,16 @@ class Insumo extends Model
             return $query;
         } else {
             return $query->where('talle_id', 'LIKE', $idtalle);
+        }
+    }
+
+    public function scopeSearchTipo($query, $idtipo)
+    {
+        if ($idtipo == "-1")
+        {
+            return $query;
+        } else {
+            return $query->where('tipo_id', 'LIKE', $idtipo);
         }
     }
 }

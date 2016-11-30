@@ -1,27 +1,93 @@
-    <div id="modal-confirmar" class="modal fade">
+
+<div id="modal-confirmar" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">
                     &times;</button>
                 <h4 class="modal-title">
-                    Eliminar registro: {{ $articulo->nombre }}</h4>
+                    Registrar acciones sobre el pedido</h4>
             </div>
-           <!-- Aca falta poner condicional de mostrar alerta si hay VENTAS asociadas al cliente para que no elemine-->
-
             <div class="modal-body">
-                {!! Form::open(['route' => ['admin.articulos.destroy', $articulo], 'method' => 'DELETE']) !!}
-                @include('admin.partes.msjConfirmar')
-                <hr>
-                <div class="pull-right">
-                    <button type="button" data-dismiss="modal" class="btn btn-white"> Cerrar</button>
-                    {!! Form::submit('Eliminar registro', ['class' => 'btn btn-danger ']) !!}
-                </div>
-                <br>
-                {!! Form::close() !!}
-                <br>
-            </div>
+                {!! Form::open(['route' => ['admin.articulos.update', $articulo], 'id' =>'form-crear', 'method' => 'PUT', 'class' => 'form-horizontal', 'files' => true]) !!}
+                  <br>
+                  <div class="form-group hide"><label class="col-sm-3 control-label">Usuario</label>
+                      <div class="col-sm-9 controls">
+                          <div class="row">
+                              <div class="col-xs-12">
+                                  <div class="input-icon right">
+                                      <i class="fa fa-map-marker"></i>
+                                        <input class="form-control" value="{!! Auth::user()->id !!}" name="usuarioPedido" required/>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                @if ($pedido->pagado)
+                    <div class="note note-success">
+                        <h3 class="box-heading">Información del pedido</h3>
+                        <h4><p>El pago por el pedido ya ha sido cubierto. ¿Desea registrar la entrega del pedido?</p><h4>
+                    </div>
+                    <div class="form-group hide">
+                        <h4>
+                           <label class="col-sm-7 control-label">Entregar el pedido</label>
+                           <div class="col-sm-1 controls"></div>
+                           <div class="col-sm-4 controls">
+                               <div class="row">
+                                   <div class="col-xs-12">
+                                       <div class="input-icon right">
+                                             {!! Form::checkbox('entregado','1', '1') !!}
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </h4>
+                    </div>                   
+                @else
 
+                <div class="note note-warning">
+                    <h3 class="box-heading">Registrar pago restante</h3>
+                    <h4><p>Usted está a punto de proceder con la registración del pago por el monto faltante. Adicionalmente puede registrar alguna de las siguientes acciones:</p><h4>
+                </div>
+                <div class="form-group">
+                  <h4>
+                     <label class="col-sm-7 control-label">Generar factura electrónica</label>
+                     <div class="col-sm-1 controls"></div>
+                     <div class="col-sm-4 controls">
+                         <div class="row">
+                             <div class="col-xs-12">
+                                 <div class="input-icon right">
+                                       {!! Form::checkbox('factura', '1') !!}
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </h4>
+                </div>
+                <div class="form-group">
+                  <h4>
+                     <label class="col-sm-7 control-label">Entregar el pedido</label>
+                     <div class="col-sm-1 controls"></div>
+                     <div class="col-sm-4 controls">
+                         <div class="row">
+                             <div class="col-xs-12">
+                                 <div class="input-icon right">
+                                       {!! Form::checkbox('entregado', '1') !!}
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </h4>
+                </div>
+                @endif
+               <br>
+               <hr/>
+               <br>                              
+               {!! Form::submit('Registrar acción', ['class' => 'btn btn-warning btn-block hide']) !!}
+
+               <button type="button" data-dismiss="modal" class="btn btn-white btn-block">Cerrar</button>
+            {!! Form::close() !!}
+            </div>
         </div>
     </div>
 </div>

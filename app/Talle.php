@@ -9,9 +9,9 @@ class Talle extends Model
     protected $table =  "talles";
     protected $fillable = ['talle', 'alto', 'ancho'];
 
-    public function articulos()
+    public function insumos()
     {
-        return $this->hasMany('App\Articulo');
+        return $this->hasMany('App\Insumo');
     }
 
     /***************************************************************/

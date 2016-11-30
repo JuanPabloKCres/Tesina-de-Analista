@@ -290,7 +290,6 @@ function confirmar()
  */
 function enviarPedido(pagado, entregado)
 {
-
     var numLi = 0;
     var lineas = [];
     var factura = {
@@ -472,7 +471,7 @@ $(document).ready(function () {
                                     e.preventDefault();
                                 }
                             });
-                });
+});
 
         /*
          * $('#iva').on('change', function (): Este eveto se dispara al cambiar el valor del iva en la venta y actualiza el valor del iva 
@@ -505,5 +504,3 @@ $(document).ready(function () {
             window.location = "/admin/pedidos";
         });
 
-
-        

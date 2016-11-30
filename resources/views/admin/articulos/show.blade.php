@@ -10,7 +10,7 @@
 
 @section('content')
     @include('admin.articulos.editar')
-    @include('admin.articulos.confirmar')
+    @include('admin.articulos.confirmarEliminacion')
     <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
         <div class="page-header pull-left">
             <div class="page-title">

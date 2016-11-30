@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-@include('admin.articulos.create')
+@include('admin.articulos.createViejito')
     <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
         <div class="page-header pull-left">
             <div class="page-title">
@@ -108,7 +108,6 @@
     </div>
 @endsection
 @section('script')
-    <script src="{{ asset('js/pluginsArticulos.js') }}"></script>
     <script>
         var listSidebar = "li6";
         var elemFaltante = "nada";

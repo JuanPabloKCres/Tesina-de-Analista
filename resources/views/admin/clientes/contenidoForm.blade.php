@@ -77,11 +77,20 @@
 <br>
 <h3>Dirección</h3>
 <br>
+<div class="form-group"><label class="col-sm-3 control-label">Provincia</label>
+    <div class="col-sm-9 controls">
+        <div class="row">
+            <div class="col-xs-12">
+                {!! Form::select('provincia_id', $provincias, null, ['class' => 'form-control selectBoot', 'data-live-search' => 'true', 'required', 'id' => 'provincia_select']) !!}
+            </div>
+        </div>
+    </div>
+</div>
 <div class="form-group"><label class="col-sm-3 control-label">Localidad</label>
     <div class="col-sm-9 controls">
         <div class="row">
             <div class="col-xs-12">
-                {!! Form::select('localidad_id', $localidades, null, ['class' => 'form-control selectBoot', 'data-live-search' => 'true', 'required', 'id' => 'localidad_id']) !!}
+                {!! Form::select('localidad_id', ['placeholder' => 'campo requerido..'], null, ['id'=>'localidad_select','class' => 'form-control']) !!}
             </div>
         </div>
     </div>
@@ -144,6 +153,7 @@
         </div>
     </div>
 </div>
+
 
 
 

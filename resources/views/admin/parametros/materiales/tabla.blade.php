@@ -17,7 +17,7 @@
         </div>
         <div class="page-header pull-right">
             <div class="page-toolbar">
-                @include('admin.parametros.materiales.botonera')
+                @include('admin.parametros.botonera')
                 <button data-placement="bottom" title="Registrar un nuevo material" type="button" data-hover="tooltip" data-toggle="modal" data-target="#modal-config"  class="btn btn-blue">
                     <i class="fa fa-plus-circle" aria-hidden="true"></i> Registrar material
                 </button>

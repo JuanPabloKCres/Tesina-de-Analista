@@ -8,7 +8,7 @@ class Movimiento extends Model
 {
 	protected $table =  "movimientos";
 
-    protected $fillable = ['concepto', 'caja_id', 'venta_id', 'monto', 'tipo', 'fecha', 'hora', 'user_id'];
+    protected $fillable = ['concepto', 'caja_id', 'venta_id', 'compra_id', 'monto', 'tipo', 'fecha', 'hora', 'user_id'];
 
     public function caja()   
     {
@@ -23,6 +23,11 @@ class Movimiento extends Model
 	public function ventas()
 	{
     	 return $this->belongsTo('App\Venta');
-	}  
+	}
+
+    public function compras()
+    {
+        return $this->belongsTo('App\Compra');
+    }
 
 }

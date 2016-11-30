@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -15,7 +14,6 @@ use App\Http\Requests\ClienteRequestCreate;
 use App\Http\Requests\ClienteRequestEdit;
 
 class ClientesController extends Controller {
-
     public function __construct() {
         Carbon::setlocale('es');         // Instancio en Espa�ol el manejador de fechas de Laravel
     }

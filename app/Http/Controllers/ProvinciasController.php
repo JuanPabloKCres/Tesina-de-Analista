@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Provincia;
+use App\Localidad;
 use App\Pais;
 use Laracasts\Flash\Flash;
 use Carbon\Carbon;
@@ -25,8 +26,14 @@ class ProvinciasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        //si la peticion se realiza por ajax, quiere decir que estamos en vista clientes.createForm intentando encontrar localidades desde provincia en un select.
+        if($request->ajax()){
+            $localidadesDeProvincia = Localidad::localidades($request->id);
+            return response()->json($localidadesDeProvincia);
+        }
+
         $provincias = Provincia::all();
         $paises = Pais::all()->lists('nombre','id');
         if ($provincias->count()==0){ // la funcion count te devuelve la cantidad de registros contenidos en la cadena
@@ -46,12 +53,8 @@ class ProvinciasController extends Controller
         return view('admin.provincias.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function store(ProvinciaRequestCreate $request)
     {   
         $provincia = new Provincia($request->all());
@@ -113,5 +116,13 @@ class ProvinciasController extends Controller
         $provincia->delete();
         Flash::error("Se ha realizado la eliminación del registro: ".$provincia->nombre.".");
         return redirect()->route('admin.provincias.index');
+    }
+
+    /** Esta funcion llama al metodo del modelo que obtiene las localidades ingresando id Provincia */
+    public function getLocalidades(Request $request, $id){
+        if($request->ajax()){
+            $localidadesDeProvincia = Localidad::localidades($id);
+            return response()->json($localidadesDeProvincia);
+        }
     }
 }

@@ -42,6 +42,7 @@ class frontTiposController extends Controller
             ->paginate();
 
         return view('front.tipos.showTipo')
+
             ->with('tipos', json_decode($tipos, true))
             ->with('productoslista', json_decode($productoslista, true))
             ->with('productos',$productos)

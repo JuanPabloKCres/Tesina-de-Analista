@@ -7,8 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Localidad extends Model
 {
     protected $table =  "localidades";
-
     protected $fillable = ['nombre', 'provincia_id', 'cod_postal'];
+
+    public static function localidades($id){     //este metodo me devuelve todas las localidades ingresandole el id de provincia
+        return Localidad::where('provincia_id','=',$id)
+        ->get();
+    }
 
     public function provincia() 
     {

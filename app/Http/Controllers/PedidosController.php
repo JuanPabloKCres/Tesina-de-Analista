@@ -25,11 +25,7 @@ class PedidosController extends Controller {
         Carbon::setlocale('es'); //
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index() {
         $pedidos = Venta::searchEntregado(0)
                 ->orderBy('id', 'ASC')
@@ -126,32 +122,11 @@ class PedidosController extends Controller {
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request) {
         return response()->json("Exito PRUEBA!");
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id) {
-        
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id) {
         $pedido = Venta::find($id);
         return view('admin.pedidos.showPedido')->with('pedido', $pedido);
@@ -195,16 +170,6 @@ class PedidosController extends Controller {
         $pedido->save();
         Flash::success("Se ha realizado la actualización del estado del pedido.");
         return redirect()->route('admin.pedidos.edit', $id);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id) {
-        //
     }
 
 }

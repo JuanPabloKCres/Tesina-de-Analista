@@ -38,20 +38,54 @@ class ArticulosController extends Controller
     }
 
 
-    public function create()
-    {
-    }
-
-
     public function store(Request $request)
     {
         $articulo = new Articulo($request->all()); // Guardamos los valores cargados en la vista en una variable de tipo marca.
         $articulo->save(); //se almacena en la base de datos.
-
         Flash::success('El articulo "'. $articulo->nombre.'"" ha sido registrada de forma existosa.');
         return redirect()->route('admin.articulos.index');
     }
 
+    public function create(Request $request){
+        if ($request->ajax()) {
+            /** Primero se recoge en una variable el array de renglones y se crea y persiste el registro de insumos */
+            $arrayRenglones = $request->renglones;
+            $arrayArticulo = $request->arrayArticulo;
+            $fecha = \Carbon\Carbon::now('America/Buenos_Aires');
+
+            $articulo = new Articulo();
+            $articulo->nombre = $arrayArticulo->nombre;
+            $articulo->alto = $arrayArticulo->alto;
+            $articulo->ancho = $arrayArticulo->ancho;
+            $articulo->tipo_id = $arrayArticulo->tipo_id;
+            //$articulo->talle_id = $arrayArticulo->talle_id;
+            //$articulo->color_id = $arrayArticulo->color_id;
+            $articulo->costo = $arrayArticulo->costoArticulo;
+            $articulo->margen = $arrayArticulo->margen;
+            $articulo->ganancia = $arrayArticulo->gananciaArticulo;
+            $articulo->precioVta = $arrayArticulo->precioVta;
+            $articulo->estado = "se fabrica";
+            $articulo->descripcion = "no se ha añadido una descripción";
+            $articulo->save();
+
+            /* Se recorre el array creando a su paso objetos "InsumoArticulo" a partir de los json que se hallan en
+             * el array y se persisten. Luego se instancia el insumo en cuestion y se incrementa el stock.
+             * */
+            foreach($arrayRenglones as $clave) {    //InsumoArticulo
+                $renglon = new InsumoArticulo();
+                $renglon->cantidad = $clave['cantidad'];
+                $renglon->importe_insumo = $clave['importe'];
+                $renglon->precio_unitario = $clave['precio_unitario'];
+                $renglon->insumo_id = $clave['insumo_id'];
+                $renglon->articulo_id = $articulo->id;
+                $renglon->save();
+            }
+
+            //return response()->json("¡La compra fue registrada con éxito!");
+            Flash::success('El articulo "'. $articulo->nombre.'"" ha sido registrada de forma existosa.');
+            return redirect()->route('admin.articulos.index');
+        }
+    }
 
     public function show($id)
     {

@@ -10,9 +10,9 @@ class Color extends Model
 
     protected $fillable = ['nombre', 'codigo'];
 
-    public function articulos()
+    public function insumos()
     {
-        return $this->hasMany('App\Articulo');
+        return $this->hasMany('App\Insumo');
     }
 
     /*************************************************************/

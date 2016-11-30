@@ -51,12 +51,14 @@
                                         </thead>
                                         <tbody>
                                         @foreach($colores as $color)
+                                            @if($color->nombre != "Ninguno")
                                             <tr>
                                                 <td>  {{ $color->nombre }}</td>
                                                 <td class="text-center">
                                                     <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá acceder acciones como actualización y eliminación del mismo" href="{{ route('admin.colores.show', $color->id) }}" class="btn btn-info"> <span class="fa fa-eye" aria-hidden="true"></span></a>
                                                 </td>
                                             </tr>
+                                            @endif
                                         @endforeach
                                         </tbody>
                                     </table>

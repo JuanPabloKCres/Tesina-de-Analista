@@ -51,6 +51,35 @@
                             <span class="menu-title">Artículos</span>
                         </a>
                     </li>
+
+
+
+                    <li id="li14">
+                        <a data-toggle="collapse" href="#dropdown-Insumos" data-placement="right" title="Visualizar los registros de artículos" >
+                            <i class="fa fa-puzzle-piece">
+                                <div class="icon-bg bg-orange"></div>
+                            </i>
+                            <span class="menu-title">Insumos</span>
+                        </a>
+                        <div id="dropdown-Insumos" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul class="nav navbar-nav">
+                                    <li>
+                                        <a href="{{ route('admin.insumos.index') }}">
+                                            <span class="menu-title">Gestión de Insumos</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.compras.index') }}">
+                                            <span class="menu-title">Compra de Insumos</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+
+
                     <li id="li7">
                         <a data-toggle="tooltip" data-placement="right" title="Ir a los registros de nuestros clientes" href="{{ route('admin.clientes.index') }}">
                             <i class="fa fa-child">

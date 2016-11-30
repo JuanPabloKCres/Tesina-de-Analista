@@ -41,3 +41,39 @@ $(document).ready(function () {
         }
     });
 });
+
+/**** Cuando se selecciona una provincia, desplegar las localidades que le corresponden ****/
+
+/*
+$('select#provincia_select').on('change',function () {
+    var provincia_id = $( "#provincia_select option:selected").val(); //document.getElementById("provincia_id").value;   //consigo el id de la provincia seleccionada (para hacer la Query)
+    alert('se selecciono el id de provincia '+ provincia_id);
+    //ajax
+    $.get('/admin/clientes?provincia_id=' + provincia_id+"", function (response,state) {
+        console.log(response);      //para vevr en consola JS que se esta enviando :O
+        //ahora debemos recorrer toda esa respuesta y meterla dentro de nuestro select de localidades
+        for(i=0; i<response.length(); i++){
+            $('#localidad_select').append("<option value='"+response[i].id+"'> "+response[i].nombre+"</option>");
+        }
+    });
+});
+*/
+
+//experimento
+$('select#provincia_select').on('change',function () {
+    $('select#localidad_select').empty();
+    $.ajax({
+        dataType: 'json',
+        url: "/admin/provincias",         //ruta que contendra el metodo para obtener lo que necesitamos, dentro del contolador
+        data: {
+            id: $('#provincia_select').val()
+        },
+        success: function (data) {
+            console.log(data)
+            //factura.tipo_cbre = data.tipo_cbre;
+            for(i=0; i<data.length; i++){
+                $('select#localidad_select').append("<option value='"+data[i].id+"'> "+data[i].nombre+"</option>");
+            }
+        }
+    });
+});
