@@ -13,18 +13,6 @@
         </div>
     </div>
 </div>
-<div class="form-group"><label class="col-sm-3 control-label">Unidad de Medida para procesar</label>
-    <div class="col-sm-9 controls">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="input-icon right">
-                    <i class="fa fa-pencil"></i>
-                    {!! Form::select('unidad_medida_id', $unidades_medidas, null,['class' => 'form-control selectBoot','id'=>'unidad_medida_id', 'placeholder' =>'Seleccione la unidad de medida..', 'data-live-search' => 'true', 'required']) !!}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="form-group"><label class="col-sm-3 control-label">Tipo</label>
     <div class="col-sm-9 controls">
@@ -32,7 +20,7 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-pencil"></i>
-                    {!! Form::select('tipo_id', $tipos, null,['class' => 'form-control selectBoot','id'=>'tipo_id', 'placeholder' =>'Seleccione un tipo de insumo..', 'data-live-search' => 'true', 'required']) !!}
+                    {!! Form::select('tipo_id', $tipos, 0,['class' => 'form-control selectBoot','id'=>'tipo_id', 'placeholder' =>'Seleccione un tipo de insumo..', 'data-live-search' => 'true', 'required']) !!}
                 </div>
             </div>
         </div>
@@ -44,7 +32,7 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-pencil"></i>
-                    {!! Form::select('material_id', $materiales, null, ['class' => 'form-control selectBoot', 'id'=>'material_id','placeholder' =>'Seleccione material..','data-live-search' => 'true']) !!}
+                    {!! Form::select('material_id', $materiales, 0, ['class' => 'form-control selectBoot', 'id'=>'material_id','placeholder' =>'Seleccione material..','data-live-search' => 'true']) !!}
                 </div>
             </div>
         </div>
@@ -57,7 +45,7 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-pencil"></i>
-                    {!! Form::select('talle_id', $talles, null, ['class' => 'form-control selectBoot', 'id'=>'talle_id', 'data-live-search' => 'true' , 'placeholder' => 'Si está registrando ropa, seleccione el talle..']) !!}
+                    {!! Form::select('talle_id', $talles, 0, ['class' => 'form-control selectBoot', 'id'=>'talle_id', 'data-live-search' => 'true']) !!}
                 </div>
             </div>
         </div>
@@ -93,8 +81,21 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-paint-brush"></i>
-                    {!! Form::select('color_id', $colores, null, ['class' => 'form-control selectBoot', 'placeholder'=>'Seleccione un color..','id'=>'color_id','data-live-search' => 'true']) !!}
+                    {!! Form::select('color_id', $colores, 0, ['class' => 'form-control selectBoot','id'=>'color_id','data-live-search' => 'true']) !!}
 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-group"><label class="col-sm-3 control-label">Unidad de Medida para procesar</label>
+    <div class="col-sm-9 controls">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="input-icon right">
+                    <i class="fa fa-pencil"></i>
+                    {!! Form::select('unidad_medida_id', $unidades_medidas, null,['class' => 'form-control selectBoot','id'=>'unidad_medida_id', 'placeholder' =>'Seleccione la unidad de medida..', 'data-live-search' => 'true', 'required']) !!}
                 </div>
             </div>
         </div>
@@ -124,13 +125,13 @@
         </div>
     </div>
 </div>
-<div class="form-group"><label class="col-sm-3 control-label">Costo</label>
+<div class="form-group"><label class="col-sm-3 control-label">Costo ($)</label>
     <div class="col-sm-9 controls">
         <div class="row">
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-money"></i>
-                    {!! Form::number('costo', null, ['class' => 'form-control', 'placeholder'=>'campo requerido (el costo se actualiza al comprar insumo)']) !!}
+                    {!! Form::text('costo', null, ['class' => 'form-control', 'id'=>'costo_id', 'placeholder'=>'campo requerido', 'required']) !!}
                 </div>
             </div>
         </div>

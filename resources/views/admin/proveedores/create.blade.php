@@ -24,7 +24,7 @@
                     {!! Form::open(['route' => 'admin.proveedores.store', 'method' => 'POST', 'id' =>'form-crear', 'class' => 'form-horizontal', 'files' => true]) !!}
                             @include('admin.proveedores.contenidoForm')
                         {!! Form::submit('Registrar proveedor', ['class' => 'btn btn-green btn-block']) !!}
-                        <button type="button" data-dismiss="modal" class="btn btn-white btn-block">
+                        <button type="button" data-dismiss="modal" id="registrarProveedor-btn" class="btn btn-white btn-block">
                     Cerrar</button>
                 {!! Form::close() !!}
             </div>

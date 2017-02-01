@@ -19,4 +19,11 @@ class Provincia extends Model
     {
         return $this->hasMany('App\Localidad');
     }
+
+    /********************************************************************/
+    public static function provincias($id){     //este metodo me devuelve todas las provincias ingresandole el id de pais
+        return Provincia::where('pais_id','=',$id)
+            ->get();
+    }
+    /********************************************************************/
 }

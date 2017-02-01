@@ -15,7 +15,10 @@ class AddProveedoresTable extends Migration
         Schema::create('proveedores', function (Blueprint $table) {
             $table->increments('id');
             $table->string('cuit');
-            $table->string('horario_atencion');
+            $table->string('hora_a_mañana');
+            $table->string('hora_c_mañana');
+            $table->string('hora_a_tarde');
+            $table->string('hora_c_tarde');
             $table->string('imagen');
             $table->string('nombre');
             $table->integer('localidad_id')->unsigned();

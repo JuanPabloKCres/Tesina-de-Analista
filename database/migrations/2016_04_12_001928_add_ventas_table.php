@@ -15,12 +15,14 @@ class AddVentasTable extends Migration {
             $table->increments('id');
             $table->string('fecha_pedido');
             $table->string('hora_pedido');
-            $table->string('fecha_venta');
-            $table->string('hora_venta');
-            $table->string('iva');
+            $table->string('fecha_entrega_estimada')->nullable();   //Fecha en la que se terminaria de producir el pedido del cliente
+            $table->string('fecha_venta')->nullable();
+            $table->string('hora_venta')->nullable();
             $table->boolean('pagado');
             $table->boolean('entregado');
             $table->double('senado');
+            $table->integer('cheque_id')->unsigned()->nullable();
+            $table->foreign('cheque_id')->references('id')->on('cheques')->onDelete('cascade');
             $table->integer('userPedido_id')->unsigned()->nullable();
             $table->foreign('userPedido_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('userVenta_id')->unsigned()->nullable();
@@ -31,11 +33,6 @@ class AddVentasTable extends Migration {
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down() {
         Schema::drop('ventas');
     }

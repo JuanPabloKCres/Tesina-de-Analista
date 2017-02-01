@@ -8,12 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Articulo extends Model
 {
 
-
 	protected $table =  "articulos";
-
-    protected $fillable = ['nombre','alto','ancho', 'tipo_id', 'color_id', 'costo', 'margen','ganancia','precioVta','descripcion', 'estado', 'user_id'];
-
-
+    protected $fillable = ['nombre','alto','ancho', 'tipo_id', 'talle_id', 'color_id' , 'cantidad_insumos', 'costo', 'margen','ganancia','iva_id','montoIva', 'precioVta','descripcion', 'estado', 'user_id'];
 
 
     public function articulos_venta()
@@ -21,19 +17,20 @@ class Articulo extends Model
         return $this->hasMany('App\ArticuloVenta');
     }
 
-		public function stockSuficiente($cantidadSolicitada)
+    public function insumos_articulos()
     {
-        $existencia = false;
-        if ($this->stock >= $cantidadSolicitada) {
-					$existencia = true;
-				}
-        return $existencia;
+        return $this->hasMany('App\InsumoArticulo');
     }
 
-		public function descontarStock($cant)
-		{
-			$this->stock = $this->stock - $cant;
-		}
+    public function descontarStock($cant)
+	{
+	    $this->stock = $this->stock - $cant;
+    }
+
+    public function iva()
+    {
+        return $this->belongsTo('App\Iva');
+    }
 
 /******************************************************************************************************/
     public function scopeSearchNombres($query, $nombre)

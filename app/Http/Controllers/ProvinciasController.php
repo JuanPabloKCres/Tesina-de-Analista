@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Provincia;
 use App\Localidad;
 use App\Pais;
+use App\Auditoria;
+use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
 use Carbon\Carbon;
 use App\Http\Requests\ProvinciaRequestCreate;
@@ -60,6 +62,17 @@ class ProvinciasController extends Controller
         $provincia = new Provincia($request->all());
         $provincia->save();
         Flash::success('La provincia "'. $provincia->nombre.'" ha sido registrada de forma existosa.');
+        /** Auditoria almacena creacion */
+        $auditoria = new Auditoria();
+        $auditoria->tabla = "provincias";
+        $auditoria->elemento_id = $provincia->id;
+        $autor = new Auth();
+        $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->accion = "alta";
+        $auditoria->dato_nuevo = "nombre: ".$provincia->nombre."|| pais_id: ".$provincia->pais_id;
+        $auditoria->dato_anterior = null;
+        $auditoria->save();
         return redirect()->route('admin.provincias.index');
     }
 
@@ -78,28 +91,26 @@ class ProvinciasController extends Controller
             ->with('paises', $paises);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {  
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(ProvinciaRequestEdit $request, $id)
     {
-        $provincia = Provincia::find($id); 
+        $provincia = Provincia::find($id);
+        $dato_anterior = "nombre: ".$provincia->nombre."|| pais_id: ".$provincia->pais_id;        //obtenemos el 'nombre' del registro antes de sobreescribirlo
         $provincia->fill($request->all());
         $provincia->save();
+
+        /** Auditoria actualizacion */
+        $auditoria = new Auditoria();
+        $auditoria->tabla = "provincias";
+        $auditoria->elemento_id = $provincia->id;
+        $autor = new Auth();
+        $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->accion = "modificacion";
+        $auditoria->dato_nuevo = "nombre: ".$provincia->nombre."|| pais_id: ".$provincia->pais_id;
+        $auditoria->dato_anterior = $dato_anterior;
+        $auditoria->save();
+
         Flash::success("Se ha realizado la actualización del registro: ".$provincia->nombre.".");
         return redirect()->route('admin.provincias.show', $id);
     }
@@ -112,7 +123,21 @@ class ProvinciasController extends Controller
      */
     public function destroy($id)
     {
-        $provincia = Provincia::find($id); 
+        $provincia = Provincia::find($id);
+        $dato_anterior ="nombre: ".$provincia->nombre." || pais_id: ".$provincia->pais_id;
+
+        /** Auditoria eliminación */
+        $auditoria = new Auditoria();
+        $auditoria->tabla = "provincias";
+        $auditoria->elemento_id = $provincia->id;
+        $autor = new Auth();
+        $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->accion = "eliminacion";
+
+        $auditoria->dato_anterior = $dato_anterior;
+        $auditoria->save();
+
         $provincia->delete();
         Flash::error("Se ha realizado la eliminación del registro: ".$provincia->nombre.".");
         return redirect()->route('admin.provincias.index');

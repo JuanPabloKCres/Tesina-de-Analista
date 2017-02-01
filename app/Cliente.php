@@ -13,6 +13,10 @@ class Cliente extends Model {
         return $this->hasMany('App\Venta');
     }
 
+    public function cheques() {
+        return $this->hasMany('App\Cheque');
+    }
+
     public function localidad() {
         return $this->belongsTo('App\Localidad');
     }
@@ -23,6 +27,7 @@ class Cliente extends Model {
 
     /*     * ****************************************************************************************************** */
 
+    /*
     public function ultimaCompra() {
         $historialVentas = [];
         foreach ($this->ventas as $venta) {            
@@ -30,8 +35,9 @@ class Cliente extends Model {
                 array_push($historialVentas, $venta);               
             }
         }
-        return $historialVentas[count($historialVentas) - 1];
+        return $historialVentas[count($historialVentas)-1];
     }
+    */
 
     public function importeVentasRealizadas() {
         $total = 0;
@@ -62,6 +68,7 @@ class Cliente extends Model {
             return $query->where('nombre', 'LIKE', $name);
         }
     }
+
 
     public function scopeSearchOrigen($query, $idOrigen) {
         if ($idOrigen == "-1") {

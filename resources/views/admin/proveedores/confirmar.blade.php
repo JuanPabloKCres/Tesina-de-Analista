@@ -7,7 +7,7 @@
                 <h4 class="modal-title">
                     Eliminar registro: {{ $proveedor->nombre }}</h4>
             </div>
-                @if ($proveedor->articulos->count()!=0)
+                @if ($proveedor->compras->count()!=0)
                     @include('admin.partes.msjRegAsociados')
                 @else
                     <div class="modal-body">

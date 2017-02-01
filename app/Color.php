@@ -14,6 +14,10 @@ class Color extends Model
     {
         return $this->hasMany('App\Insumo');
     }
+    public function articulos()
+    {
+        return $this->hasMany('App\Articulo');
+    }
 
     /*************************************************************/
 

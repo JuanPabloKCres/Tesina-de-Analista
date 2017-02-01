@@ -5,12 +5,12 @@
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">
                     &times;</button>
                 <h4 class="modal-title">
-                    Eliminar registro: {{ $articulo->nombre }}</h4>
+                    Eliminar registro: {{ $insumo->nombre }}</h4>
             </div>
            <!-- Aca falta poner condicional de mostrar alerta si hay VENTAS asociadas al cliente para que no elemine-->
 
             <div class="modal-body">
-                {!! Form::open(['route' => ['admin.articulos.destroy', $articulo], 'method' => 'DELETE']) !!}
+                {!! Form::open(['route' => ['admin.insumos.destroy', $insumo], 'method' => 'DELETE']) !!}
                 @include('admin.partes.msjConfirmar')
                 <hr>
                 <div class="pull-right">

@@ -6,26 +6,32 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-tachometer"></i>
-                     {!! Form::select('unidad', array('decimetro cubico'=>'dmᶟ','centimetro cubico'=>'cmᶟ','milimetro cubico'=>'mmᶟ','metro cubico'=>'mᶟ', 'Cantidad en Unidad'=>'Cantidad'), ['class' => 'form-control', 'placeholder' => 'campo requerido' , 'id' => 'unidad_id' ,  'maxlength' => '50', 'required']) !!}
+                     {!! Form::text('unidad', null, ['class' => 'form-control', 'placeholder' => 'campo requerido' , 'id' => 'unidad_id' ,  'maxlength' => '50', 'required']) !!}
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="input-icon right">
+                    {!! Form::select('unidad_select', array('decimetro cubico'=>'dmᶟ','centimetro cubico'=>'cmᶟ','milimetro cubico'=>'mmᶟ','metro cubico'=>'mᶟ', 'Cantidad en Unidad'=>'Cantidad'), ['class' => 'form-control', 'id' => 'unidad_select' ,  'maxlength' => '50', 'required']) !!}
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!--
 <div class="form-group"><label class="col-sm-3 control-label">Nombre Unidad</label>
     <div class="col-sm-9 controls">
         <div class="row">
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa "></i>
-                    {!! Form::text('nombre',null, ['class' => 'form-control', 'placeholder' => 'campo requerido', 'maxlength' => '50', 'required', 'id' => 'nombre_id']) !!}
+                    {{-- {!! Form::text('nombre',null, ['class' => 'form-control', 'placeholder' => 'campo requerido', 'maxlength' => '50', 'required', 'id' => 'nombre_id']) !!} --}}
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+-->
 <div class="form-group"><label class="col-sm-3 control-label">Descripcion</label>
     <div class="col-sm-9 controls">
         <div class="row">

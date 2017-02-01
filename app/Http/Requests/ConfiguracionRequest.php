@@ -28,6 +28,7 @@ class ConfiguracionRequest extends Request
             'telefono' => 'max:30',
             'direccion' => 'required|max:50',
             'localidad_id' => 'required',
+            'responiva_id' => 'required',
             'email' => 'email|max:100',
             'cuit'  => 'required|max:12|min:12',
             'imagen' => 'mimes:jpeg,png|max:3072' 

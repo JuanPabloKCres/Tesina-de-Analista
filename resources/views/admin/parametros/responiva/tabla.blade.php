@@ -37,7 +37,7 @@
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="panel panel-yellow">
+                            <div class="panel panel-white">
                                 <div class="panel-heading">Categorías tributarias registradas</div>
                                 <div class="panel-body">
                                     @include('admin.partes.msjError')
@@ -46,17 +46,17 @@
                                         <thead>
                                         <tr>
                                             <th>Nombre</th>
-                                            <th>IVA aplicado</th>
-                                            <th>Tipo Factura</th>
+                                            <th class="text-center">IVA aplicado</th>
+                                            <th class="text-center">Tipo Factura</th>
                                             <th class="text-center">Acciones</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         @foreach($responiva as $responiva)
                                             <tr>
-                                                <td>  {{ $responiva->nombre }}</td>
-                                                <td>  {{ $responiva->iva }}</td>
-                                                <td>  {{ $responiva->factura }}</td>
+                                                <td class="text-dark">  {{ $responiva->nombre }}</td>
+                                                <td class="text-center">  {{ $responiva->iva }}%</td>
+                                                <td class="text-center">  {{ $responiva->factura }}</td>
                                                 <td class="text-center">
                                                     <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá acceder acciones como actualización y eliminación del mismo" href="{{ route('admin.responiva.show', $responiva->id) }}" class="btn btn-info"> <span class="fa fa-eye" aria-hidden="true"></span></a>
                                                 </td>

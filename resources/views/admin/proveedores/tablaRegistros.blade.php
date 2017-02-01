@@ -13,7 +13,7 @@
                                 <th>Nombre</th>
                                 <th>CUIT</th>
                                 <th>Rubro</th>
-                                <th>Horario Atención</th>
+                                <th>Horarios de Atención</th>
                                 <th>Email</th>
                                 <th>Teléfono</th>
                                 <th>Celular</th>
@@ -28,7 +28,7 @@
                                 <td>{{ $proveedor->nombre }}</td>
                                 <td>{{ $proveedor->cuit }}</td>
                                 <td>{{ $proveedor->rubro->nombre }}</td>
-                                <td>{{ $proveedor->horario_atencion }}</td>
+                                <td>{{ $proveedor->hora_a_manana }} a {{ $proveedor->hora_c_manana}} y {{ $proveedor->hora_a_tarde}} a {{ $proveedor->hora_c_tarde}}</td>
                                 <td>{{ $proveedor->email }}</td>
                                 @if($proveedor->telefono)
                                     <td>{{ $proveedor->telefono }}</td>

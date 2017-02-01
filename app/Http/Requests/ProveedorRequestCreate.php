@@ -28,7 +28,6 @@ class ProveedorRequestCreate extends Request
             'cuit' => 'required|max:11|unique:proveedores',
             'celular' => 'max:30',
             'telefono' => 'max:30',
-
             'localidad_id' => 'required',
             'calle' => 'max:30',
             'altura' => 'max:7',
@@ -36,7 +35,10 @@ class ProveedorRequestCreate extends Request
             'email' => 'email|max:100',  
             'web'  => 'max:40',                             //el tipo es 'active_url', despues lo cambio porque me tiraba error
             'imagen' => 'image|mimes:jpeg,png|max:3072',
-            'horario_atencion' => 'max:30',
+            'hora_a_manana' => 'max:5',
+            'hora_a_tarde' => 'max:5',
+            'hora_c_manana' => 'max:5',
+            'hora_c_tarde' => 'max:5',
         ];
     }
 }

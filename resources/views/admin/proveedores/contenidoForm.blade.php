@@ -1,3 +1,6 @@
+<script src="{{ asset('plantillas/jonthornton-jquery-timepicker/jquery.timepicker.css') }}"></script>
+<script src="{{ asset('plantillas/jonthornton-jquery-timepicker/jquery.timepicker.min.js') }}"></script>
+
 <h3>Información General</h3>
                       <br>
                         <div class="form-group"><label class="col-sm-3 control-label">Razón social</label>
@@ -35,13 +38,38 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group"><label class="col-sm-3 control-label">Horario de atención</label>
+                        <div class="form-group"><label class="col-sm-3 control-label">Horario de atención mañana</label>
                             <div class="col-sm-9 controls">
                                 <div class="row">
-                                    <div class="col-xs-12">
+                                    <div class="col-xs-4">
                                         <div class="input-icon right">
                                             <i class="fa fa-clock-o"></i>
-                                                {!! Form::text('horario_atencion', null, ['class' => 'form-control', 'placeholder' => 'campo opcional']) !!}
+                                            {!! Form::time('hora_a_manana', null, ['class' => 'form-control', 'id'=>'h_a_m', 'placeholder' => '']) !!}
+                                        </div>
+
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="input-icon right">
+                                            <i class="fa fa-clock-o"></i>
+                                            {!! Form::time('hora_c_manana', null, ['class' => 'form-control', 'id'=>'h_c_m', 'placeholder' => '']) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-3 control-label">Horario de atención tarde</label>
+                            <div class="col-sm-9 controls">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <div class="input-icon right">
+                                            <i class="fa fa-clock-o"></i>
+                                            {!! Form::time('hora_a_tarde', null, ['class' => 'form-control', 'id'=>'h_a_t', 'placeholder' => '']) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="input-icon right">
+                                            <i class="fa fa-clock-o"></i>
+                                            {!! Form::time('hora_c_tarde', null, ['class' => 'form-control', 'id'=>'h_c_t', 'placeholder' => '']) !!}
                                         </div>
                                     </div>
                                 </div>
@@ -53,7 +81,7 @@
                                     <div class="col-xs-12">
                                         <div class="input-icon right">
                                             <i class="fa fa-at"></i>
-                                            {!! Form::text('web', null, ['class' => 'form-control', 'placeholder' => 'campo opcional']) !!}
+                                            {!! Form::text('web', null, ['class' => 'form-control', 'id'=>'web_text', 'placeholder' => 'campo opcional']) !!}
                                         </div>
                                     </div>
                                 </div>

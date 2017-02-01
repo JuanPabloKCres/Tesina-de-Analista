@@ -21,7 +21,7 @@
                         <div class="col-xs-9" align="left">
                             <div class="input-icon right">
                                 <i class="fa fa-pencil"></i>
-                                <input class="form-control" type="number" id="cantidad_number" name="number" min="1" max="1000000" data-parsley-type="number" placeholder="campo requerido" required/>
+                                <input class="form-control" type="number" id="cantidad_number" name="number" min="0.01" max="1000000" step="0.01" data-parsley-type="number" placeholder="campo requerido" required/>
                             </div>
                         </div>
                     </div>
@@ -32,7 +32,7 @@
                         <div class="col-xs-6" align="right">
                             <div class="input-icon right">
                                 <i class="fa fa-pencil"></i>
-                                <input class="form-control" type="text" id="unidad_text" tooltip="Unidad de medida por la que se compra el insumo" min="1" max="1000000" data-parsley-type="text" placeholder="campo requerido" required/>
+                                <input class="form-control" type="text" readonly="readonly" id="unidad_text" tooltip="Unidad de medida por la que se compra el insumo" min="1" max="1000000" data-parsley-type="text" placeholder="campo requerido" required/>
                             </div>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                         <div class="col-xs-10" align="left">
                             <div class="input-icon right">
                                 <i class="fa fa-usd"></i>
-                                <input class="form-control" type="number" step="any" id="costo_number" name="number" min="0" max="1000000" data-parsley-type="number" placeholder="campo requerido" keypress="completarPrecio()" required/>
+                                <input class="form-control" type="number" step="any" readonly="readonly" id="costo_number" name="number" min="0" max="1000000" data-parsley-type="number" placeholder="campo requerido" keypress="completarPrecio()" required/>
                             </div>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                         <div class="col-xs-10" align="left">
                             <div class="input-icon right">
                                 <i class="fa fa-usd"></i>
-                                <input class="form-control" type="number" step="any" id="d4" name="number" min="0" max="1000000" data-parsley-type="number" placeholder="campo requerido" keypress="completarPrecio()" required/>
+                                <input class="form-control" type="number" step="any" readonly="readonly" id="d4" name="number" min="0" max="1000000" data-parsley-type="number" placeholder="campo requerido" keypress="completarPrecio()" required/>
                             </div>
                         </div>
                     </div>

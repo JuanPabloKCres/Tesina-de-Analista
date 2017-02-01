@@ -2,6 +2,9 @@
 
 <html>
 <head>
+	<?php
+	header("Access-Control-Allow-Origin: *");
+	?>
 	<title>@yield('title','Default') | GN Soluciónes</title>
 	@include('admin.partes.estilos')  
 </head>

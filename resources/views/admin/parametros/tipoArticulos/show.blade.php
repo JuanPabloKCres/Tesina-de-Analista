@@ -49,18 +49,16 @@
                                                 <div class="row mtl">
                                                     <div class="col-md-1">
                                                     </div>
-                                                    <div class="col-md-4">
-                                                         <div class="col-lg-12"><h4 class="box-heading">Descripción</h4>
-                                                          <p class="text-justify"> {{ $tipo->descripcion }} </p>
-                                                            <br>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-10">
                                                       <table class="table table-striped table-hover">
                                                           <tbody>
                                                           <tr>
                                                               <td><h4 class="box-heading">Nombre:</h4></td>
                                                               <td><h4>{{ $tipo->nombre }}</h4></td>
+                                                          </tr>
+                                                          <tr>
+                                                              <td><h4 class="box-heading">Descripción:</h4></td>
+                                                              <td><h4>{{ $tipo->descripcion }}</h4></td>
                                                           </tr>
                                                           <tr>
                                                               <td><h4 class="box-heading">Fecha de alta:</h4></td>

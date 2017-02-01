@@ -16,9 +16,8 @@ class AddArticulosTable extends Migration
             $table->increments('id');
             $table->string('nombre');
             $table->integer('cantidad_insumos');
-            $table->string('alto');
-            $table->string('ancho');
-            $table->string('estado');
+            $table->string('alto')->nullable();
+            $table->string('ancho')->nullable();
             $table->integer('tipo_id')->unsigned();
             $table->foreign('tipo_id')->references('id')->on('tipos')->onDelete('cascade');
 
@@ -28,15 +27,11 @@ class AddArticulosTable extends Migration
             $table->foreign('color_id')->references('id')->on('colores')->onDelete('cascade');
 
 
-            $table->integer('user_id')->unsigned();
+            $table->integer('user_id')
+                ->unsigned()
+                ->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-            /*
-            $table->integer('material_id')->unsigned();
-            $table->foreign('material_id')->references('id')->on('materiales')->onDelete('cascade');
-
-            $table->integer('proveedor_id')->unsigned();
-            $table->foreign('proveedor_id')->references('id')->on('proveedores')->onDelete('cascade');
 
             $table->integer('talle_id')
                 ->unsigned()
@@ -44,16 +39,19 @@ class AddArticulosTable extends Migration
             $table->foreign('talle_id')->references('id')->on('talles')->onDelete('cascade');
 
 
-
-            */
             //$table->integer('stock');
             $table->double('costo');
             $table->double('margen');   //%
             $table->double('ganancia'); //$
-            $table->double('precioVta');
 
+            $table->double('iva_id')->unsigned();
+            $table->foreign('iva_id')->references('id')->on('ivas')->onDelete('cascade');
 
-            $table->string('descripcion',500);
+            $table->double('montoIva')->unsigned();
+            $table->double('precioVta')->unsigned();
+
+            $table->string('descripcion',500)->nullable();
+            $table->string('estado')->nullable();
 
             $table->timestamps();
         });

@@ -21,10 +21,9 @@ class ResponivaRequestEdit extends Request
     public function rules()
     {
         return [
-            //'nombre' => 'required|max:50|unique:responiva,nombre,'.$this->route->getParameter('responiva'),
+            'nombre' => 'required|max:50|unique:responiva,nombre,'.$this->route->getParameter('responiva'),
             'iva' => 'required|max:3',
             'factura' => 'max:1',
-            'descripcion' => 'max:50',
         ];
     }
 }

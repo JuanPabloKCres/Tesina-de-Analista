@@ -69,10 +69,8 @@ class ProveedoresController extends Controller
     public function show($id)
     {
         //return view('admin.proveedores.show')->with('proveedor', $this->proveedor);
-
     	$proveedor = Proveedor::find($id);
         return view('admin.proveedores.show')->with('proveedor', $proveedor);
-
     }
 
 
@@ -100,7 +98,6 @@ class ProveedoresController extends Controller
         Flash::success("Se ha realizado la actualización del registro: ".$proveedor->nombre.".");
         return redirect()->route('admin.proveedores.show', $id);
     }
-
 
 
     public function destroy($id)

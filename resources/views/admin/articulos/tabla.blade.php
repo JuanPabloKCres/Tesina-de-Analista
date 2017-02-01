@@ -1,7 +1,7 @@
 @extends('admin.partes.index')
 
 @section('title')
-    Artículos registrados
+    Articulos Producidos
 @endsection
 
 @section('sidebar')
@@ -9,17 +9,14 @@
 @endsection
 
 @section('content')
-@include('admin.articulos.createViejito')
     <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
         <div class="page-header pull-left">
             <div class="page-title">
-              Artículos</div>
+              Producciones</div>
         </div>
         <div class="page-header pull-right">
             <div class="page-toolbar">
-                <button data-placement="bottom" title="Registrar un nuevo producto de la gráfica" type="button" data-hover="tooltip" data-toggle="modal" data-target="#modal-config"  class="btn btn-blue">
-                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Registrar artículo
-                </button>
+                <a data-toggle="tooltip" data-placement="bottom" href="{{ route('admin.articulos.create') }}" title="Registrar un nuevo pedido o venta de uno o mas producto"  class="btn btn-blue"> <span class="fa fa-plus-circle" aria-hidden="true"></span> Generar presupuesto</a>
             </div>
         </div>
         <div class="clearfix"></div>
@@ -37,7 +34,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="panel panel-yellow">
-                                <div class="panel-heading">Artículos registrados</div>
+                                <div class="panel-heading">Produccion de Articulos</div>
                                 <div class="panel-body">
                                     @include('admin.partes.msjError')
                                     @include('flash::message')
@@ -45,16 +42,12 @@
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
-                                                <th>Proveedor</th>
-                                                <th>Material</th>
                                                 <th>Tipo</th>
                                                 <th>Talle</th>
                                                 <th>Alto</th>
                                                 <th>Ancho</th>
                                                 <th>Color</th>
-                                                <th>Stock actual</th>
-                                                <!--StockMinimo-->
-                                                <th>Costo elavorac.</th>
+                                                <th>Costo materiales</th>
                                                 <th>% Gancia</th>
                                                 <th>Gan. x uni.</th>
                                                 <th>Precio Venta</th>
@@ -65,32 +58,42 @@
                                         <tbody>
                                         @foreach($articulos as $articulo)
                                             <tr>
-                                                <td>{{ $articulo->nombre }}</td>
-                                                <td>{{ $articulo->proveedor->nombre }}</td>
-                                                @if($articulo->material)
-                                                    <td>{{ $articulo->material->nombre }}</td>
+                                                <td class="text-dark text-uppercase">{{ $articulo->nombre }}</td>
+
+                                                @if($articulo->tipo)
+                                                    <td class="text-center">{{ $articulo->tipo->nombre}}</td>
                                                 @else
-                                                    <td>{{ "Ninguno" }}</td>
+                                                    <td class="text-center">{{ "Ninguno" }}</td>
                                                 @endif
-                                                <td>{{ $articulo->tipo->nombre }}</td>
+
                                                 @if($articulo->talle)
                                                     <td class="text-center">{{ $articulo->talle->talle}}</td>
                                                 @else
                                                     <td class="text-center">{{ "Ninguno" }}</td>
                                                 @endif
-                                                <td class="text-center">{{ $articulo->alto}}</td>
-                                                <td class="text-center">{{ $articulo->ancho}}</td>
+
+                                                @if($articulo->alto)
+                                                    <td class="text-center">{{ $articulo->alto}}cm</td>
+                                                @else
+                                                    <td class="text-center">{{ "Ninguno" }}</td>
+                                                @endif
+                                                @if($articulo->ancho)
+                                                    <td class="text-center">{{ $articulo->ancho}}cm</td>
+                                                @else
+                                                    <td class="text-center">{{ "Ninguno" }}</td>
+                                                @endif
+
                                                 @if($articulo->color)
-                                                    <td class="text-center">{{ $articulo->color->nombre }}</td>
+                                                    <td class="text-center ">{{ $articulo->color->nombre }}</td>
                                                 @else
                                                     <td>{{ "Ninguno" }}</td>
                                                 @endif
-                                                <td class="text-center">{{ $articulo->stock }}</td>
+
                                                 <!--StockMinimo-->
-                                                <td class="text-center">{{ $articulo->costo }}</td>
-                                                <td class="text-center">{{ $articulo->margen }}</td>
-                                                <td class="text-center">{{ $articulo->ganancia }}</td>
-                                                <td class="text-center">{{ $articulo->precioVta}}</td>
+                                                <td class="text-center">$ {{ $articulo->costo }}</td>
+                                                <td class="text-center">{{ $articulo->margen }}%</td>
+                                                <td class="text-center">$ {{ $articulo->ganancia }}</td>
+                                                <td class="text-center badge-dark text-white">$ {{ $articulo->precioVta}}</td>
                                                 <td class="text-center">
                                                     <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá acceder acciones como edición y eliminación del mismo" href="{{ route('admin.articulos.show', $articulo->id) }}" class="btn btn-info"> <span class="fa fa-eye" aria-hidden="true"></span></a>
                                                 </td>

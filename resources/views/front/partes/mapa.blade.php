@@ -15,14 +15,13 @@
                 width: 100% !important;
                 height: 100% !important;
         }
-
-
 </style>
 
 
 
 <div class="google-maps">
-       <iframe src="https://www.google.com/maps/d/u/0/embed?mid=zKZOQhecH1Us.k3FbMRNUYsp0" width="100" height="480"></iframe>
+
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6940.346377030642!2d-58.986204085368186!3d-27.458473882895582!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94450ceddea57bdd%3A0xbb8e80d08acd5a78!2sGN+Soluciones+Gr%C3%A1ficas!5e0!3m2!1ses-419!2sar!4v1480791598567" frameborder="0" style="border:0" ></iframe>
 </div>
 
 

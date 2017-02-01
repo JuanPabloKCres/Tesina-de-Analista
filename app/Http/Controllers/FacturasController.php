@@ -4,110 +4,203 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 
 class FacturasController extends Controller
 {
-
-    public function index()
+    public function index(Request $request)
     {
-        // Con esto vamos a poder hacer uso de Interface COM con Web Services AFIP (PyAfipWs)
+        if ($request->ajax()){
+            //$infoCompra = $request->factura;    //array recibido via Ajax desde vista pedidos
+            //se comento para probar estaticamente si funciona
+            /*
+            $tipo_cbte = $infoCompra['tipo_cbte'];
+            $tipo_doc = $infoCompra['tipo_doc'];
+            $nro_doc = $infoCompra['nro_doc'];
+            $nombre_cliente = $infoCompra['nombre_cliente'];
+            $domicilio_cliente = $infoCompra['domicilio_cliente'];
+            $imp_neto = $infoCompra['imp_neto'];
+            $imp_iva = $infoCompra['imp_iva'];
+            $imp_total = $infoCompra['imp_total'];
+            */
 
-        try {
+            /*
+            $process = new Process('cd E:/Things');
+            $process->start();
+            */
 
-            # Crear objeto interface Web Service Autenticación y Autorización
-            $WSAA = new COM('wsaa');
-            # Generar un Ticket de Requerimiento de Acceso (TRA)
-            $tra = $WSAA->CreateTRA() ;
+            $tipo_cbte = 1;
+            $tipo_doc = 80;
+            $nro_doc = 20344783854;
+            $nombre_cliente = "Sergio Caballero";
+            $domicilio_cliente = "Bolivar 362";
+            $imp_neto = $infoCompra = 1000;
+            $imp_iva = $infoCompra = 210;
+            $imp_total = $infoCompra = 1210;
 
-            # Especificar la ubicacion de los archivos certificado y clave privada
-            $path = getcwd()  . "\\";
+            //if($tipo_cbte !=''&& $tipo_doc !=''&& $nro_doc !=''&& $nombre_cliente !='' && $domicilio_cliente !='' && $imp_neto !='' && $imp_iva !='' && $imp_total !='')
+            //{
+                try{
+                    $factura = array(
+                        //'id' => 0,                     // identificador único (no obligatorio WSFEv1, solo para exportacion)
+                        'punto_vta' => 4000,           //no tocar para homologacion, para produccion poner el punto de venta autorizado para WSFEv1
+                        'tipo_cbte' => $tipo_cbte,              // 1: FA, 2: NDebitoA, 3:NCreditoA, 6: FB, 11: FC
+                        'cbte_nro' => 0,               // solicitar proximo con /ult
+                        'tipo_doc' => $tipo_doc,              // 96: DNI, 80: CUIT, 99: Consumidor Final
+                        'nro_doc' => $nro_doc,    // Nro. de CUIT o DNI
+                        'fecha_cbte' => date('Ymd'),   // Formato AAAAMMDD
+                        'concepto' => 1,               // 1: Productos, 2: Servicios, 3/4: Ambos ****Siempre usaremos Productos (1)
+                        'fecha_venc_pago' => NULL,
+                        'nombre_cliente' => $nombre_cliente,
+                        'domicilio_cliente' => $domicilio_cliente,
+                        'moneda_ctz' => 1,   // 1 para pesos
+                        'moneda_id' => 'PES',  // 'PES': pesos, 'DOL': dolares (solo exportacion)
+                        'obs_comerciales' => 'Observaciones Comerciales, texto libre',
+                        'obs_generales' => 'Observaciones Generales, texto libre',
+                        'forma_pago' => '30 dias',
 
-            # Certificado: certificado es el firmado por la AFIP
-            # ClavePrivada: la clave privada usada para crear el certificado
-            $Certificado = "gnsolucionesPrueba.crt"; // certificado de prueba
-            $ClavePrivada = "clave_privada_20245735147_201606270038.key"; // clave privada de prueba
+                        // importes subtotales generales:
+                        'imp_neto' => $imp_neto,            // neto gravado
+                        'imp_iva' => $imp_iva,              // IVA liquidado
+                        'imp_total' => $imp_total,           // total de la factura
+                        'imp_tot_conc' => NULL,
+                        'imp_op_ex' => 0,
+                        // Datos devueltos por AFIP (completados luego al llamar al webservice):
+                        'cae' => '',                       // ej. '61123022925855'
+                        'fecha_vto' => '',                 // ej. '20110320'
+                        'motivos_obs' => '',               // ej. '11'
+                        'err_code' => '',                  // ej. 'OK'
+                        'descuento' => 0,
 
-            # Generar el mensaje firmado (CMS) ;
-            $cms = $WSAA->SignTRA($tra, $path . $Certificado, $path . $ClavePrivada);
+                        'detalles' => array (
+                            array(
+                                'qty' => 1,                    // cantidad
+                                'umed' => 7,                   // unidad de medida
+                                'codigo' => NULL,
+                                'ds' => 'Descripcion del producto P0001',
+                                //'precio' => 100,
+                                'precio' => NULL,
+                                'importe' => 121,
+                                //'imp_iva' => 21,
+                                'imp_iva' => NULL,
+                                'iva_id' => 5,                 // tasa de iva 5: 21%
+                                'u_mtx' => NULL,             // unidad MTX (packaging)
+                                'cod_mtx' => NULL,    // código de barras para MTX
+                                'despacho' => NULL,
+                                'dato_a' => NULL, 'dato_b' => NULL, 'dato_c' => NULL,
+                                'dato_d' => NULL,'dato_e' => NULL,
+                                'bonif' => 0,
+                            ),
+                        ),
+                        'ivas' => array (
+                            array(
+                                'base_imp' => 100,
+                                'importe' => 21,
+                                'iva_id' => 5,
+                            ),
+                        ),
+                        // Comprobantes asociados (solo notas de crédito y débito):
+                        //'cbtes_asoc' => array (
+                        //   array('cbte_nro' => 1234, 'cbte_punto_vta' => 2, 'cbte_tipo' => 91, ),
+                        //   array('cbte_nro' => 1234, 'cbte_punto_vta' => 2, 'cbte_tipo' => 5, ),
+                        // ),
+                        'tributos' => array (
+                            array(
+                                'alic' => '0.00',
+                                'base_imp' => '0',
+                                'desc' => 'Impuesto Municipal Resistencia',
+                                'importe' => '0.00',
+                                'tributo_id' => 99,
+                            ),
+                        ),
+                        'permisos' => array (),
+                        'datos' => array (),
+                    );
 
-            # Llamar al web service para autenticar (generar ticket de acceso)
-            $ta = $WSAA->CallWSAA($cms); // homologación
-            #$ta = $WSAA->CallWSAA($cms, "https://wsaa.afip.gov.ar/ws/services/LoginCms") # producción
+                } catch (Exception $e) {
+                    echo $e;
+                }
 
-            echo "Token de Acceso: $WSAA->Token \n";
-            echo "Sing de Acceso: $WSAA->Sign \n";
+                // Guardar el archivo json para consultar la ultimo numero de factura:
+                try {
+                    $json = file_put_contents('./factura.json', json_encode(array($factura)));
+                } catch (Exception $e) {
+                    echo $e;
+                }
 
-            # Crear objeto interface Web Service de Factura Electrónica
-            $WSFE = new COM('WSFE') ;
-            # Setear tocken y sing de autorización (pasos previos) Y CUIT del emisor
-            $WSFE->Token = $WSAA->Token;
-            $WSFE->Sign = $WSAA->Sign;
-            $WSFE->Cuit = "23111111113";
 
-            # Conectar al Servicio Web de Facturación
-            $ok = $WSFE->Conectar(); // pruebas
-            #$ok = WSFE.Conectar("https://wsw.afip.gov.ar/wsfe/service.asmx") ' producción # producción
+                // Obtener el último número para este tipo de comprobante / punto de venta:
+                try {
+                    exec("C:\\xampp\\htdocs\\factura\\pyafipws\\python ./pyafipws/rece1.py ./pyafipws/rece.ini /json /ult 1 4000");
+                } catch (Exception $e) {
+                    echo $e;
+                }
 
-            # Llamo a un servicio nulo, para obtener el estado del servidor (opcional)
-            $WSFE->Dummy();
-            echo "appserver status $WSFE->AppServerStatus \n";
-            echo "dbserver status $WSFE->DbServerStatus \n";
-            echo "authserver status $WSFE->AuthServerStatus \n";
+                try{
+                    $json = file_get_contents('./salida.json');
+                    $facturas = json_decode($json, True);
+                }catch(Exception $e){
+                    echo $e;
+                }
 
-            # Recupera cantidad máxima de registros (opcional)
-            $qty = $WSFE->RecuperarQty();
 
-            # Recupera último número de secuencia ID
-            $LastId = $WSFE->UltNro();
+                // leo el ultimo numero de factura del archivo procesado (salida)
+                $cbte_nro = intval($facturas[0]['cbt_desde']) + 1;
+                echo "Proximo Numero: ", $cbte_nro, "\n\r";
 
-            # Recupero último número de comprobante para un punto de venta y tipo (opcional)
-            $tipo_cbte = 1; $punto_vta = 1;
-            $LastCBTE = $WSFE->RecuperaLastCMP($punto_vta, $tipo_cbte);
+                // Vuelvo a guardar el archivo json para actualizar el número de factura:
+                $factura['cbt_desde'] = $cbte_nro;  // para WSFEv1
+                $factura['cbt_hasta'] = $cbte_nro;  // para WSFEv1
+                $factura['cbte_nro'] = $cbte_nro;   // para PDF
+                $json = file_put_contents('./factura.json', json_encode(array($factura)));
 
-            # Establezco los valores de la factura o lote a autorizar:
-            $Fecha = date("Ymd");
-            echo "Fecha $Fecha \n";
-            $id = $LastId + 1; $presta_serv = 0;
-            $tipo_doc = 96; $nro_doc = "34478385";
-            $cbt_desde = $LastCBTE + 1; $cbt_hasta = $LastCBTE + 1;
-            $imp_total = "121.00"; $imp_tot_conc = "0.00"; $imp_neto = "100.00";
-            $impto_liq = "21.00"; $impto_liq_rni = "0.00"; $imp_op_ex = "0.00";
-            $fecha_cbte = $Fecha; $fecha_venc_pago = $Fecha;
+                // Obtención de CAE: llamo a la herramienta para WSFEv1
+                try {
+                    exec("C:\\xampp\\htdocs\\factura\\pyafipws\\python ./pyafipws/rece1.py ./pyafipws/rece.ini /json");
+                } catch (Exception $e) {
+                    echo $e;
+                }
 
-            # Fechas del período del servicio facturado (solo si presta_serv = 1)
-            $fecha_serv_desde = $Fecha; $fecha_serv_hasta = $Fecha;
 
-            # Llamo al WebService de Autorización para obtener el CAE
-            $cae = $WSFE->Aut($id, $presta_serv, $tipo_doc, $nro_doc,
-                $tipo_cbte, $punto_vta, $cbt_desde, $cbt_hasta,
-                $imp_total, $imp_tot_conc, $imp_neto, $impto_liq, $impto_liq_rni, $imp_op_ex,
-                $fecha_cbte, $fecha_venc_pago, $fecha_serv_desde, $fecha_serv_hasta);
+                // Ejemplo para levantar el archivo json con el CAE obtenido:
+                try{
+                    $json = file_get_contents('./salida.json');
+                    $facturas = json_decode($json, True);
+                }catch(Exception $e){
+                    echo $e;
+                }
 
-            echo "LastId=$LastId \n";
-            echo "LastCBTE=$LastCBTE \n";
-            echo "CAE=$cae \n";
-            echo "Vencimiento $WSFE->Vencimiento"; # Fecha de vencimiento o vencimiento de la autorización
+                // leo el CAE del archivo procesado
+                echo "CAE OBTENIDO: ", $facturas[0]['cae'], "\n\r";
+                echo "\nObservaciones: ", $facturas[0]['motivos_obs'], "\n\r";
+                echo "Errores: ", $facturas[0]['err_msg'], "\n\r";
 
-            # Verifico que no haya rechazo o advertencia al generar el CAE
-            if ($cae=="") {
-                echo "La página esta caida o la respuesta es inválida\n";
-            } elseif ($cae=="NULL" || $WSFE->Resultado!="A") {
-                echo "No se asignó CAE (Rechazado). Motivos: $WSFE->Motivo \n";
-            } elseif ($WSFE->Motivo!="NULL" && $WSFE->Motivo!="00") {
-                echo "Se asignó CAE pero con advertencias. Motivos: $WSFE->Motivos \n";
-            }
+                // Vuelvo a guardar el archivo json para actualizar el CAE y otros datos:
+                $factura['cae'] = $facturas[0]['cae'];
+                $factura['fecha_vto'] = $facturas[0]['fch_venc_cae'];
+                $factura['motivos_obs'] = $facturas[0]['motivos_obs'];
+                $factura['err_code'] = $facturas[0]['err_code'];
+                $factura['err_msg'] = $facturas[0]['err_msg'];
 
-        } catch (Exception $e) {
-            echo 'Excepción: ',  $e->getMessage(), "\n";
+                try{
+                    $json = file_put_contents('./factura.json', json_encode(array($factura)));
+                }catch(Exception $e){
+                    echo $e;
+                }
+
+                // Genero la factura en PDF (agregar --mostrar si se tiene visor de PDF)
+                try {
+                    exec("C:\\xampp\\htdocs\\factura\\pyafipws\\python ./pyafipws/pyfepdf.py ./pyafipws/rece.ini --cargar --json --mostrar ");
+                    // leer factura.pdf o similar para obtener el documento generado. TIP: --mostrar
+                } catch (Exception $e) {
+                    echo $e;
+                }
+            //}
+
         }
-
-
-        return view('admin.facturas.tabla');
     }
-
-
-
 }

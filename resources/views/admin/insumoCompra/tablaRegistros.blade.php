@@ -8,7 +8,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>ID Insumo</th>
+                        <th>ID</th>
                         <th>Insumo</th>
                         <th>Cantidad</th>
                         <th>Proveedor</th>

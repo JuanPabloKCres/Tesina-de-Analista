@@ -46,7 +46,8 @@
                                             <tr>
                                                 <th class="text-center">Apellido/s</th>
                                                 <th class="text-center">Nombre/s</th>
-                                                <th class="text-center">Responsabilidad ante el IVA</th>
+                                                <th class="text-center">Razón Social</th>
+                                                <th class="text-center">Responsabilidad ante IVA</th>
                                                 <th class="text-center">CUIT</th>
                                                 <th class="text-center">DNI</th>
                                                 <th class="text-center">Localidad y dirección</th>
@@ -59,16 +60,21 @@
                                             <tr>
                                                 <td class="text-center">{{ $cliente->apellido }}</td>
                                                 <td class="text-center">{{ $cliente->nombre }}</td>
+                                                @if ( $cliente->empresa)
+                                                    <td class="text-center">{{ $cliente->empresa }}</td>
+                                                @else
+                                                    <td class="text-center">{{ "-" }}</td>
+                                                @endif
                                                 <td class="text-center">{{ $cliente->responiva->nombre }}</td>
                                                   @if ( $cliente->cuit)
-                                                     <td>{{ $cliente->cuit }}</td>
+                                                     <td class="text-center">{{ $cliente->cuit }}</td>
                                                   @else
-                                                     <td>{{ "No se registró" }}</td>
+                                                     <td class="text-center">{{ "No se registró" }}</td>
                                                   @endif
                                                   @if ( $cliente->dni)
-                                                     <td>{{ $cliente->dni }}</td>
+                                                     <td class="text-center">{{ $cliente->dni }}</td>
                                                   @else
-                                                     <td>{{ "No se registró" }}</td>
+                                                     <td class="text-center">{{ "No se registró" }}</td>
                                                   @endif
                                                 <td class="text-center">{{ $cliente->localidad->nombre}} -
                                                   @if ( $cliente->direccion)

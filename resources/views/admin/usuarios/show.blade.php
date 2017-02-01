@@ -70,7 +70,11 @@
                                                             <tr>
                                                                 <td><h4 class="box-heading">Email:</h4></td>
                                                                 <td><h4>{{ $usuario->email }}</h4></td>
-                                                            </tr> 
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Rol:</h4></td>
+                                                                <td><h4>Administrador</h4></td>
+                                                            </tr>
                                                             <tr>
                                                                 <td><h4 class="box-heading">Fecha de alta:</h4></td>
                                                                 <td><h4>{{ $usuario->created_at->diffForHumans() }}</h4></td>

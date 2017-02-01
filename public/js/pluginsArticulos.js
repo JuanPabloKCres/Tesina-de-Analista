@@ -18,7 +18,7 @@ var montoPedido = 0;
 var montoTotal = 0;
 var costosTotales = 0;
 
-$('#unidad_text').prop( "disabled", true );
+//$('#unidad_text').prop( "disabled", true );
 //alert('Estamos en pluginsArticulos');
 
 $('select#tipo_id').on('change',function() {
@@ -74,7 +74,6 @@ $('#color_id').on('change',function() {
 /** al elegir un insumo, se ejecuta una funcion que busca el costo de el insumo seleccionado */
 $('#insumo_select').on('change',function(){
     var insumo_id = $('#insumo_select option:selected').val();
-    //alert('id insumo elegido='+ insumo_id);
     mostrarCostoInsumo(insumo_id);
     mostrarUnidadMedidaInsumo(insumo_id);
 });
@@ -115,11 +114,11 @@ function mostrarUnidadMedidaInsumo(insumo_id){
 /** limpiar campos **/
 function limpiar()
 {
+    $('#insumo_select').val("");
     $('#cantidad_number').val("");
     $('#unidad_text').val("");
     $('#costo_number').val("");
     $('#d4').val("");
-    //$('#total').val("");
 }
 
 /** completarCosto: Este método se encarga de completar el valor para un campo a partir de otros dos
@@ -139,7 +138,7 @@ function completarCosto(n)
         } else {
             precio = $('#d4').val();
             importe = precio / cantidad;
-            total = parseFloat(precio);
+            total = parseFloat(precio);         //HACER ALGO PARA REDONDEAR!!!!!
             $('#costo_number').val(importe);
             $('#total').val(total);
         }
@@ -163,10 +162,18 @@ function completarGanancia()
     var margen = $('#gananciaPorcent_number').val();
     var ganancia_dinero = costo * (margen/100);
     $('#gananciaDinero_text').val(ganancia_dinero);
-    var precio_venta = parseFloat(costo) + parseFloat(ganancia_dinero);
-
+    var iva = $('#iva_select').val();
+    var precioVtasinIva = parseFloat(costo) + parseFloat(ganancia_dinero);
+    var montoIva =  (precioVtasinIva * (iva/100));
+    //alert('el monto que representa el IVA: $'+montoIva);
+    $('#montoIva_number').val(montoIva);
+    var precio_venta = precioVtasinIva + montoIva;
     $('#precioVta_text').val(precio_venta);
 }
+/** Al seleccionar IVA, actualizar montoIva*/
+$('#iva_select').on('change',function(){
+    completarGanancia();
+});
 
 /**  captura el evento de cuando se suelta la tecla despues de presionarla sobre el campo "Precio unitario"
  * y lanza el método que se encarga de calcular el contenido para el campo "Importe". */
@@ -225,7 +232,6 @@ $("#form-pedido").submit(function (e) {
  * a la controladora a través de la id del artículo el nombre del mismo y si es suficiente el stock
  * para luego pasar el nombre al método que se encarga de agregar el contenido en la tabla.
  */
-
 function comprobar(insumo_select, cantidad_number, unidad_text, costo_number, d4)  //d4 es la casilla de costo neto
 {
     if ((insumo_select !== '') && (cantidad_number !== '') && (unidad_text !== '') && (costo_number !== '') && (d4 !== '')) {
@@ -240,7 +246,6 @@ function comprobar(insumo_select, cantidad_number, unidad_text, costo_number, d4
             dataType: 'json',
             success: function (data) {
                 var d = JSON.parse(data);
-                alert('se deberia agregar...');
                 agregarContenido(insumo_select, d.nombre, cantidad_number, unidad_text, costo_number, d4);
             }
         });
@@ -311,7 +316,7 @@ function confirmar()
  */
 function enviarPedido()
 {
-    alert('se entra a enviarPedido()');
+    //alert('se entra a enviarPedido()');
     var numLi = 0;
     var lineas = [];
     $('#tblListaInsumos tbody tr').each(function () {
@@ -326,36 +331,31 @@ function enviarPedido()
     var tipo_id= $('#tipo_id').val();       var talle_id= $('#talle_id').val();     var color_id= $('#color_id').val();
     var costoArticulo= $('#costoArticulo_text').val();      var margen= $('#gananciaPorcent_number').val();
     var gananciaArticulo= $('#gananciaDinero_text').val();      var precioVta= $('#precioVta_text').val();
-
-    var articulo = [];
-    var datosArticulo = {nombre, alto, ancho, tipo_id, talle_id, color_id, costoArticulo, margen, gananciaArticulo, precioVta};
-    articulo [0] = datosArticulo;
-    console.log(articulo);
-    ////////////////////////////////////////////////////////////////////////////////////////////
-    //persistir Articulo
-    alert(nombre);
-    alert(alto);    //ok
-    alert(ancho);   //ok
-    alert(tipo_id); //ok
-    alert(talle_id);
-    alert(color_id);    //ok
-    alert(costoArticulo);   //ok
-    alert(margen);          //ok
-    alert(gananciaArticulo);    //ok
-    alert(precioVta);           //ok
+    var iva= $('#iva_select').val();    var montoIva= $('#montoIva_number').val();
 
     $.ajax({
         dataType: 'JSON',
         url: "/admin/articulos/create",
         data: {
             renglones: lineas,
-            arrayArticulo: articulo,
-            usuarioAltaArticulo: $('#usuarioAltaArticulo').val(),
-
-            montoPedido: montoPedido
+            nombre: nombre,
+            alto: alto,
+            ancho: ancho,
+            tipo_id: tipo_id,
+            talle_id: talle_id,
+            color_id: color_id,
+            costoArticulo: costoArticulo,
+            margen: margen,
+            gananciaArticulo: gananciaArticulo,
+            iva: iva,
+            montoIva: montoIva,
+            precioVta: precioVta
+            //articuloAjax: articulo
+            //usuarioAltaArticulo: $('#usuarioAltaArticulo').val(),
+            //montoPedido: montoPedido
         },
         success: function (data) {
-            alert('Los datos de la compra fueron exitosamente enviados a ArticulosController@create');
+            console.log(data);
             /* Una vez completado el proceso se muestra el mensaje de exito*/
             $('#mensajeExito').html(data);
             $('#botonExito').click();

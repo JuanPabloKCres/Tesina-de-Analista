@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Insumo extends Model
 {
     protected $table =  "insumos";
-    protected $fillable = ['nombre', 'unidad_medida_id', 'stock','stockMinimo', 'costo', 'descripcion', 'talle_id', 'tipo_id', 'color_id', 'material_id'];
+    protected $fillable = ['nombre', 'unidad_medida_id', 'alto','ancho', 'stock','stockMinimo', 'costo','costo_anterior', 'descripcion', 'talle_id', 'color_id', 'material_id'];
 
 
     public function insumos_compra()
@@ -18,6 +18,19 @@ class Insumo extends Model
     public function insumos_articulo()
     {
         return $this->hasMany('App\InsumoArticulo');
+    }
+
+    public function unidad_medida()
+    {
+        return $this->belongsTo('App\Unidad_Medida');
+    }
+    public function color()
+    {
+        return $this->belongsTo('App\Color');
+    }
+    public function talle()
+    {
+        return $this->belongsTo('App\Talle');
     }
 
     public function stockSuficiente($cantidadSolicitada)
@@ -35,11 +48,12 @@ class Insumo extends Model
         $this->stock = $this->stock - $cant;
     }
 
-    /* ***** se llaman cuando se oompran insumos******/
+    /* ***** se llaman cuando se compran insumos******/
     public function incrementarStock($cant)
     {
         $this->stock = $this->stock + $cant;
     }
+
     public function actualizarCosto($costo_nvo)
     {
         $this->costo = $costo_nvo;

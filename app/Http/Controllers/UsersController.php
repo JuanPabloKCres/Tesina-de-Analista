@@ -64,6 +64,7 @@ class UsersController extends Controller
         $user = new User($request->all());
         $user->name = $request->apellido.' '.$request->nombre;
         $user->password = bcrypt($request->password);
+        $user->nivel_acceso_id = $request->nivel_acceso;
         $user->imagen = $nombreImagen;
         $user->save();
 

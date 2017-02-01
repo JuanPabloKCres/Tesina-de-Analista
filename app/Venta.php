@@ -8,7 +8,7 @@ class Venta extends Model
 {
     protected $table =  "ventas";
 
-    protected $fillable = ['fecha_pedido', 'hora_pedido', 'fecha_venta', 'hora_venta', 'iva','pagado', 'entregado', 'senado', 'userPedido_id', 'userVenta_id', 'cliente_id'];
+    protected $fillable = ['fecha_pedido', 'hora_pedido', 'fecha_entrega_estimada', 'fecha_venta', 'hora_venta','pagado', 'entregado', 'senado', 'forma_pago', 'cheque_id', 'userPedido_id', 'userVenta_id', 'cliente_id'];
 
     public function usuarioPedido()
     {
@@ -23,6 +23,11 @@ class Venta extends Model
     public function cliente()
     {
         return $this->belongsTo('App\Cliente');
+    }
+
+    public function cheque()
+    {
+        return $this->hasOne('App\Cheque');
     }
 
     public function articulos_ventas()

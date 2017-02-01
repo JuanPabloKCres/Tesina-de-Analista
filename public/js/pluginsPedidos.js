@@ -6,6 +6,16 @@
  * Ej: tengo 11 renglones y la tabla muestra solo 10 renglones y crea otra página para mostrar el 11º renglón,
  * si al registrar estoy en la pág 1, el 11º registro será ignorado.
  */
+/*
+$('#fecha_entrega_date').on('click', function () {
+    var fecha_entrega_estimada;
+    fecha_entrega_estimada = $("#fecha_entrega_date").val();
+    //alert(fecha_entrega_estimada);
+    $('#fecha_entrega_date').datepicker({minDate: -7});
+});
+*/
+
+$('#iva_select').prop('disabled',true);
 
 $(document).ready(function () {
     $('#tblListaProductos').DataTable({
@@ -30,6 +40,37 @@ var cantFilas = 0;
 var montoPedido = 0;
 var montoTotal = 0;
 var pagarTotal = true;
+var datos_cheque = null;      //array con datos del cheque
+var cheque = [];
+//Datos del cheque (en blanco)
+var pagoCheque = null;
+var nro_serie;
+var banco;
+var sucursal_banco;
+var fecha_emision;
+var fecha_cobro;
+
+function cargarDatosCheque(){
+    alert('Se cargaron datos del cheque para el pago');
+    nro_serie= $('#nro_serie').val();
+    banco= $('#banco').val();
+    sucursal_banco= $('#sucursal').val();
+    fecha_emision = $('#fecha_emision').val();
+    fecha_cobro= $('#fecha_cobro').val();
+    /*
+    datos_cheque = {
+        nro_serie: $('#nro_serie').val(), banco: $('#banco').val(), sucursal_banco: $('#sucursal').val(),
+        fecha_emision: $('#fecha_emision').val(), fecha_cobro: $('#fecha_cobro').val()
+    };
+    cheque[0] = datos_cheque;
+    */
+}
+
+//var nro_serie_cheque = $('#nro_serie').val();
+//var banco_cheque = $('#banco').val();
+//var sucursal_banco_cheque = $('#sucursal').val();
+//var fecha_emision_cheque = $('#fecha_emision').val();
+//var fecha_cobro_cheque = $('#fecha_cobro').val();
 
 
 /*
@@ -41,29 +82,30 @@ var pagarTotal = true;
  *
  * parseFloat: método de javascript para convertir a decimal la variable y usarla para el pertinente cálculo.
  */
-function agregarContenido(d1, nombre, d2, d3, d4)
+function agregarContenido(articulo_select, nombre, cantidad_number, precioU_number, importe_number)
 {
     var tPro = $('#tblListaProductos').DataTable();
     cantFilas++;
     numFila++;
-    valorItemNeto = parseFloat(d4); //valor neto (valor*cantidad)
-    valorItemTotal = valorItemNeto + valorItemNeto * parseFloat($('#iva').val()) / 100; //valor con iva incluido
+    valorItemNeto = parseFloat(importe_number); //valor neto (valor*cantidad)
+    //valorItemTotal = valorItemNeto + valorItemNeto * parseFloat($('#iva').val()) / 100; //valor con iva incluido
+    valorItemTotal = valorItemNeto;
     montoPedido = montoPedido + valorItemNeto;
     montoTotal = montoTotal + valorItemTotal;
     tPro.row.add([
         numFila,
-        d1,
+        articulo_select,
         nombre,
-        d2,
-        d3,
-        d4,
-        valorItemTotal,
+        cantidad_number,
+        precioU_number,
+        importe_number,
+        //valorItemTotal,       #comentado el 19/01 15:21
         ' <a href="javascript:borrarFila(' + numFila + ');" data-toggle="modal"><i class="fa fa-lg fa-trash-o"></i> Borrar</a>   '
     ]).draw();
     $('#mp').html(montoPedido);
     $('#mt').html(montoTotal);
     limpiar();
-    $('#d2').select();
+    $('#cantidad_number').select();
 }
 
 /*
@@ -119,65 +161,70 @@ function obtenerCantidades(d, cant)
  * para luego pasar el nombre al método que se encarga de agregar el contenido en la tabla.
  */
 
-function comprobar(d1, d2, d3, d4)
+function comprobar(articulo_select, cantidad_number, precioU_number, importe_number)
 {
-    if ((d1 !== '') && (d2 !== '') && (d3 !== '') && (d4 !== '')) {
-        var canti = obtenerCantidades(d1, d2);
+    if ((articulo_select !== '') && (cantidad_number !== '') && (precioU_number !== '') && (importe_number !== '')) {
+        var canti = obtenerCantidades(articulo_select, cantidad_number);
         $.ajax({
             url: "/admin/articulos",
             data: {
-                id: d1,
-                cantidadSolicitada: canti
+                id: articulo_select,
+                comprobarSiHayInsumosSuficientes:true,
+                cantidadArticuloSolicitado: canti
             },
             type: 'GET',
             dataType: 'json',
             success: function (data) {
+                //alert('Se resolvio la validacion de insumos desde ArticulosController');
                 var d = JSON.parse(data);
-                if (d.stockSuficiente) {
-                    agregarContenido(d1, d.nombreArticulo, d2, d3, d4);
-                } else {
-                    $('#msjStock').removeClass("hide");
-                    $("#d2").select();
+                console.log(d);
+                if(d.permitir){
+                    agregarContenido(articulo_select, $('#articulo_select option:selected').text(), cantidad_number, precioU_number, importe_number);
                 }
+                else{
+                    alert(d.mensaje + d.faltante+" unidades de "+ d.insumo+")");
+                    $('#msjStock').removeClass("hide");
+                    $("#cantidad_number").select();
+                }
+
             }
         });
     } else {
-        $("#d2").select();
+        $("#cantidad_number").select();
     }
 }
 
 /*
  * Function limpiar: Este método resetea los campos cantidad, precio_unitario e importe.
- * d2: campo "Cantidad".
- * d3: campo "Precio unitario".
- * d4: campo "Importe".
+ * cantidad_number: campo "Cantidad".
+ * precioU_number: campo "Precio unitario".
+ * importe_number: campo "Importe".
  */
 function limpiar()
 {
-    $('#d2').val("");
-    $('#d3').val("");
-    $('#d4').val("");
-    $('#total').val("");
+    $('#cantidad_number').val("");
+    $('#precioU_number').val("");
+    $('#importe_number').val("");
 }
 
 /*
  * Este método jquery captura el evento de cuando se suelta la tecla despues de presionarla sobre
  * el campo "Precio unitario" y lanza el método que se encarga de calcular el contenido para el campo "Importe".
  */
-$("#d3").keypress(function () {
+$("#precioU_number").keypress(function () {
 }).keyup(function () {
     var iva = $("#iva option:selected").val();
-    completarPrecio("d4", iva);
+    completarPrecio("importe_number", iva);
 });
 
 /*
  * Este método jquery captura el evento de cuando se suelta la tecla despues de presionarla sobre
  * el campo "Importe" y lanza el método que se encarga de calcular el contenido para el campo "Precio unitario".
  */
-$("#d4").keypress(function () {
+$("#importe_number").keypress(function () {
 }).keyup(function () {
     var iva = $("#iva option:selected").val();
-    completarPrecio("d3", iva);
+    completarPrecio("precioU_number", iva);
 });
 
 /*
@@ -187,14 +234,14 @@ $("#d4").keypress(function () {
  * Este método verifica primero si el campo "Precio unitario" no está vacio. Otro cosa a saber de este método es que
  * si ambos campos a verificar se encuentran vacios no hace nada.
  */
-$("#d2").keypress(function () {
+$("#cantidad_number").keypress(function () {
 }).keyup(function () {
     var iva = $("#iva option:selected").val();
-    if ($('#d3').val() !== "")
+    if ($('#precioU_number').val() !== "")
     {
-        completarPrecio("d4", iva);
+        completarPrecio("importe_number", iva);
     } else {
-        completarPrecio("d3", iva);
+        completarPrecio("precioU_number", iva);
     }
 });
 
@@ -206,29 +253,29 @@ $("#d2").keypress(function () {
  */
 function completarPrecio(n, iva)
 {
-    cantidad = $('#d2').val();
+    cantidad = $('#cantidad_number').val();
     var impuesto;
     var total;
 
-    if (n == "d3") {
-        if ($('#d4').val() === "")
+    if (n == "precioU_number") {
+        if ($('#importe_number').val() === "")
         {
-            $('#d3').val("");
+            $('#precioU_number').val("");
         } else {
-            precio = $('#d4').val();
+            precio = $('#importe_number').val();
             importe = precio / cantidad;
             impuesto = ((precio * iva) / 100);
             total = parseFloat(precio) + parseFloat(impuesto);
-            $('#d3').val(importe);
+            $('#precioU_number').val(importe);
             $('#total').val(total);
         }
     } else {
-        if ($('#d3').val() === "") {
-            $('#d4').val("");
+        if ($('#precioU_number').val() === "") {
+            $('#importe_number').val("");
         } else {
-            importe = $('#d3').val();
-            $('#d4').val((importe * cantidad));
-            precio = $('#d4').val();
+            importe = $('#precioU_number').val();
+            $('#importe_number').val((importe * cantidad));
+            precio = $('#importe_number').val();
             impuesto = ((precio * iva) / 100);
             total = parseFloat(precio) + parseFloat(impuesto);
             $('#total').val(total);
@@ -242,7 +289,7 @@ function completarPrecio(n, iva)
  */
 $("#form-agregar").submit(function (e) {
     e.preventDefault();
-    comprobar($('#d1').val(), $('#d2').val(), $('#d3').val(), $('#d4').val());
+    comprobar($('#articulo_select').val(), $('#cantidad_number').val(), $('#precioU_number').val(), $('#importe_number').val());
 });
 
 /*
@@ -280,8 +327,7 @@ function confirmar()
     }
 }
 
-/*
- * Function enviarPedido: Este método se encarga de recorrer los renglones de la tabla y empaquetar el contenido de
+/** Function enviarPedido: Este método se encarga de recorrer los renglones de la tabla y empaquetar el contenido de
  * interés de cada renglón en un objeto json y añadirlo a un array que se enviará a la controladora con otros datos
  * requeridos para realizar el registro de pedido/venta. Por ahora solo lanza un alert advirtiendo de que el método se ejecuto bien.
  * Resta dirigir la página hacia la pantalla de pedidos (pendiente).
@@ -290,72 +336,115 @@ function confirmar()
  */
 function enviarPedido(pagado, entregado)
 {
+    alert('pagado: '+pagado+" entregado: "+entregado);
     var numLi = 0;
     var lineas = [];
+
     var factura = {
-        nro_doc: "",
-        nombre_cliente: "",
-        domicilio_cliente: "",
-        imp_neto: "",
-        tipo_cbre: "",
-        items: []
-    };
+            iva: $('#iva').val(),
+            tipo_cbte: $('#factura').val(),
+            nro_doc: $('#cuit').val(),
+            nombre_cliente: $('#nombreCliente').val(),
+            domicilio_cliente: $('#direccion').val(),
+            imp_total: $('#montoTotal').val(),
+            items: []
+        };
+
 
     $('#tblListaProductos tbody tr').each(function () {
         var dataFila = $('#tblListaProductos').DataTable().row(this).data();
-        var linea = {cantidad: dataFila[3], importe: dataFila[5], precio_unitario: dataFila[4], articulo_id: dataFila[1]};
+        var linea = {articulo_id: dataFila[1], articulo_nombre: dataFila[2], cantidad: dataFila[3], precio_unitario: dataFila[4], importe: dataFila[5]};
         lineas [numLi] = linea;
         factura.items [numLi] = linea;
+        console.log("Se agrego un item para la factura: "+linea.articulo_nombre);
         numLi++;
     });
     if (!pagarTotal) {
         montoTotal = $('#sena').val();
     }
-    //factura electrónica
+
+    /**factura electrónica */
     if ($('input:checkbox[name=factura]:checked').val()) {
-        $.ajax({
+        $.ajax({    //en esta peticion se busca obtener los datos del cliente para confecc. la factura
             dataType: 'json',
             url: "/admin/clientes",
             data: {
                 id: $('#cliente').val()
             },
             success: function (data) {
-                factura.tipo_cbre = data.tipo_cbre;
-                factura.nro_doc = data.dni;
-                factura.nombre_cliente = data.nombre;
-                factura.domicilio_cliente = data.domicilio;
-            }
+                console.log("De ClientesController se obtuvieron estos datos para FE: "+data);
+                console.log("El monto total que se manda a la FE es =" + montoTotal);
+
+                var data_2 = JSON.parse(data);
+                factura.tipo_cbte = data_2.tipo_cbte;   //OK
+                factura.nro_doc = data_2.dni;           //OK
+                factura.nombre_cliente = data_2.nombre;         //OK
+                factura.provincia_cliente = data_2.provincia;   //OK
+                factura.localidad_cliente = data_2.localidad;   //OK
+                factura.domicilio_cliente = data_2.domicilio;   //OK
+                factura.imp_total = montoTotal;                 //OK
+                var array = JSON.stringify(factura);
+                var enlace_factura = 'http://localhost/factura/dinamico-factura.php?&datos_factura=' + encodeURIComponent(array);
+                window.open(enlace_factura);
+              }
         });
-
-        window.open('file:///C:/xampp/prueba.php');
-
-
-        //window.open('file:///C:/xampp/htdocs/factura/Json+Get.php');
-
-        //window.open('localhost:8000\\pagina.php');
-        //window.open('C:\\xampp' + factura);
-        //window.location.href = "C:\\xampp\\htdocs\\factura\\Json+Get.php?valores=" + factura;
-        //location.href = "pagina.php?valores=" + factura + ""; ///colocar acá la dirección de la página del com
     }
-    //persistir venta o pedido
+
+    console.log(lineas);
+    console.log("usuario pedido: "+$('#usuarioPedido').val()+" cliente: "+$('#cliente').val());
+    console.log("la seña es: "+montoPedido);
+
+    if(entregado){
+        var hoy = new Date();
+        var dd = hoy.getDate();
+        var mm = hoy.getMonth()+1;      //Enero seria 1
+        var yyyy = hoy.getFullYear();
+        if(dd<10) {dd='0'+dd}   if(mm<10) {mm='0'+mm}
+        hoy = mm+'/'+dd+'/'+yyyy;
+        fecha_entrega_estimada = hoy;
+    }
+    else{   //entregado == false
+        fecha_entrega_estimada = $('#fecha_entrega_date').val();
+    }
+
+    /** Si se cargaron datos del cheque*/
+    if(nro_serie ===''/* && cheque[0].banco !=null && cheque[0].sucursal_banco != null && cheque[0].fecha_emision !=null && cheque[0].fecha_cobro != null*/){
+        pagoCheque = "false";
+        alert('Se paga en efectivo');
+    }else{
+        pagoCheque = "true";
+        alert('Se paga con cheque');
+        console.log(cheque);
+    }
+
+    /** persistir venta o pedido */
     $.ajax({
         dataType: 'json',
         url: "/admin/pedidos/create",
         data: {
             renglones: lineas,
             pagado: pagado,
-            iva: $('#iva').val(),
+            pagoCheque: pagoCheque,
+
+            //cheque: cheque,
+            nro_serie: nro_serie,
+            banco: banco,
+            sucursal_banco: sucursal_banco,
+            fecha_emision: fecha_emision,
+            fecha_cobro: fecha_cobro,
+
+            fecha_entrega_estimada: fecha_entrega_estimada,
             entregado: entregado,
             usuarioPedido: $('#usuarioPedido').val(),
             cliente: $('#cliente').val(),
             sena: montoPedido
         },
         success: function (data) {
-            /*
-             * Una vez completado el proceso se muestra el mensaje de exito.
-             */
+            /* Una vez completado el proceso se muestra el mensaje de exito */
+            console.log(data);
             $('#mensajeExito').html(data);
             $('#botonExito').click();
+            //enviarNotificacion();       //email stock bajo
         }
     });
 }
@@ -363,7 +452,6 @@ function enviarPedido(pagado, entregado)
 /*
  * Este método jquery es el que toma el valor total de un pedido o si por el contrario solo se quiere señar el mismo.
  */
-
 $("#botonModalidad").click(function () {
     if ($('#divSena').hasClass('hide')) {
         $('#botonModalidad').html("Pagar totalidad del pedido");
@@ -375,11 +463,12 @@ $("#botonModalidad").click(function () {
         $('#divSena').addClass("hide");
         pagarTotal = true;
         $('#botonModalidad').removeClass("btn-success");
+        //$('#botonModalidad').removeClass("btn-pagarConCheque");
         $('#botonModalidad').addClass("btn-primary");
         $('#botonModalidad').html("Señar el pedido");
+        generarFactura();
     }
 });
-
 
 /*
  * Function registrarCliente: Este método se encarga de enviar al servidor los datos para registrar a un nuevo cliente
@@ -413,46 +502,69 @@ function registrarCliente()
 
 
 
-/*
- * Function generarFactura: Este método se encarga de recoger ciertos datos de la vista y 
- * enviarlos al archivo php que se encarga de realizar la facturación electrónica.
- */
-
+/** Function generarFactura: Este método se encarga de recoger ciertos datos de la vista y
+ * enviarlos al archivo php que se encarga de realizar la facturación electrónica.*/
 function generarFactura() {
     if ($('input:checkbox[name=factura]:checked').val()) {
-        var numLi = 0;
-        var factura = {
+        var cantidadProductos = 0;
+        var factura = [];
+        var datosParaFactura = {
             iva: $('#iva').val(),
-            tipo_cbre: $('#factura').val(),
+            tipo_cbte: $('#factura').val(),
             nro_doc: $('#cuit').val(),
             nombre_cliente: $('#nombreCliente').val(),
             domicilio_cliente: $('#direccion').val(),
             imp_neto: $('#montoTotal').val(),
             items: []
         };
+        factura[0] = datosParaFactura;
+        //factura.items [numLi] = linea;
+        /*
+         factura = {
+            iva: $('#iva').val(),
+            tipo_cbte: $('#factura').val(),
+            nro_doc: $('#cuit').val(),
+            nombre_cliente: $('#nombreCliente').val(),
+            domicilio_cliente: $('#direccion').val(),
+            imp_neto: $('#montoTotal').val(),
+            items: []
+            */
+        };
+        console.log("Los datos de factura que se envian a FACTURA ELECTRONICA AFIP son: (iva)"+factura[0].iva
+        +" (tipo_cte)"+factura[0].tipo_cbte+" (nro_doc)"+factura[0].nro_doc+" (nombre_cliente)"+factura[0].nombre_cliente
+        +" (domicilio_cliente)"+factura[0].domicilio_cliente+" (imp_neto)"+factura[0].imp_neto);
+    console.log(datosParaFactura);
+
         $('#tblListaItems tbody tr').each(function () {
             var dataFila = $('#tblListaItems').DataTable().row(this).data();
-            var linea = {cantidad: dataFila[2], importe: dataFila[4], precio_unitario: dataFila[3], articulo: dataFila[1]};
-            factura.items [numLi] = linea;
-            numLi++;
+            var item = {cantidad: dataFila[2], importe: dataFila[4], precio_unitario: dataFila[3], articulo: dataFila[1]};
+            factura.items [cantidadProductos] = item;
+            cantidadProductos++;
+        });
+        var nada ="nada";
+        $.ajax({
+            url: "http://localhost//factura//dinamico-factura.php",
+            data: {
+                nada: nada,
+            },
+            dataType: 'json',
+            success: function (data) {
+                alert('la factura se envio a AFIP con exito!');
+                $('#precioU_number').val(respuesta);
+            }
         });
 
-        window.open('file://c:/xampp/htdocs/factura/Json+Get.php');
+        //window.open('file://c:/xampp/htdocs/factura/Json+Get.php');
         //window.open('localhost:8000\\pagina.php');
 
         //window.location.href = "C:\\xampp\\htdocs\\factura\\Json+Get.php"
         //location.href = "pagina.php?valores=" + factura + ""; ///colocar acá la dirección de la página del com
-    }
     $('#form-crear').submit();
 }
 
 
-
-/* ** Toqueteado por Juampy **
- # La funcion valida que en el campo "Cantidad" de un Aticulo se ingresen SOLO NUMEROS
- */
 $(document).ready(function () {
-    $("#d2").keydown(function (e) {
+    $("#cantidad_number").keydown(function (e) {
         // Allow: backspace, delete, tab, escape, enter and .
         if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
                 // Allow: Ctrl+A
@@ -473,11 +585,9 @@ $(document).ready(function () {
                             });
 });
 
-        /*
-         * $('#iva').on('change', function (): Este eveto se dispara al cambiar el valor del iva en la venta y actualiza el valor del iva 
-         * en todos los importes incluyendo a los de los items.
-         */
-
+/** Este eveto se dispara al cambiar el valor del iva en la venta y actualiza el valor del iva
+         * en todos los importes incluyendo a los de los items. */  //NO VA EN LA TESIS, SOLO PARA LA GRAFICA
+/*
         $('#iva').on('change', function () {
             if (montoTotal > 0) {
                 montoTotal = montoPedido + montoPedido * parseFloat($('#iva').val()) / 100; //valor con iva incluido
@@ -493,14 +603,148 @@ $(document).ready(function () {
                 $('#mt').html(montoTotal);
             }
         });
-
-        /*
-         *  $("#modal-exito").on("hidden.bs.modal", function () : Este eveto se dispara al detectarse que el modal que muestra el mensaje 
-         *  de venta o pedido satisfactorio se cierra y lo que hace es redirigir a la pag de pedidos.
-         */
-
         $("#modal-exito").on("hidden.bs.modal", function () {
-            window.open("file:///c:/newfolder/video.mp4");
-            window.location = "/admin/pedidos";
+            generarFactura();
+            //window.location = "/admin/pedidos";
         });
+*/
 
+
+
+/** Al elegir un articulo, se ejecuta una funcion que busca el precio de venta y disponibilidad de insumos*/
+$('#articulo_select').on('change',function(){
+    var articulo_id = $('#articulo_select').val();
+    mostrarPrecioArticulo(articulo_id);
+    mostrarStockRemanente(articulo_id);
+});
+
+// Las funciones:
+function mostrarPrecioArticulo(articulo_id){        //devuelve el precio de venta del articulo elegido
+    $.ajax({
+        url: "/admin/articulos",
+        data: {
+            id:articulo_id,
+            encontrarPrecio: true,
+        },
+        dataType: 'json',
+        success: function (data) {
+            var respuesta = JSON.parse(data);
+            $('#precioU_number').val(respuesta);
+        }
+    });
+}
+function mostrarStockRemanente(articulo_id){        //devuelve los insumos que quedan para armar el producto elegido
+    $.ajax({
+        url: "/admin/articulos",
+        data: {
+            id:articulo_id,
+            informarStockRestante: true,
+        },
+        dataType: 'json',
+        success: function (data) {
+            var respuesta = JSON.parse(data);
+            var i = 1;
+            console.log(respuesta);
+            for(i in respuesta) {
+                alert("**STOCK REMANENTE**          "+respuesta[i].insumo+": "+respuesta[i].cantidad_actual+ " "+respuesta[i].unidad);
+            }
+        }
+    });
+}
+
+
+/** Al seleccionar cliente devolver su responsabilidad ante iva y porcentaje de iba a abonar*/
+$('#cliente').on('change',function(){
+    var cliente_id = $('#cliente').val();
+    mostrarInfoTributaria(cliente_id);      //obtener responsabilidad IVA y % IVA
+});
+
+function mostrarInfoTributaria(cliente_id){
+    $.ajax({
+        url: "/admin/clientes",
+        data: {
+            id:cliente_id,
+        },
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            var respuesta = JSON.parse(data);
+            console.log(respuesta);
+            //$('#cliente').val($('#cliente').val() + respuesta.dni);
+            $('#responiva_select').val(respuesta.responiva+" (Factura "+respuesta.tipo_cbte+")");
+            $('#iva_select').val(respuesta.iva);
+        }
+    });
+}
+
+/** Al presionar 'Pagar con Cheque' cargar el cheque con la info del cliente y el pedido si no paga con seña ni es "Consumidor Final"*/
+function rellenarModalCheque(){
+    if(pagarTotal == true){                       //si no se va a señar, permitir Pagar con Cheque
+        var cliente_id = $('#cliente').val();
+        $.ajax({
+            url: "/admin/clientes",
+            data: {
+                id:cliente_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                var respuesta = JSON.parse(data);
+                console.log(respuesta);
+                if(respuesta.responiva == 'Consumidor Final'){
+                    alert('No se permite el pago con cheque a clientes en carácter de "Consumidor Final"');
+                }
+                else{
+                    $('#nombre_cheque').val(respuesta.n);
+                    $('#apellido_cheque').val(respuesta.a);
+                    $('#empresa_cheque').val(respuesta.empresa);
+                    $('#cuit_cheque').val(respuesta.dni);
+                    $('#monto_cheque').val(montoTotal);
+                    $("#modal-create-cheque").modal();              //Abrir el modal de cheque
+                }
+            }
+        });
+    }
+    else{
+        alert('No se puede pagar con cheque una seña, solo totalidad');
+    }
+}
+
+/** Envia el email de notificacion de stock bajo **/
+function enviarNotificacion(){
+    var articulo_id = $('#articulo_select').val();      //con esto solo notificara el ultimo articulo, despues hay que hacer que recorra la tabla de pedido
+    var mensaje;
+    $.ajax({
+        url: "/admin/articulos",
+        data: {
+            id:articulo_id,
+            informarStockRestante: true,
+        },
+        dataType: 'json',
+        success: function (data) {
+            var respuesta = JSON.parse(data);
+            var i = 1;
+            console.log(respuesta);
+            for(i in respuesta) {
+                mensaje = "El stock de "+respuesta[i].insumo+" esta muy bajo, solo quedan  "+respuesta[i].cantidad_actual+ " "+respuesta[i].unidad+" (stock minimo: "+respuesta[i].minimo+")\n";
+                //alert("**STOCK REMANENTE**          "+respuesta[i].insumo+": "+respuesta[i].cantidad_actual+ " "+respuesta[i].unidad);
+            }
+            $.ajax({
+                url: "/emails/notificacion",
+                data: {
+                    mensaje:mensaje,
+                },
+                dataType: 'json',
+                success: function(data) {
+                    var respuesta = JSON.parse(data);
+                    alert(data);
+                    alert(respuesta);
+                }
+            })
+        }
+    });
+}
+
+function sePagaconCheque(){
+    pagoCheque = true;
+}

@@ -18,7 +18,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('imagen');
             $table->string('password');
-            $table->enum('tipo', ['miembro','administrador'])->default('miembro');
+            $table->integer('nivel_acceso_id')->unsigned();
+            $table->foreign('nivel_acceso_id')->references('id')->on('roles')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

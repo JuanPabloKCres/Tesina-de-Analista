@@ -22,6 +22,7 @@
        class="btn btn-info">
        <span class="fa fa-cubes" aria-hidden="true"></span>
     Materiales</a>
+
     <a data-toggle="tooltip"
        data-placement="bottom"
        href="{{ route('admin.tipoArticulos.index') }}"
@@ -29,6 +30,15 @@
        class="btn btn-info">
        <span class="fa fa fa-futbol-o" aria-hidden="true"></span>
     Tipos de artículos</a>
+
+    <a data-toggle="tooltip"
+       data-placement="bottom"
+       href="{{ route('admin.ivas.index') }}"
+       title="Visualizar los porcentajes de IVA"
+       class="btn btn-info">
+        <span class="fa fa-percent" aria-hidden="true"></span>
+        IVA</a>
+
     <a data-toggle="tooltip"
        data-placement="bottom"
        href="{{ route('admin.responiva.index') }}"
@@ -36,4 +46,20 @@
        class="btn btn-info">
        <span class="fa fa-balance-scale" aria-hidden="true"></span>
     Categorías tributarias</a>
+
+    <a data-toggle="tooltip"
+       data-placement="bottom"
+       href="{{ route('admin.bancos.index') }}"
+       title="Visualizar los registros de entidades bancarias"
+       class="btn btn-info">
+        <span class="fa fa-bank" aria-hidden="true"></span>
+        Bancos</a>
+
+    <a data-toggle="tooltip"
+       data-placement="bottom"
+       href="{{ route('admin.paises.index') }}"
+       title="Visualizar los registros de paises, provincias y localidades"
+       class="btn btn-info">
+        <span class="fa fa-map" aria-hidden="true"></span>
+        Lugares</a>
 </div>

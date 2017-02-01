@@ -8,6 +8,8 @@ use Carbon\Carbon;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Laracasts\Flash\Flash;
+use App\Auditoria;
+use Illuminate\Support\Facades\Auth;
 
 class ResponivaController extends Controller
 {
@@ -38,9 +40,18 @@ class ResponivaController extends Controller
         $responiva = new Responiva($request->all());
         $responiva->save();
         Flash::success('Se ha registrado la responsabilidad tributaria.');
+        /** Auditoria almacena creacion */
+        $auditoria = new Auditoria();
+        $auditoria->tabla = "responiva";
+        $auditoria->elemento_id = $responiva->id;
+        $autor = new Auth();
+        $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->accion = "alta";
+        $auditoria->dato_nuevo = "nombre: ".$responiva->nombre." || iva: ".$responiva->iva." || Factura: ".$responiva->factura;
+        $auditoria->dato_anterior = null;
+        $auditoria->save();
         return redirect()->route('admin.responiva.index');
-
-
     }
 
 
@@ -55,9 +66,21 @@ class ResponivaController extends Controller
     public function update(Request $request, $id)
     {
         $responiva = Responiva::find($id);
+        $dato_anterior = "nombre: ".$responiva->nombre." || iva: ".$responiva->iva." || Factura: ".$responiva->factura;
         $responiva->fill($request->all());
         $responiva->save();
         Flash::success("Se han actualizado los datos hacerca de la responsabilidad ante IVA: ".$responiva->nombre.".");
+        /** Auditoria actualizacion */
+        $auditoria = new Auditoria();
+        $auditoria->tabla = "responiva";
+        $auditoria->elemento_id = $responiva->id;
+        $autor = new Auth();
+        $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->accion = "modificacion";
+        $auditoria->dato_nuevo =  "nombre: ".$responiva->nombre." || iva: ".$responiva->iva." || Factura: ".$responiva->factura;
+        $auditoria->dato_anterior = $dato_anterior;
+        $auditoria->save();
         return redirect()->route('admin.responiva.show', $id);
     }
 
@@ -65,6 +88,17 @@ class ResponivaController extends Controller
     public function destroy($id)
     {
         $responiva= Responiva::find($id);
+        $dato_anterior =  "nombre: ".$responiva->nombre." || iva: ".$responiva->iva." || Factura: ".$responiva->factura;
+        /** Auditoria eliminación */
+        $auditoria = new Auditoria();
+        $auditoria->tabla = "responiva";
+        $auditoria->elemento_id = $responiva->id;
+        $autor = new Auth();
+        $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->accion = "eliminacion";
+        $auditoria->dato_anterior = $dato_anterior;
+        $auditoria->save();
         $responiva->delete();
         Flash::error("Se ha suprmido ".$responiva->nombre ." como tipo de responsabilidad ante IVA");
           return redirect()->route('admin.responiva.index');

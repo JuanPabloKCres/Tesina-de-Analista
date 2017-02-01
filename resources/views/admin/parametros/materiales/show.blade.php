@@ -60,7 +60,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td><h4 class="box-heading">Cantidad de artículos asociados:</h4></td>
-                                                                <td><h4>{{ $material->articulos->count() }}</h4></td>
+                                                                <td><h4>{{ $material->insumos->count() }}</h4></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>

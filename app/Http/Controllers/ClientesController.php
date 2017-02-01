@@ -22,21 +22,38 @@ class ClientesController extends Controller {
         if ($request->ajax()) {
             $cliente = Cliente::find($request->id);
             $nombre = $cliente->apellido . " " . $cliente->nombre;
+            $n = $cliente->nombre;
+            $a = $cliente->apellido;
+            $responiva = $cliente->responiva->nombre;
+            $iva = $cliente->responiva->iva;
+            $empresa = $cliente->empresa;
             $dni = "";
-            $domicilio = "";
-            $tipo_cbre = $cliente->responiva->factura;
+            $direccion = "";
+            $localidad = "";
+            $provincia = "";
+            $tipo_cbte = $cliente->responiva->factura;
             if ($cliente->cuit) {
                 $dni = $cliente->cuit;
             } else {
                 $dni = $cliente->dni;
             }
-            if ($cliente->domicilio) {
-                $domicilio = $cliente->domicilio;
+            if ($cliente->direccion) {
+                $direccion = $cliente->direccion;
             } else {
                 $domicilio = "No registrado";
             }
+            if ($cliente->localidad) {
+                $localidad = $cliente->localidad->nombre;
+            } else {
+                $localidad = "No registrado";
+            }
+            if ($cliente->provincia) {
+                $provincia = $cliente->localidad->provincia_id->nombre;
+            } else {
+                $provincia = "No registrado";
+            }
 
-            $datosValidados = array("nombre" => $nombre, "dni" => $dni, "domicilio" => $domicilio, "tipo_cbre" => $tipo_cbre);
+            $datosValidados = array("nombre" => $nombre, "n" =>$n, "a" => $a, "empresa"=>$empresa, "dni" => $dni, "domicilio" => $direccion, "localidad" => $localidad, "provincia" => $provincia, "tipo_cbte" => $tipo_cbte, "responiva"=>$responiva, "iva"=>$iva);
             return response()->json(json_encode($datosValidados, true));
         }
         $clientes = Cliente::all();

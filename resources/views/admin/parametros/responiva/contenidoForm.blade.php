@@ -6,7 +6,9 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-pencil"></i>
-                     {!! Form::select('nombre', array('Consumidor Final'=>'Consumidor Final','Monotributista'=>'Monotributista','Responsable Inscripto'=>'Responsable Inscripto','Excento'=>'Excento'),
+                    {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'campo requerido', 'maxlength' => '3', 'required']) !!}
+
+                    {!! Form::select('nombre_ejemplo', array('Consumidor Final'=>'Consumidor Final','Monotributista'=>'Monotributista','Responsable Inscripto'=>'Responsable Inscripto','Excento'=>'Excento'),
                       ['class' => 'form-control', 'placeholder' => 'campo requerido', 'maxlength' => '50', 'required']) !!}
                 </div>
             </div>

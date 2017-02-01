@@ -9,22 +9,18 @@ class Proveedor extends Model
   	protected $table =  "proveedores";
 
     protected $fillable = ['nombre', 'cuit', 'localidad_id','imagen', 'web', 'calle', 'altura',
-                            'rubro_id', 'telefono', 'celular', 'email', 'horario_atencion'];
+                            'rubro_id', 'telefono', 'celular', 'email', 'hora_a_manana','hora_c_manana', 'hora_a_tarde','hora_c_tarde'];
 
 
     public function rubro() 
     {
         return $this->belongsTo('App\Rubro');
     }
-    
-    public function articulos() // esto hay que sacar, ya que ahora un proveedor esta vinculado con un insumo y no con un articulo (que tiene varios insumos)
-    {
-        return $this->hasMany('App\Articulo');
-    }
 
-    public function insumos()
+
+    public function insumo_compra()
     {
-        return $this->hasMany('App\Insumo');
+        return $this->hasMany('App\InsumoCompra');
     }
 
     public function localidad()

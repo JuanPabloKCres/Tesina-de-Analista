@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login | La Auténtica</title>
+    <title>Login | GN Soluciónes</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +20,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2">
-                                            <div class="panel panel-yellow">
+                                            <div class="panel panel-red">
                                                 <div class="panel-heading">
                                                     Restablecer contraseña
                                                 </div>
@@ -37,7 +37,7 @@
                                         {!! csrf_field() !!}
 
                                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                            <label class="col-md-4 control-label">Correo</label>
+                                            <label class="col-md-4 control-label">Correo:</label>
 
                                             <div class="col-md-6">
                                                 <input type="email" class="form-control" name="email" value="{{ old('email') }}">

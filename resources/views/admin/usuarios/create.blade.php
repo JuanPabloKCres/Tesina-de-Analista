@@ -24,6 +24,19 @@
 {!! Form::open(['route' => 'admin.usuarios.store', 'id' =>'form-crear', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
                     <h3>Detalles de la Cuenta</h3>
                       <br>
+                        <div class="form-group"><label class="col-sm-3 control-label">Rol</label>
+                            <div class="col-sm-9 controls">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="input-icon right">
+                                            <i class="fa fa-envelope"></i>
+                                            {!! Form::select('rol', array('1'=>'Administrador','2'=>'Administrador de la web','3'=>'Vendedor','4'=>'Cajero'),['placeholder' => 'campo requerido..'], ['id'=>'rol_select','class' => 'form-control']) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group"><label class="col-sm-3 control-label">Email</label>
                             <div class="col-sm-9 controls">
                                 <div class="row">

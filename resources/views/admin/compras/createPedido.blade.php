@@ -3,7 +3,7 @@
 @section('script')
 <script src="{{ URL::asset('js/pluginsCompras.js') }}"></script>
 <script>
-var listSidebar = "li8";
+var listSidebar = "li14";
 var elemFaltante = "nada";
 </script>
 @endsection
@@ -29,6 +29,7 @@ Pedidos - Registrar compra Insumos
     <div class="page-header pull-right">
         <div class="page-toolbar">
             <a data-toggle="tooltip" data-placement="bottom" href="{{  route('admin.compras.index') }}" title="Volver a los registros de compras"  class="btn btn-blue"> <span class="fa fa-arrow-circle-o-left" aria-hidden="true"></span> Volver</a>
+            <a data-toggle="tooltip" data-placement="bottom" href="{{  route('admin.insumos.index') }}" title="Ir a la pantalla de compra de insumos"  class="btn btn-blue"> <span class="fa fa-puzzle-piece" aria-hidden="true"></span>  Registrar Insumo</a>
             <button data-placement="bottom" title="Registrar un nuevo Proveedor" type="button" data-hover="tooltip" data-toggle="modal" data-target="#modal-create"  class="btn btn-blue">
                 <span class="fa fa-user-plus" aria-hidden="true"></span> Registrar Proveedor
             </button>
@@ -67,6 +68,7 @@ Pedidos - Registrar compra Insumos
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-md-9">
                             <div class="row">
                                 <div class="col-lg-12">
@@ -116,6 +118,7 @@ Pedidos - Registrar compra Insumos
                                     </div>
                                 </div>
                             </div>
+
                             {{--
 
 
@@ -127,6 +130,12 @@ Pedidos - Registrar compra Insumos
                             @include('admin.insumoCompra.tablaRegistros')
                             <button id="botonExito" type="button" data-hover="tooltip" data-toggle="modal" data-target="#modal-exito"  class="btn hide"></button>
                         </div>
+                        <div class="form-group "><label class="col-sm-3 control-label">Costos de envio ($):</label>
+                            <div class="col-md-9">
+                                {!! Form::text('costo_envio', null, ['class' => 'text-right', 'id' => 'costo_envio']) !!}
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

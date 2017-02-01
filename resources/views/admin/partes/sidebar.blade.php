@@ -11,14 +11,6 @@
                         </i>
                         <span class="menu-title">Usuarios</span></a>
                     </li>
-                    <li id="li2">
-                        <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de paises, provincias y localidades" href="{{ route('admin.paises.index') }}">
-                           <i class="fa fa-street-view">
-                                <div class="icon-bg bg-orange"></div>
-                            </i>
-                            <span class="menu-title">Lugares</span>
-                        </a>
-                    </li>
                     <li id="li3">
                         <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de rubros de proveedores" href="{{ route('admin.rubros.index') }}">
                             <i class="fa fa-industry">
@@ -48,10 +40,9 @@
                             <i class="fa fa-tags">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
-                            <span class="menu-title">Artículos</span>
+                            <span class="menu-title">Producciones</span>
                         </a>
                     </li>
-
 
 
                     <li id="li14">
@@ -59,7 +50,7 @@
                             <i class="fa fa-puzzle-piece">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
-                            <span class="menu-title">Insumos</span>
+                            <span class="menu-title">Stock</span>
                         </a>
                         <div id="dropdown-Insumos" class="panel-collapse collapse">
                             <div class="panel-body">
@@ -79,7 +70,6 @@
                         </div>
                     </li>
 
-
                     <li id="li7">
                         <a data-toggle="tooltip" data-placement="right" title="Ir a los registros de nuestros clientes" href="{{ route('admin.clientes.index') }}">
                             <i class="fa fa-child">
@@ -97,11 +87,11 @@
                         </a>
                     </li>
                     <li id="li9">
-                        <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de ventas" href="{{ route('admin.estadisticas.index') }}">
+                        <a data-toggle="tooltip" data-placement="right" title="Visualizar el historial de ventas" href="{{ route('admin.estadisticas.index') }}">
                             <i class="fa fa-archive">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
-                            <span class="menu-title">Historial de ventas</span>
+                            <span class="menu-title">Ventas</span>
                         </a>
                     </li>
                     <li id="li10">
@@ -125,7 +115,7 @@
                         <i class="fa fa-eye">
                             <div class="icon-bg bg-orange"></div>
                         </i>
-                        <span class="menu-title">Auditoria y Respaldo</span>
+                        <span class="menu-title">Auditoria</span>
                         </a>
                     </li>
                     <li id="li13">

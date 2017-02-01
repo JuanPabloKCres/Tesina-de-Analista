@@ -30,7 +30,7 @@
                                         <p><h5>Rubro: {{ $proveedor->rubro->nombre }}</h5></p>
 
                                         <p><h4>Dirección: {{ $proveedor->calle." ".$proveedor->altura }}</h4></p>
-                                        <p><h4><b>Horario Atención:</b> {{ $proveedor->horario_atencion}}</h4></p>
+                                        <p><h4><b>Horario Atención:</b> {{ $proveedor->hora_a_manana}} a {{ $proveedor->hora_c_manana}} y {{ $proveedor->hora_a_tarde}} a {{ $proveedor->hora_c_tarde}}</h4></p>
 
                                     </div>
                                 </div>                                                 
@@ -44,3 +44,7 @@
         </div>
     </div>
 </div>
+
+@section('script')
+    <script src="{{ asset('js/proveedores.js') }}"></script>
+@endsection

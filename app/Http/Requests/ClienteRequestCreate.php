@@ -23,7 +23,6 @@ class ClienteRequestCreate extends Request
             'dni'=> 'max:8|unique:clientes',
             'email' => 'email|max:100|unique:clientes',
             'telefono' => 'required|max:100|unique:clientes',
-            'empresa',
             'direccion',
             'provincia_id' => 'required',
             'localidad_id' => 'required',

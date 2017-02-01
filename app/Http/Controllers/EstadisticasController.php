@@ -16,14 +16,8 @@ use Illuminate\Support\Collection as Collection;
 
 class EstadisticasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
      public function index(Request $request)
      {
-
        $pedidos = Venta::whereNotNull('userVenta_id')
        ->orderBy('id','ASC')
        ->paginate();
@@ -63,7 +57,7 @@ class EstadisticasController extends Controller
                 $clienteRanking->valorCompras = $clienteRanking->valorCompras + $pedido->importe();
                 $rankingClientes[$pedido->cliente->id] = $clienteRanking;
               }else{
-                $clienteRanking = new ClienteRanking ();
+                $clienteRanking = new ClienteRanking();
                 $clienteRanking->id = $pedido->cliente->id;
                 $clienteRanking->nombreCompleto = $pedido->cliente->apellido." ".$pedido->cliente->nombre;
                 $clienteRanking->cantCompras = 1;
@@ -75,13 +69,13 @@ class EstadisticasController extends Controller
               //por cada registro de venta hay que realizar un foreach para conocer los articulos y la información asociada a ellos.
               foreach ($pedido->articulos_ventas as $articuloPedido) {
                 if(array_key_exists($articuloPedido->articulo->id, $rankingArticulos)){
-                  $articuloRanking = new ArticuloRanking ();
+                  $articuloRanking = new ArticuloRanking();
                   $articuloRanking = $rankingArticulos[$articuloPedido->articulo->id];
                   $articuloRanking->cantidad = $articuloRanking->cantidad + $articuloPedido->cantidad;
                   $articuloRanking->importe = $articuloRanking->importe + $articuloPedido->importe;
                   $rankingArticulos[$articuloPedido->articulo->id] = $articuloRanking;
                 }else{
-                  $articuloRanking = new ArticuloRanking ();
+                  $articuloRanking = new ArticuloRanking();
                   $articuloRanking->id = $articuloPedido->articulo->id;
                   $articuloRanking->nombre = $articuloPedido->articulo->nombre;
                   $articuloRanking->cantidad = $articuloPedido->cantidad;
@@ -109,69 +103,5 @@ class EstadisticasController extends Controller
         ->with('rankingArticulos',$collectionArticulos->sortByDesc('cantidad')->take(5));
      }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

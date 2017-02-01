@@ -10,11 +10,11 @@
 
 @section('content')
     @include('admin.parametros.unidades_medidas.editar')
-    @include('admin.parametros.unidades_medidas.confirmar')
+    {{--@include('admin.parametros.unidades_medidas.confirmar')--}}
     <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
         <div class="page-header pull-left">
             <div class="page-title">
-                Talle: {{ $unidades_medidas->unidad_medida }}</div>
+                Unidad: {{ $unidad_medida->unidad }}</div>
         </div>
         <div class="page-header pull-right">
             <div class="page-toolbar">
@@ -80,7 +80,7 @@
                                                 <hr/>
                                                 <br>
                                                 <div class="pull-right">
-                                                    <button type="button"  data-hover="tooltip"  data-toggle="modal" data-target="#modal-actualizar"  title="Visualizar la pantalla de actualización de datos. En ella podrá actualizar los datos pertinentes al registro."  class="btn btn-warning">  Actualizar datos</i></button>
+                                                    <!-- <button type="button"  data-hover="tooltip"  data-toggle="modal" data-target="#modal-actualizar"  title="Visualizar la pantalla de actualización de datos. En ella podrá actualizar los datos pertinentes al registro."  class="btn btn-warning">  Actualizar datos</i></button> -->
                                                     <button type="button"  data-hover="tooltip"  data-toggle="modal" data-target="#modal-confirmar"  title="Confirmar eliminación de datos." class="btn btn-danger">Eliminar registro</i></button>
                                                 </div>
                                             </div>

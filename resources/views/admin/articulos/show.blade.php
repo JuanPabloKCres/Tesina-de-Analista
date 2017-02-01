@@ -54,20 +54,12 @@
                                                                 <td><h4>{{ $articulo->nombre }}</h4></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><h4 class="box-heading">Proveedor:</h4></td>
-                                                                <td><h4>{{ $articulo->proveedor->nombre}}</h4></td>
-                                                            </tr>
-                                                            <tr>
                                                                 <td><h4 class="box-heading">Material:</h4></td>
                                                                 @if($articulo->material)
                                                                     <td><h4>{{ $articulo->material->nombre}}</h4></td>
                                                                 @else
                                                                     <td><h4>{{ "No se registro"}}</h4></td>
                                                                 @endif
-                                                            </tr>
-                                                            <tr>
-                                                                <td><h4 class="box-heading">Tipo:</h4></td>
-                                                                <td><h4>{{ $articulo->tipo->nombre}}</h4></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><h4 class="box-heading">Talle:</h4></td>
@@ -101,14 +93,49 @@
                                                                     <td><h4>{{ "No corresponde"}}</h4></td>
                                                                 @endif
                                                             </tr>
+
                                                             <tr>
-                                                                <td><h4 class="box-heading">Stock actual:</h4></td>
-                                                                <td><h4>{{ $articulo->stock}} unidades</h4></td>
+                                                                <td><h4 class="box-heading">Costo en insumos:</h4></td>
+                                                                @if($articulo->costo)
+                                                                    <td><h4>$ {{ $articulo->costo}}</h4></td>
+                                                                @else
+                                                                    <td><h4>{{ "No tiene"}}</h4></td>
+                                                                @endif
                                                             </tr>
                                                             <tr>
-                                                                <td><h4 class="box-heading">Stock mínimo:</h4></td>
-                                                                <td><h4>{{ $articulo->stockMinimo}} uniddades</h4></td>
+                                                                <td><h4 class="box-heading">Mergen:</h4></td>
+                                                                @if($articulo->margen)
+                                                                    <td><h4>{{ $articulo->margen}}%</h4></td>
+                                                                @else
+                                                                    <td><h4>{{ "No se pudo calcular"}}</h4></td>
+                                                                @endif
                                                             </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Ganancias por unidad vendida:</h4></td>
+                                                                @if($articulo->ganancia)
+                                                                    <td><h4>$ {{ $articulo->ganancia}}</h4></td>
+                                                                @else
+                                                                    <td><h4>{{ "No se pudo calcular"}}</h4></td>
+                                                                @endif
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">IVA:</h4></td>
+                                                                @if($articulo->iva)
+                                                                    <td><h4>{{ $articulo->iva}}% (${{$articulo->montoIva}})</h4></td>
+                                                                @else
+                                                                    <td><h4>{{ "No corresponde"}}</h4></td>
+                                                                @endif
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Precio Venta:</h4></td>
+                                                                @if($articulo->precioVta)
+                                                                    <td><h4>{{ $articulo->precioVta}}</h4></td>
+                                                                @else
+                                                                    <td><h4>{{ "Todavia no esta disponible para venta"}}</h4></td>
+                                                                @endif
+                                                            </tr>
+
+
                                                             <tr>
                                                                 <td><h4 class="box-heading">Cantidad de ventas asociadas:</h4></td>
                                                                 <td><h4 class="box-heading"></h4></td>
@@ -130,7 +157,7 @@
                                             <br>
                                             <div class="pull-right">
                                                 <button type="button"  data-hover="tooltip"  data-toggle="modal" data-target="#modal-actualizar"  title="Visualizar la pantalla de actualización de datos. En ella podrá actualizar los datos pertinentes al registro."  class="btn btn-warning">  Actualizar datos</i></button>
-                                                <button type="button"  data-hover="tooltip"  data-toggle="modal" data-target="#modal-confirmar"  title="Confirmar eliminación de datos." class="btn btn-danger">Eliminar registro</i></button>
+                                                <button type="button"  data-hover="tooltip"  data-toggle="modal" data-target="#modal-confirmarEliminacion"  title="Confirmar eliminación de datos." class="btn btn-danger">Eliminar registro</i></button>
                                             </div>
                                         </div>
                                     </div>

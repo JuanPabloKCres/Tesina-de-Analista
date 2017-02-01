@@ -24,8 +24,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
    Route::resource('insumos','InsumosController');             //Insumos
    Route::resource('insumos/obtenerCosto','InsumosController@obtenerCosto');             //Insumos
    Route::resource('articulos','ArticulosController');
+   Route::resource('factura','FacturasController');
+
+   Route::resource('notificacion','MailController');
+
    Route::resource('colores','ColoresController');
+   Route::resource('bancos','BancosController');         //Bancos
    Route::resource('responiva','ResponivaController');
+   Route::resource('ivas','IvasController');
 
    Route::resource('estadisticas','EstadisticasController');
    Route::resource('proveedores','ProveedoresController');

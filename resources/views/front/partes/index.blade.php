@@ -68,7 +68,7 @@
                 </div>
             </section>
         </div>
-        <h2 class="modal-content thumbnail" style="background-color: #f5e79e"><p><b>Sitio web en construcci&oacuten</b></p>
+        <h2 class="modal-content thumbnail" style="background-color: #f5e79e"><p><b>Sitio web en construcción</b></p>
             <p></p>
             <p> </p></h2>
 
@@ -76,6 +76,7 @@
         @include('front.partes.tipos')
         @include('front.partes.productos')
         @include('front.partes.contacto')  <!-- mapa esta dentro de contacto-->
+        <a class="twitter-grid" href="https://twitter.com/TwitterDev/timelines/539487832448843776">Tweets de GN Soluciones</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
         @include('front.partes.pie')
     </div><!--/#wrapper-->
 
@@ -83,10 +84,6 @@
     @include('front.partes.scripts')
     @yield('script')
 
-    <script>
-        function myFunction() {
-            alert("Este sitio web se encuentra en reparacion!");
-        }
-    </script>
+
 </body>
 </html>

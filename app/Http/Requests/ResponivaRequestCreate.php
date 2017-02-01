@@ -24,11 +24,9 @@ class ResponivaRequestCreate extends Request
     public function rules()
     {
         return [
-            'nombre'=> 'required|max:30|unique:responiva',
-            'iva'=>'required|max:3',
+            'nombre' => 'required|max:30|unique:responiva',
+            'iva'=>'required|max:5',
             'factura'=>'required|max:1',
-            'descripcion'=>'max:50'
-
         ];
     }
 }

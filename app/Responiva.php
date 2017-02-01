@@ -7,13 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Responiva extends Model
 {
     protected $table = "responiva";
-
-    protected $fillable = ['nombre','iva','factura','descripcion'];
-    //el atributo 'descripcion' debe añadirse en 'migrations' de considerarse importante para el cliente
+    protected $fillable = ['nombre','iva','factura'];
 
     public function clientes()
     {
         return $this->hasMany('App\Cliente');
+    }
+
+    public function config()
+    {
+        return $this->hasMany('App\Config');
     }
 
     /***************************************************************/

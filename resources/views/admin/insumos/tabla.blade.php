@@ -44,16 +44,16 @@
                                     <table class="display dataTable table table-hover table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Nombre</th>
-                                                <th>Material</th>
-                                                <th>Tipo</th>
-                                                <th>Talle</th>
-                                                <th>Alto</th>
-                                                <th>Ancho</th>
-                                                <th>Color</th>
-                                                <th>Stock actual</th>
+                                                <th class="text-center">Nombre</th>
+                                                <th class="text-center">Material</th>
+                                                <th class="text-center">Und medida compra</th>
+                                                <th class="text-center">Talle</th>
+                                                <th class="text-center">Alto</th>
+                                                <th class="text-center">Ancho</th>
+                                                <th class="text-center">Color</th>
+                                                <th class="text-center">Stock actual</th>
                                                 <!--StockMinimo-->
-                                                <th>Costo ult/compra.</th>
+                                                <th class="text-center">Costo ult/compra.</th>
 
 
                                                 <th class="text-center">Acciones</th>
@@ -68,11 +68,13 @@
                                                 @else
                                                     <td>{{ "Ninguno" }}</td>
                                                 @endif
-                                                @if($insumo->tipo)
-                                                    < class="text-center">{{ $insumo->tipo->nombre}}</td>
+
+                                                @if($insumo->material)
+                                                    <td class="text-center">{{ $insumo->unidad_medida->unidad }}</td>
                                                 @else
-                                                    <td class="text-center">{{ "Otros" }}</td>
+                                                    <td class="text-center">{{ "Unidades" }}</td>
                                                 @endif
+
 
                                                 @if($insumo->talle)
                                                     <td class="text-center">{{ $insumo->talle->talle}}</td>
@@ -98,7 +100,7 @@
                                                 @endif
                                                 <td class="text-center">{{ $insumo->stock }}</td>
                                                 <!--StockMinimo-->
-                                                <td class="text-center">{{ $insumo->costo }}</td>
+                                                <td class="text-center">$ {{ $insumo->costo }}</td>
                                                 <td class="text-center">
                                                     <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá acceder acciones como edición y eliminación del mismo" href="{{ route('admin.insumos.show', $insumo->id) }}" class="btn btn-info"> <span class="fa fa-eye" aria-hidden="true"></span></a>
                                                 </td>

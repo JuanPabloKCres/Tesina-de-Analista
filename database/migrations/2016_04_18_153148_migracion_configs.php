@@ -21,6 +21,8 @@ class MigracionConfigs extends Migration
             $table->string('email');
             $table->string('direccion');
             $table->string('imagen');
+            $table->integer('responiva_id')->unsigned();
+            $table->foreign('responiva_id')->references('id')->on('responiva')->onDelete('cascade');
             $table->integer('localidad_id')->unsigned();            
 
             $table->foreign('localidad_id')->references('id')->on('localidades')->onDelete('cascade');

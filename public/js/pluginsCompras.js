@@ -7,6 +7,7 @@
  * si al registrar estoy en la pág 1, el 11º registro será ignorado.
  */
 
+//alert('Se entra a pluginsCompras.js');
 
 $(document).ready(function () {
     $('#tblListaInsumos').DataTable({
@@ -17,7 +18,6 @@ $(document).ready(function () {
         "lengthMenu": [[-1], ["Todos"]]
     });
 });
-
 
 
 /*Las variables que se usan en las funciones de este script*/
@@ -103,7 +103,6 @@ function agregarContenido(insumo_select, proveedor_select, nombreInsumo, cantida
 }
 
 
-
 /* Este método es el que toma el valor total de un pedido o si por el contrario solo se quiere señar el mismo. */
 $("#botonModalidad").click(function () {
         pagarTotal = true;
@@ -142,31 +141,33 @@ function enviarPedido(pagado, entregado, confirmado)
     $('#tblListaInsumos tbody tr').each(function () {
         var dataFila = $('#tblListaInsumos').DataTable().row(this).data();
         var proveedor_id = $('#proveedor_select').val();
-        var linea = {insumo_id: dataFila[1], cantidad: dataFila[3] /*, proveedor_select: dataFila[4]*/, proveedor_id, costo_unitario: dataFila[5], importe: dataFila[6]};
-
+        var linea = {insumo_id: dataFila[1], cantidad: dataFila[3]/*, proveedor_select: dataFila[4]*/, proveedor_id: proveedor_id, costo_unitario: dataFila[5], importe: dataFila[6]};
         lineas [numLi] = linea;
         console.log(lineas);
         //factura.items [numLi] = linea;
         numLi++;
     });
 
-    alert(lineas[0].proveedor_id);
-
+    var proveedor_id = $('#proveedor_select').val();
+    var costo_envio = $('#costo_envio').val();
     //persistir venta o pedido
     $.ajax({
         dataType: 'JSON',
         url: "/admin/compras/create",
         data: {
+            proveedor_id: proveedor_id,
             renglones: lineas,
             confirmado: confirmado,
             pagado: pagado,
             entregado: entregado,
             recibido: recibido,
             usuarioPedido: $('#usuarioPedido').val(),
+            costo_envio: costo_envio,
             montoPedido: montoPedido
+
         },
         success: function (data) {
-            alert('Los datos de la compra fueron exitosamente enviados a ComprasController@create');
+            //alert('Los datos de la compra fueron exitosamente enviados a ComprasController@create');
             /* Una vez completado el proceso se muestra el mensaje de exito*/
             $('#mensajeExito').html(data);
             $('#botonExito').click();
@@ -196,7 +197,7 @@ function borrarFila(d)
     });
     $('#tblListaInsumos').dataTable().fnDeleteRow(numFilaBorrar);
     $('#mp').html(montoPedido);
-    $('#mt').html(montoTotal);
+    $('#mt').html(montoTotal+$('#mt').html);
     cantFilas--;
 }
 
@@ -310,4 +311,81 @@ $("#cantidad_number").keypress(function () {
     }
 });
 
+/******* La funcion valida que en el campo "costo_envio" de una Compra se ingresen SOLO NUMEROS ******/
+$(document).ready(function () {
+    $("#costo_envio").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: Ctrl+C
+            (e.keyCode == 67 && e.ctrlKey === true) ||
+                // Allow: Ctrl+X
+            (e.keyCode == 88 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+            // let it happen, don't do anything
+            return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+});
 
+$('#costo_envio').keypress(function () {
+}).keyup(function () {
+        sumaraTotal();});
+
+function sumaraTotal(){
+    var costo_envio = $('#costo_envio').val();
+    costo_envio = parseFloat(costo_envio);
+    //alert('Se deberia actualizar MontoTotal +'+costo_envio);
+    //costo_envio;
+
+    $('#mt').html(parseFloat(montoTotal+costo_envio));
+}
+
+/** Al elegir un insumo, se ejecuta una funcion que busca el costo de el insumo seleccionado */
+$('#insumo_select').on('change',function(){
+    var insumo_id = $('#insumo_select').val();
+    mostrarPrecioInsumo(insumo_id);
+    //mostrarStockRemanente(insumo_id);
+});
+// Las funciones:
+function mostrarPrecioInsumo(insumo_id){
+
+    $.ajax({
+        url: "/admin/insumos",
+        data: {
+            id:insumo_id,
+            encontrarCosto:true,
+        },
+        dataType: 'json',
+        success: function (data) {
+            var respuesta = JSON.parse(data);
+            //console.log(respuesta);
+            $('#costo_number').val(respuesta.costo);
+            alert(respuesta.nombre+(' (Actualmente '+respuesta.stock+' unidades en Stock)'));
+        }
+    });
+}
+
+/*
+ function mostrarStockRemanente(articulo_id){
+ $.ajax({
+ url: "/admin/articulos",
+ data: {
+ id:articulo_id,
+ informarStockRestante:true,
+ },
+ dataType: 'json',
+ success: function (data) {
+ var respuesta = JSON.parse(data);
+ console.log(respuesta);
+ alert("(Stock remanente)"+respuesta.insumo+": "+respuesta.cantidad_actual);
+ }
+ });
+ }
+ */

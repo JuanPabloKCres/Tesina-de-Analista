@@ -15,8 +15,6 @@ class AddTallesTable extends Migration
         Schema::create('talles', function (Blueprint $table) {
             $table->increments('id');
             $table->string('talle');
-            $table->double('alto');
-            $table->double('ancho');
             $table->timestamps();
         });
     }

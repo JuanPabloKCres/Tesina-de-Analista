@@ -14,26 +14,9 @@ use Laracasts\Flash\Flash;
 
 class MailController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function store(Request $request)     /**Para email de contacto desde el Front**/
     {
-
-    }
-
-
-    public function create()
-    {
-
-    }
-
-
-    public function store(Request $request)
-    {
-
         Mail::send('emails.contact', $request->all(), function($msj){
             $msj->subject('Correo de contacto');
             $msj->to('jpaulnava@gmail.com');
@@ -44,54 +27,17 @@ class MailController extends Controller
         return Redirect::to('/');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function index(Request $request)     /**Para notificacion automatica de stock bajo a administrador**/
     {
-        //
+        if($request->ajax()){
+            Mail::send('emails.notificacion', $request->all(), function($msj){
+                $msj->subject('Notificacion de stock bajo');
+                $msj->to('jpaulnava@gmail.com');
+            });
+            Flash::overlay('Se ha notificado al repositor de la necesidad de reponer insumos');
+            return response()->json(json_encode("Se envio el email, desde MailController.php", true));
+        }
+
     }
 
-    public function sitioReparacion()
-    {
-        Flash::overlay('Bien! su mensaje se envio correctamente');
-        return Redirect::to('/');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

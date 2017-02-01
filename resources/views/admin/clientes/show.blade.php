@@ -126,7 +126,7 @@ Detalle del cliente
                                                             <tr>
                                                                 <td><h4 class="box-heading">Fecha de la última compra:</h4></td>
                                                                 <td>
-                                                                    <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá tener acceso al detalle de la última compra que realizó este cliente" href="{{ route('admin.pedidos.edit', $cliente->ultimaCompra()->id) }}" class="btn btn-info"> <h4>{{$cliente->ultimaCompra()->fecha_venta}}</h4></a>
+
                                                                 </td>
                                                             </tr>
                                                             <tr>

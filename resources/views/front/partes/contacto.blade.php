@@ -67,8 +67,7 @@
 			</div>
 		</div>
 	</div>
-
-
+@include('front.partes.mapa')
 
 
 </div>
