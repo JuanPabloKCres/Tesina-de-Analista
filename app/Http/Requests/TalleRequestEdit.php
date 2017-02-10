@@ -26,7 +26,8 @@ class TalleRequestEdit extends Request
     {
         return [
             'nombre' => 'required|max:50|unique:talles,nombre,'.$this->route->getParameter('talles'),
-            'descripcion'
+            'alto' => 'max:50|unique:talles',
+            'ancho' => 'max:50|unique:talles'
         ];
     }
 }

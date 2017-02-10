@@ -65,4 +65,4 @@
     </div>
     <input class="hide" id="botonMandar" type="submit" value="Submit">
 </form>
-<button id="botonModalidad" class="btn btn-primary btn-block"> Señar el pedido</button>
+<button id="botonModalidad" class="btn btn-primary btn-block" title="Haga click para fijar un monto de Seña al pedido, de lo contrario se abona la totalidad del mismo." > Quiero señar el pedido</button>

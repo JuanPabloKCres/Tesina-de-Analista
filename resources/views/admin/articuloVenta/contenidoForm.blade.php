@@ -1,8 +1,26 @@
 <form class="form-horizontal" id="form-agregar">
     <?php
         $array_fecha = getdate();
-        $fecha_hoy =$array_fecha['year'].'-0'.$array_fecha['mon'].'-'.$array_fecha['mday'];
+        $año = $array_fecha['year'];
+        $mes = $array_fecha['mon'];
+        $dia = $array_fecha['mday'];
+
+        if(strlen ($mes)==1){                       #si mes tiene un digito anteponer un 0 al mes
+            if(strlen ($dia)==1){                       #si dia tambien tiene un digito anteponer un 0 al dia
+                $fecha_hoy = $año.'-0'.$mes.'-0'.$dia;
+            }else{
+                $fecha_hoy = $año.'-0'.$mes.'-'.$dia;
+            }
+        }else{
+            if(strlen ($dia)==1){                       #si dia tiene un digito anteponer un 0 al dia
+                $fecha_hoy = $año.'-'.$mes.'-0'.$dia;
+            }else{
+                $fecha_hoy = $año.'-'.$mes.'-'.$dia;
+            }
+        }
+        //echo $fecha_hoy;
     ?>
+
     <div class="row text-center">
         <div class="col-lg-12">
             <h3>Artículos</h3>

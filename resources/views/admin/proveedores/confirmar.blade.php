@@ -7,9 +7,11 @@
                 <h4 class="modal-title">
                     Eliminar registro: {{ $proveedor->nombre }}</h4>
             </div>
+            {{--
                 @if ($proveedor->compras->count()!=0)
                     @include('admin.partes.msjRegAsociados')
                 @else
+            --}}
                     <div class="modal-body">
                         {!! Form::open(['route' => ['admin.proveedores.destroy', $proveedor], 'method' => 'DELETE']) !!}
                         @include('admin.partes.msjConfirmar')
@@ -22,7 +24,9 @@
                         {!! Form::close() !!}
                         <br>
                     </div>
+                {{--
                 @endif
+                --}}
         </div>
     </div>
 </div>

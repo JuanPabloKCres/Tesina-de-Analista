@@ -20,11 +20,6 @@ class IvasController extends Controller
         Carbon::setlocale('es'); // Instancio en Español el manejador de fechas de Laravel
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $ivas = Iva::all();
@@ -34,7 +29,6 @@ class IvasController extends Controller
             return view('admin.parametros.ivas.tabla')->with('ivas',$ivas); // se devuelven los registros
         }
     }
-
 
     public function create()
     {
@@ -53,7 +47,7 @@ class IvasController extends Controller
         $auditoria->elemento_id = $iva->id;
         $autor = new Auth();
         $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
-        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
         $auditoria->accion = "alta";
         $auditoria->dato_nuevo = "iva: ".$iva->iva."%";
         $auditoria->dato_anterior = null;
@@ -81,7 +75,7 @@ class IvasController extends Controller
         $auditoria->elemento_id = $iva->id;
         $autor = new Auth();
         $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
-        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
         $auditoria->accion = "modificacion";
         $auditoria->dato_nuevo =  "iva: ".$iva->iva."%";
         $auditoria->dato_anterior = $dato_anterior;
@@ -99,7 +93,7 @@ class IvasController extends Controller
         $auditoria->elemento_id = $iva->id;
         $autor = new Auth();
         $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
-        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
         $auditoria->accion = "eliminacion";
         $auditoria->dato_anterior = $dato_anterior;
         $auditoria->save();

@@ -45,7 +45,7 @@
                                      <table class="display dataTable table table-hover table-striped">
                                         <thead>
                                             <tr>                                                
-                                                <th>Apellido y nombre</th>
+                                                <th class="text-center">Apellido y nombre</th>
                                                 <th class="text-center">Rol</th>
                                                 <th class="text-center">Email</th>
                                                 <th class="text-center">Acciones</th>
@@ -54,9 +54,8 @@
                                         <tbody>
                                         @foreach($usuarios as $usuario)
                                             <tr>                                                
-                                                <td>{{ $usuario->name }}</td>
-                                                {{--<td>{{ $usuario->rol->nombre }}</td>        --}}
-                                                <td class="text-center">Administrador</td>
+                                                <td class="text-center">{{ $usuario->name }}</td>
+                                                <td class="text-center">{{ $usuario->rol->nombre }}</td>
                                                 <td class="text-center">{{ $usuario->email }}</td>
                                                 <td class="text-center">
                                                     <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá acceder acciones como edición y eliminación del mismo" href="{{ route('admin.usuarios.show', $usuario->id) }}" class="btn btn-info"> <span class="fa fa-eye" aria-hidden="true"></span></a>

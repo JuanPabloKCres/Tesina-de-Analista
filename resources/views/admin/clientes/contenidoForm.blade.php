@@ -99,7 +99,7 @@
     <div class="col-sm-9 controls">
         <div class="row">
             <div class="col-xs-12">
-                {!! Form::select('localidad_id', ['placeholder' => 'campo requerido..'], null, ['id'=>'localidad_select','class' => 'form-control']) !!}
+                {!! Form::select('localidad_id', ['placeholder' => 'campo requerido..'], null, ['id'=>'localidad_select','class' => 'form-control','required']) !!}
             </div>
         </div>
     </div>

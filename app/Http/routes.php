@@ -9,9 +9,6 @@ Route::get('/', function () {
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
    Route::resource('usuarios','UsersController');
    Route::resource('clientes','ClientesController');
-   /** ajax para devolver localidades **/
-   //Route::get('/admin/clientes/{id}','ClientesController@noexiste');
-   /*******************fin ****************/
 
    Route::resource('paises','PaisesController');
    Route::resource('provincias','ProvinciasController');
@@ -25,6 +22,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
    Route::resource('insumos/obtenerCosto','InsumosController@obtenerCosto');             //Insumos
    Route::resource('articulos','ArticulosController');
    Route::resource('factura','FacturasController');
+   Route::resource('comprobantes','ComprobantesController');
 
    Route::resource('notificacion','MailController');
 
@@ -42,6 +40,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
    Route::resource('compras','ComprasController');             //Compras de Insumos
    Route::resource('unidades_medidas','UnidadesController');
+
+   Route::resource('auditorias','AuditoriasController');       //solo redirecciona a la view de la tabla de auditorias
 
    /** Para administrar el Front: **/
    Route::resource('tipos','TiposParaFrontController');

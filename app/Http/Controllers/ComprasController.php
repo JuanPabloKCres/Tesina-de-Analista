@@ -17,6 +17,9 @@ use Laracasts\Flash\Flash;
 use Carbon\Carbon;
 use Illuminate\Routing\Route;
 
+use App\Auditoria;
+use Illuminate\Support\Facades\Auth;
+
 class ComprasController extends Controller {
 
     public function __construct()
@@ -24,14 +27,12 @@ class ComprasController extends Controller {
         Carbon::setlocale('es'); // Instancio en Esp el manejador de fechas de Laravel
     }
 
-
     public function index() {
         $compras = Compra::searchRecibido(0)    //se considerara compra mostrable solo la que fue recibida
                 ->orderBy('id', 'ASC')
                 ->paginate();
         return view('admin.compras.tablaPedidos')->with('compras', $compras);
     }
-
 
     public function create(Request $request) {
         $caja = Caja::where('cerrado', false)->first(); //Aca se busca el primer registro de caja que este activo (supuestamente debería ser el único, igual se pone asi para que no siga buscando al pedo)
@@ -76,6 +77,17 @@ class ComprasController extends Controller {
                     $conceptoMovimiento = "Compra de insumos por un monto de $" . $compra->importe;
                 }
                 $compra->save();
+                /** Auditoria almacena compra */
+                $auditoria = new Auditoria();
+                $auditoria->tabla = "compras";
+                $auditoria->elemento_id = $compra->id;
+                $autor = new Auth();
+                $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+                $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
+                $auditoria->accion = "alta";
+                $auditoria->dato_nuevo = "concepto: ".$compra->concepto." || importe insumos: ".$compra->importe_insumos." || costo envio: ".$compra->importe_costo_envio." || importe total: ".$compra->importe." || fecha_solicitud: ".$compra->fecha_pedidoCompra." || hora_solicitud: ".$compra->hora_pedidoCompra." || fecha compra:".$compra->fecha_compra." || hora_compra:".$compra->hora_compra." || confirmado: ".$compra->confirmado." || pagado: ".$compra->pagado." || recibido: ".$compra->recibido." || userCompra_id: ".$compra->userCompra_id;
+                $auditoria->dato_anterior = null;
+                $auditoria->save();
 
                 /* Se recorre el array creando a su paso objetos "InsumoCompra" a partir de los json que se hallan en
                  * el array y se persisten. Luego se instancia el insumo en cuestion y se incrementa el stock.

@@ -49,7 +49,7 @@ class UnidadesController extends Controller
         $auditoria->elemento_id = $unidad_medida->id;
         $autor = new Auth();
         $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
-        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
         $auditoria->accion = "alta";
         $auditoria->dato_nuevo = "unidad: ".$unidad_medida->unidad." || detalle: ".$unidad_medida->detalle;
         $auditoria->dato_anterior = null;
@@ -77,7 +77,7 @@ class UnidadesController extends Controller
         $auditoria->elemento_id = $unidad_medida->id;
         $autor = new Auth();
         $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
-        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
         $auditoria->accion = "modificacion";
         $auditoria->dato_nuevo = "unidad: ".$unidad_medida->nombre." || detalle: ".$unidad_medida->detalle;
         $auditoria->dato_anterior = $dato_anterior;
@@ -95,7 +95,7 @@ class UnidadesController extends Controller
         $auditoria->elemento_id = $unidad_medida->id;
         $autor = new Auth();
         $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
-        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
         $auditoria->accion = "eliminacion";
         $auditoria->dato_anterior = $dato_anterior;
         $auditoria->save();

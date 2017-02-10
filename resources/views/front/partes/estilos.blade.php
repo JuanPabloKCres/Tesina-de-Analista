@@ -12,13 +12,13 @@
 
 <!-- css -->
 <link rel="stylesheet" href="{{ asset('plantillas/Avada/assets/css/bootstrap.min.css') }}">
-    <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/font-awesome.css') }}  ">
-    <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/font-awesome.min.css') }}  ">
+<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/font-awesome.css') }}  ">
+<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/font-awesome.min.css') }}  ">
 <link rel="stylesheet" href="{{asset('plantillas/Avada/assets/css/style.css')}}">
 
 <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-select/css/bootstrap-select.min.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-select/css/bootstrap-select.css') }}">
- <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/animate.css') }} ">
+<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/animate.css') }} ">
 
 
 		

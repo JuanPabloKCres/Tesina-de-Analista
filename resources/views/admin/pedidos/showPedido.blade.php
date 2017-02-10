@@ -22,7 +22,7 @@ Pedidos - Detalle de un pedido
         <div class="page-toolbar">
             <a data-toggle="tooltip" data-placement="bottom" href="{{ route('admin.pedidos.index') }}" title="Volver a los registros de pedidos"  class="btn btn-blue"> <span class="fa fa-arrow-circle-o-left" aria-hidden="true"></span> Volver</a>
             @if (!$pedido->entregado)
-            <button type="button"  data-hover="tooltip"  data-toggle="modal" data-target="#modal-confirmar"  title="Confirmar acciones sobre el pedido." class="btn btn-success"><span class="fa fa-money" aria-hidden="true"></span> Acciones</button>
+                <button type="button"  data-hover="tooltip"  data-toggle="modal" data-target="#modal-confirmar"  title="Confirmar acciones sobre el pedido." class="btn btn-success"><span class="fa fa-money" aria-hidden="true"></span> Acciones</button>
             @endif
         </div>
     </div>
@@ -51,7 +51,7 @@ Pedidos - Detalle de un pedido
                                             <tbody>
                                                 <tr>
                                                     <td><h4 class="box-heading">Apellido y nombre:</h4></td>
-                                                    <td><h4 id="nombreCliente">{{ $pedido->cliente->apellido }} {{ $pedido->cliente->nombre }}</h4></td>
+                                                    <td><h4 id="nombreCliente">{{ $pedido->cliente->apellido }},  {{ $pedido->cliente->nombre }}</h4></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -151,3 +151,9 @@ Pedidos - Detalle de un pedido
     </div>
 </div>
 @endsection
+
+
+
+<script type="text/javascript">
+    var id_cliente_pedidosPendientes = '<?php echo $pedido->cliente->id;?>';    //OK!
+</script>

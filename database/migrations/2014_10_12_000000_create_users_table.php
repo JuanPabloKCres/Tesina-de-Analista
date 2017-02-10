@@ -18,8 +18,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('imagen');
             $table->string('password');
-            $table->integer('nivel_acceso_id')->unsigned();
-            $table->foreign('nivel_acceso_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->integer('rol_id')->unsigned();
+            $table->foreign('rol_id')->references('id')->on('roles')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

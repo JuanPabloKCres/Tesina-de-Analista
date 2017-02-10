@@ -14,7 +14,7 @@ Detalle del cliente
 <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
     <div class="page-header pull-left">
         <div class="page-title">
-            Cliente: {{ $cliente->apellido }}, {{ $cliente->nombre }}</div>
+            Cliente: {{ $cliente->apellido }}, {{ $cliente->nombre }} ({{ $cliente->responiva->nombre }})</div>
     </div>
     <div class="page-header pull-right">
         <div class="page-toolbar">
@@ -46,13 +46,8 @@ Detalle del cliente
                                         <div class="col-md-12">
                                             <div class="row mtl">
                                                 <div class="col-md-1"></div>
-                                                <div class="col-md-4">
-                                                    <div class="col-lg-12"><h4 class="box-heading">Descripción</h4>
-                                                        <p class="text-justify"> {{ $cliente->descripcion }} </p>
-                                                        <br>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
+
+                                                <div class="col-md-10">
                                                     <table class="table table-striped table-hover">
                                                         <tbody>
                                                             <tr>
@@ -73,12 +68,13 @@ Detalle del cliente
                                                             </tr>
                                                             <tr>
                                                                 <td><h4 class="box-heading">DNI:</h4></td>
-                                                                @if ( $cliente->cuit)
+                                                                @if ( $cliente->dni)
                                                                 <td><h4>{{ $cliente->dni }}</h4></td>
                                                                 @else
                                                                 <td><h4>No se registró</h4></td>
                                                                 @endif
                                                             </tr>
+
                                                             <tr>
                                                                 <td><h4 class="box-heading">Empresa:</h4></td>
                                                                 @if ( $cliente->empresa)
@@ -116,15 +112,33 @@ Detalle del cliente
                                                                 @endif
                                                             </tr>
                                                             <tr>
+                                                                <td><h4 class="box-heading">Responsabilidad Tributaria:</h4></td>
+                                                                @if ( $cliente->responiva->nombre)
+                                                                    <td><h4>{{ $cliente->responiva->nombre }}</h4></td>
+                                                                @else
+                                                                    <td><h4>No se registró</h4></td>
+                                                                @endif
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Descripcion:</h4></td>
+                                                                @if ( $cliente->descripcion)
+                                                                    <td><h4>{{ $cliente->descripcion }}</h4></td>
+                                                                @else
+                                                                    <td><h4>No se registró</h4></td>
+
+                                                                @endif
+                                                            </tr>
+                                                            <tr>
                                                                 <td><h4 class="box-heading">Cantidad de pedidos o ventas asociadas:</h4></td>
                                                                 <td><h4>{{$cliente->ventas->count()}}</h4></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><h4 class="box-heading">Cantidad de dinero invertido por este cliente:</h4></td>
-                                                                <td><h4>${{$cliente->importeVentasRealizadas()}}</h4></td>
+                                                                <td><h4 class="text-google-plus">${{$cliente->importeVentasRealizadas_sinRestarIva()}}   &nbsp;&nbsp;&nbsp; (${{$cliente->importeVentasRealizadas()}} pesos limpios)</h4></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><h4 class="box-heading">Fecha de la última compra:</h4></td>
+                                                                <td><h4>{{$cliente->ventas->last()->updated_at->diffForHumans() }}</h4></td>
                                                                 <td>
 
                                                                 </td>

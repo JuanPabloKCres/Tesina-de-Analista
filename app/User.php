@@ -7,16 +7,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     protected $table =  "users";
-    protected $fillable = ['name','nivel_acceso_id','email', 'imagen', 'password'];
+    protected $fillable = ['name','rol_id','email', 'imagen', 'password'];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
     public function rol()
     {
@@ -25,6 +23,10 @@ class User extends Authenticatable
 
     public function auditorias(){
         return $this->hasMany('App\Auditoria');
+    }
+
+    public function comprobantes(){
+        return $this->hasMany('App\Comprobante');
     }
 
     public function movimientos()
@@ -40,5 +42,15 @@ class User extends Authenticatable
     public function aperturas()
     {
         return $this->hasMany('App\Caja', 'foreign_key', 'userApertura_id');
+    }
+
+    public function scopeSearchRoles($query, $rol_id)
+    {
+        if ($rol_id == "-1")
+        {
+            return $query;
+        } else {
+            return $query->where('rol_id', 'LIKE', $rol_id);
+        }
     }
 }

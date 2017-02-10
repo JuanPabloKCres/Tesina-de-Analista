@@ -31,3 +31,9 @@ $(document).ready(function () {
         }
     });
 });
+
+$('#talle_id').on('change', function(){
+    var nombre_insumo = $('#nombre_id').val();
+    var talle = $("#talle_id option:selected").text();
+    $('#nombre_id').val(nombre_insumo +' (Talle: '+talle+')');
+})

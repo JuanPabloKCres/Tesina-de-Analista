@@ -35,7 +35,6 @@ class ProvinciasController extends Controller
             $localidadesDeProvincia = Localidad::localidades($request->id);
             return response()->json($localidadesDeProvincia);
         }
-
         $provincias = Provincia::all();
         $paises = Pais::all()->lists('nombre','id');
         if ($provincias->count()==0){ // la funcion count te devuelve la cantidad de registros contenidos en la cadena
@@ -68,7 +67,7 @@ class ProvinciasController extends Controller
         $auditoria->elemento_id = $provincia->id;
         $autor = new Auth();
         $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
-        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
         $auditoria->accion = "alta";
         $auditoria->dato_nuevo = "nombre: ".$provincia->nombre."|| pais_id: ".$provincia->pais_id;
         $auditoria->dato_anterior = null;
@@ -105,7 +104,7 @@ class ProvinciasController extends Controller
         $auditoria->elemento_id = $provincia->id;
         $autor = new Auth();
         $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
-        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
         $auditoria->accion = "modificacion";
         $auditoria->dato_nuevo = "nombre: ".$provincia->nombre."|| pais_id: ".$provincia->pais_id;
         $auditoria->dato_anterior = $dato_anterior;
@@ -132,7 +131,7 @@ class ProvinciasController extends Controller
         $auditoria->elemento_id = $provincia->id;
         $autor = new Auth();
         $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
-        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
         $auditoria->accion = "eliminacion";
 
         $auditoria->dato_anterior = $dato_anterior;

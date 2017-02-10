@@ -64,7 +64,7 @@
                                               @endif
                                               <td class="text-center">{{ $pedido->usuarioPedido->name }}</td>
                                               <td class="text-center">efectivo</td>
-                                              <td class="text-center">dd/mm/aaaa</td>
+                                              <td class="text-center"> {{  $pedido->fecha_entrega_estimada }}</td>
                                               <th class="text-center">
                                                   <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá señar la totalidad del pedido o realizar la entrega del pedido" href="{{ route('admin.pedidos.edit', $pedido->id) }}" class="btn btn-info"> <span class="fa fa-eye" aria-hidden="true"></span></a>
                                               </th>

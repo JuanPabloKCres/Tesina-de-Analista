@@ -70,7 +70,7 @@ $('#color_id').on('change',function() {
 });
 
 
-/***************** 27/11/16 *******************/
+/***************************** 27/11/16 ********************************/
 /** al elegir un insumo, se ejecuta una funcion que busca el costo de el insumo seleccionado */
 $('#insumo_select').on('change',function(){
     var insumo_id = $('#insumo_select option:selected').val();
@@ -161,14 +161,14 @@ function completarGanancia()
     var costo = $('#costoArticulo_text').val();
     var margen = $('#gananciaPorcent_number').val();
     var ganancia_dinero = costo * (margen/100);
-    $('#gananciaDinero_text').val(ganancia_dinero);
+    $('#gananciaDinero_text').val(ganancia_dinero.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
     var iva = $('#iva_select').val();
     var precioVtasinIva = parseFloat(costo) + parseFloat(ganancia_dinero);
     var montoIva =  (precioVtasinIva * (iva/100));
     //alert('el monto que representa el IVA: $'+montoIva);
-    $('#montoIva_number').val(montoIva);
+    $('#montoIva_number').val(montoIva.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
     var precio_venta = precioVtasinIva + montoIva;
-    $('#precioVta_text').val(precio_venta);
+    $('#precioVta_text').val(precio_venta.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
 }
 /** Al seleccionar IVA, actualizar montoIva*/
 $('#iva_select').on('change',function(){

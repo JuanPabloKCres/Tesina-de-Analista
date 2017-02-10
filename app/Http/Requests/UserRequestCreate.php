@@ -26,7 +26,7 @@ class UserRequestCreate extends Request
         return [
             'nombre' => 'required|max:50',
             'apellido' => 'required|max:50',
-            'nivel_acceso' => 'required',
+            'rol_id' => 'required',
             'email' => 'required|email|max:100|unique:users',
             'password' => 'required|min:6|confirmed', 
         ];

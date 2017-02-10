@@ -111,7 +111,7 @@
                         </a>
                     </li>
                     <li id="li12">
-                        <a data-toggle="tooltip" data-placement="right" title="Controlar uso del sistema y backup de la información almacenada" ">
+                        <a data-toggle="tooltip" data-placement="right" title="Controlar uso del sistema y backup de la información almacenada" href="{{ route('admin.auditorias.index') }}">
                         <i class="fa fa-eye">
                             <div class="icon-bg bg-orange"></div>
                         </i>

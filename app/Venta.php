@@ -46,8 +46,18 @@ class Venta extends Model
       foreach ($this->articulos_ventas as $av) {
           $total = $total + $av->importe;
       }
-      $total = $total + $total * $this->iva / 100; 
+      $total = $total + $total * $this->iva / 100;
        return $total;
+    }
+
+    public function importeConIvaIncluido()
+    {
+        $total = 0;
+        foreach ($this->articulos_ventas as $av) {
+            $total = $total + $av->importe;
+        }
+        $total = $total + $total;
+        return $total;
     }
 
     public function cantidadArticulos()

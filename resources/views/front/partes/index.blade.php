@@ -4,7 +4,6 @@
 		<title>GN Soluciones | Resistencia</title>
 		@include('front.partes.estilos')
 	</head>
-
 <body>
 @include('front.partes.analyticstracking')
 

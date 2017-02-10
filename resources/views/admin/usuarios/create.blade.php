@@ -30,7 +30,7 @@
                                     <div class="col-xs-12">
                                         <div class="input-icon right">
                                             <i class="fa fa-envelope"></i>
-                                            {!! Form::select('rol', array('1'=>'Administrador','2'=>'Administrador de la web','3'=>'Vendedor','4'=>'Cajero'),['placeholder' => 'campo requerido..'], ['id'=>'rol_select','class' => 'form-control']) !!}
+                                            {!! Form::select('rol_id', $roles, null, ['placeholder' => 'campo requerido..', 'data-live-search' => 'true', 'id'=>'rol_select','class' => 'form-control selectBoot', 'required']) !!}
                                         </div>
                                     </div>
                                 </div>

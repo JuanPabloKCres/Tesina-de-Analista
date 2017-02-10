@@ -62,11 +62,9 @@ class PedidosController extends Controller {
                 if ($request->entregado == "true") {
                     $venta->entregado = 1;
                 }
-
-                //////////////////////// CHEQUE //////////////////////
-                if ($request->pagoCheque == "true") {
+                ///////////////////////////// CHEQUE /////////////////////////////////
+                if ($request->pagoCheque == true) {
                     $forma_pago = "cheque totalidad";
-
                     $cheque = new Cheque();
                     $cheque->nro_serie = $request->nro_serie;     #OK
                     $cheque->monto = $request->sena;                        #OK
@@ -76,14 +74,12 @@ class PedidosController extends Controller {
                     $cheque->fecha_emision = $request->fecha_emision;     #OK
                     $cheque->fecha_cobro = $request->fecha_cobro;         #OK
                     $cheque->save();                                      #OK
-
-                    $venta->cheque_id = 2;    //se asocia la venta con el cheque nuevo cargado.
+                    $venta->cheque_id = $cheque->id;    //se asocia la venta con el cheque nuevo cargado.
                 }else{
                     $forma_pago = "efectivo";
                 }
                 $venta->forma_pago = $forma_pago;
-                ////////////////////////////////////////////////////////
-
+                //////////////////////////////////////////////////////////////////////
                 if (($request->pagado == "true") && ($request->entregado == "true")) {
                     $venta->userVenta_id = $request->usuarioPedido;
                     $venta->fecha_venta = $fecha->format('d-m-Y');
@@ -145,8 +141,6 @@ class PedidosController extends Controller {
         }
     }
 
-
-
     public function store(Request $request) {
         return response()->json("Exito PRUEBA!");
     }
@@ -156,13 +150,6 @@ class PedidosController extends Controller {
         return view('admin.pedidos.showPedido')->with('pedido', $pedido);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id) {
         $pedido = Venta::find($id);
         $fecha = \Carbon\Carbon::now('America/Buenos_Aires');
@@ -192,8 +179,14 @@ class PedidosController extends Controller {
             $pedido->hora_venta = $fecha->format('H:i');
         }
         $pedido->save();
-        Flash::success("Se ha realizado la actualización del estado del pedido.");
+        Flash::success("Se ha actualizado el estado del pedido.");
         return redirect()->route('admin.pedidos.edit', $id);
     }
+
+    /*
+    public function hacerFactura(Request $request) {
+        return view('admin.pedidos.showPedido')->with('pedido', $pedido);
+    }
+    */
 
 }

@@ -15,6 +15,8 @@ $('#fecha_entrega_date').on('click', function () {
 });
 */
 
+//alert(id_cliente_pedidosPendientes);
+
 $('#iva_select').prop('disabled',true);
 
 $(document).ready(function () {
@@ -26,6 +28,8 @@ $(document).ready(function () {
         "lengthMenu": [[-1], ["Todos"]]
     });
 });
+
+
 
 /*
  * Variables para cuando se cargan artículos en la tabla.
@@ -39,31 +43,41 @@ var numFila = 0;
 var cantFilas = 0;
 var montoPedido = 0;
 var montoTotal = 0;
+var montoTotal_Absoludo = 0;
 var pagarTotal = true;
 var datos_cheque = null;      //array con datos del cheque
-var cheque = [];
 //Datos del cheque (en blanco)
-var pagoCheque = null;
+var pagoCheque = false;
 var nro_serie;
 var banco;
 var sucursal_banco;
 var fecha_emision;
 var fecha_cobro;
 
-function cargarDatosCheque(){
-    alert('Se cargaron datos del cheque para el pago');
-    nro_serie= $('#nro_serie').val();
-    banco= $('#banco').val();
-    sucursal_banco= $('#sucursal').val();
+
+function validarFormCheque(){
+    nro_serie = document.forms["form-crear"]["nro_serie"].value;
+    banco = document.forms["form-crear"]["banco"].value;
+    sucursal = document.forms["form-crear"]["sucursal"].value;
+    fecha_emision = document.forms["form-crear"]["fecha_emision"].value;
+    fecha_cobro = document.forms["form-crear"]["fecha_cobro"].value;
+    if (nro_serie == "" && banco =='' && sucursal =='' && fecha_emision =='' && fecha_cobro =='') {
+        alert("No se ha rellenado correctamente el cheque");
+        pagoCheque = false;
+    }
+    else{
+        cargarDatosCheque();
+    }
+}
+
+function cargarDatosCheque(){                           //valida y carga los datos del modal-cheque
+    nro_serie = $('#nro_serie').val();
+    banco = $('#banco').val();
+    sucursal_banco = $('#sucursal').val();
     fecha_emision = $('#fecha_emision').val();
-    fecha_cobro= $('#fecha_cobro').val();
-    /*
-    datos_cheque = {
-        nro_serie: $('#nro_serie').val(), banco: $('#banco').val(), sucursal_banco: $('#sucursal').val(),
-        fecha_emision: $('#fecha_emision').val(), fecha_cobro: $('#fecha_cobro').val()
-    };
-    cheque[0] = datos_cheque;
-    */
+    fecha_cobro = $('#fecha_cobro').val();
+    alert('Se cargaron datos del cheque para el pago');
+    pagoCheque = true;
 }
 
 //var nro_serie_cheque = $('#nro_serie').val();
@@ -92,6 +106,7 @@ function agregarContenido(articulo_select, nombre, cantidad_number, precioU_numb
     valorItemTotal = valorItemNeto;
     montoPedido = montoPedido + valorItemNeto;
     montoTotal = montoTotal + valorItemTotal;
+    montoTotal_Absoludo = montoTotal_Absoludo + valorItemTotal;
     tPro.row.add([
         numFila,
         articulo_select,
@@ -126,6 +141,7 @@ function borrarFila(d)
             numFilaBorrar = Filas;
             montoPedido = montoPedido - parseFloat(dataPla[5]);
             montoTotal = montoTotal - parseFloat(dataPla[6]);
+            montoTotal_Absoludo = montoTotal_Absoludo - parseFloat(dataPla[6]);
         }
         Filas++;
     });
@@ -274,7 +290,9 @@ function completarPrecio(n, iva)
             $('#importe_number').val("");
         } else {
             importe = $('#precioU_number').val();
-            $('#importe_number').val((importe * cantidad));
+            var importe_x_cantidad = importe * cantidad;
+            importe_x_cantidad = importe_x_cantidad.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+            $('#importe_number').val((importe_x_cantidad));
             precio = $('#importe_number').val();
             impuesto = ((precio * iva) / 100);
             total = parseFloat(precio) + parseFloat(impuesto);
@@ -336,7 +354,7 @@ function confirmar()
  */
 function enviarPedido(pagado, entregado)
 {
-    alert('pagado: '+pagado+" entregado: "+entregado);
+    alert('pagado: '+pagado+" entregado: "+entregado+" pagoCheque: "+pagoCheque);
     var numLi = 0;
     var lineas = [];
 
@@ -403,18 +421,15 @@ function enviarPedido(pagado, entregado)
         hoy = mm+'/'+dd+'/'+yyyy;
         fecha_entrega_estimada = hoy;
     }
-    else{   //entregado == false
+    else{
         fecha_entrega_estimada = $('#fecha_entrega_date').val();
     }
-
     /** Si se cargaron datos del cheque*/
-    if(nro_serie ===''/* && cheque[0].banco !=null && cheque[0].sucursal_banco != null && cheque[0].fecha_emision !=null && cheque[0].fecha_cobro != null*/){
-        pagoCheque = "false";
+    if(pagoCheque==false){
         alert('Se paga en efectivo');
     }else{
-        pagoCheque = "true";
         alert('Se paga con cheque');
-        console.log(cheque);
+        console.log( "nro_serie: "+nro_serie+", banco: "+banco+", sucursal: "+sucursal_banco+" fecha_emision: "+fecha_emision+" ,fecha_cobro: "+fecha_cobro);
     }
 
     /** persistir venta o pedido */
@@ -425,14 +440,13 @@ function enviarPedido(pagado, entregado)
             renglones: lineas,
             pagado: pagado,
             pagoCheque: pagoCheque,
-
-            //cheque: cheque,
+            //******** Datos Cheque *******//
             nro_serie: nro_serie,
             banco: banco,
             sucursal_banco: sucursal_banco,
             fecha_emision: fecha_emision,
             fecha_cobro: fecha_cobro,
-
+            /******************************/
             fecha_entrega_estimada: fecha_entrega_estimada,
             entregado: entregado,
             usuarioPedido: $('#usuarioPedido').val(),
@@ -447,6 +461,8 @@ function enviarPedido(pagado, entregado)
             //enviarNotificacion();       //email stock bajo
         }
     });
+    /** Se emite un comprobante **/
+            emitirTicket();
 }
 
 /*
@@ -500,66 +516,53 @@ function registrarCliente()
     });
 }
 
-
-
 /** Function generarFactura: Este método se encarga de recoger ciertos datos de la vista y
- * enviarlos al archivo php que se encarga de realizar la facturación electrónica.*/
+ * enviarlos al archivo php que se encarga de realizar la facturación electrónica. (al convertir un pedido en una venta)*/
 function generarFactura() {
-    if ($('input:checkbox[name=factura]:checked').val()) {
-        var cantidadProductos = 0;
-        var factura = [];
-        var datosParaFactura = {
-            iva: $('#iva').val(),
-            tipo_cbte: $('#factura').val(),
-            nro_doc: $('#cuit').val(),
-            nombre_cliente: $('#nombreCliente').val(),
-            domicilio_cliente: $('#direccion').val(),
-            imp_neto: $('#montoTotal').val(),
-            items: []
-        };
-        factura[0] = datosParaFactura;
-        //factura.items [numLi] = linea;
-        /*
-         factura = {
-            iva: $('#iva').val(),
-            tipo_cbte: $('#factura').val(),
-            nro_doc: $('#cuit').val(),
-            nombre_cliente: $('#nombreCliente').val(),
-            domicilio_cliente: $('#direccion').val(),
-            imp_neto: $('#montoTotal').val(),
-            items: []
-            */
-        };
-        console.log("Los datos de factura que se envian a FACTURA ELECTRONICA AFIP son: (iva)"+factura[0].iva
-        +" (tipo_cte)"+factura[0].tipo_cbte+" (nro_doc)"+factura[0].nro_doc+" (nombre_cliente)"+factura[0].nombre_cliente
-        +" (domicilio_cliente)"+factura[0].domicilio_cliente+" (imp_neto)"+factura[0].imp_neto);
-    console.log(datosParaFactura);
-
-        $('#tblListaItems tbody tr').each(function () {
+    $('#form-crear').submit();
+            $('#tblListaItems tbody tr').each(function () {
             var dataFila = $('#tblListaItems').DataTable().row(this).data();
             var item = {cantidad: dataFila[2], importe: dataFila[4], precio_unitario: dataFila[3], articulo: dataFila[1]};
-            factura.items [cantidadProductos] = item;
+            //factura.items [cantidadProductos] = item;
             cantidadProductos++;
         });
         var nada ="nada";
-        $.ajax({
-            url: "http://localhost//factura//dinamico-factura.php",
-            data: {
-                nada: nada,
-            },
-            dataType: 'json',
-            success: function (data) {
-                alert('la factura se envio a AFIP con exito!');
-                $('#precioU_number').val(respuesta);
-            }
-        });
+    $.ajax({    //en esta peticion se busca obtener los datos del cliente para confecc. la factura
+        dataType: 'json', url: "/admin/clientes",
+        data: {
+            id: id_cliente_pedidosPendientes,
+        },
+        success: function (data) {
+            console.log("De ClientesController se obtuvieron estos datos para FE: "+data);
+            console.log("El monto total que se manda a la FE es =" + montoTotal);
 
-        //window.open('file://c:/xampp/htdocs/factura/Json+Get.php');
-        //window.open('localhost:8000\\pagina.php');
+            var factura = {
+                iva: $('#iva').val(),
+                tipo_cbte: $('#factura').val(),
+                nro_doc: $('#cuit').val(),
+                nombre_cliente: $('#nombreCliente').val(),
+                domicilio_cliente: $('#direccion').val(),
+                imp_total: $('#montoTotal').val(),
+                items: []
+            };
 
-        //window.location.href = "C:\\xampp\\htdocs\\factura\\Json+Get.php"
-        //location.href = "pagina.php?valores=" + factura + ""; ///colocar acá la dirección de la página del com
-    $('#form-crear').submit();
+            console.log(factura);
+
+            var data_2 = JSON.parse(data);
+            factura.tipo_cbte = data_2.tipo_cbte;
+            factura.nro_doc = data_2.dni;
+            factura.nombre_cliente = data_2.nombre;
+            factura.provincia_cliente = data_2.provincia;
+            factura.localidad_cliente = data_2.localidad;
+            factura.domicilio_cliente = data_2.domicilio;
+            factura.imp_total = montoTotal;
+            var array = JSON.stringify(factura);
+            var enlace_factura = 'http://localhost/factura/dinamico-factura.php?&datos_factura=' + encodeURIComponent(array);
+            window.open(enlace_factura);
+        }
+    });
+
+    $('#form-crear').submit();      //actualiza el estado del pedido (pago completo, o entrega 'pedidos.update'
 }
 
 
@@ -610,7 +613,6 @@ $(document).ready(function () {
 */
 
 
-
 /** Al elegir un articulo, se ejecuta una funcion que busca el precio de venta y disponibilidad de insumos*/
 $('#articulo_select').on('change',function(){
     var articulo_id = $('#articulo_select').val();
@@ -646,12 +648,12 @@ function mostrarStockRemanente(articulo_id){        //devuelve los insumos que q
             var i = 1;
             console.log(respuesta);
             for(i in respuesta) {
-                alert("**STOCK REMANENTE**          "+respuesta[i].insumo+": "+respuesta[i].cantidad_actual+ " "+respuesta[i].unidad);
+                alert("**STOCK REMANENTE para armar el articulo**:                                          " +
+                    ""+respuesta[i].insumo+"    ("+respuesta[i].cantidad_actual+ " "+respuesta[i].unidad+")");
             }
         }
     });
 }
-
 
 /** Al seleccionar cliente devolver su responsabilidad ante iva y porcentaje de iba a abonar*/
 $('#cliente').on('change',function(){
@@ -710,6 +712,7 @@ function rellenarModalCheque(){
     }
 }
 
+
 /** Envia el email de notificacion de stock bajo **/
 function enviarNotificacion(){
     var articulo_id = $('#articulo_select').val();      //con esto solo notificara el ultimo articulo, despues hay que hacer que recorra la tabla de pedido
@@ -745,6 +748,70 @@ function enviarNotificacion(){
     });
 }
 
-function sePagaconCheque(){
-    pagoCheque = true;
+function emitirTicket(){
+    var nro_comprobante = 0;
+    var emitirTicket = true;
+    var ticket = {                          /*El ticket es una 'nota de pedido'*/
+        nro_comprobante: nro_comprobante,
+        iva: $('#iva').val(),
+        nro_doc: $('#cuit').val(),
+        nombre_cliente: $('#nombreCliente').val(),
+        domicilio_cliente: $('#direccion').val(),
+        sena: $('#sena').val(),
+        imp_total: montoPedido,
+        items: []
+    };
+    if(pagarTotal){
+        ticket.sena = montoPedido;
+    }
+
+    var numLi = 0;
+    var lineas = [];
+    $('#tblListaProductos tbody tr').each(function () {
+        var dataFila = $('#tblListaProductos').DataTable().row(this).data();
+        var linea = {articulo_id: dataFila[1], articulo_nombre: dataFila[2], cantidad: dataFila[3], precio_unitario: dataFila[4], importe: dataFila[5]};
+        lineas [numLi] = linea;
+        ticket.items [numLi] = linea;
+        console.log("Se agrego un item para el ticket: "+linea.articulo_nombre);
+        numLi++;
+    });
+
+    $.ajax({
+        url: "/admin/comprobantes",
+        data: {
+            cliente_id: $('#cliente').val(),
+            usuario_id: $('#usuarioPedido').val(),
+        },
+        dataType: 'json',
+        success: function (data) {
+            var respuesta = JSON.parse(data);
+            nro_comprobante = respuesta.comprobante_id;             //Funciona?
+        }
+    });
+
+    $.ajax({
+        url: "/admin/clientes",
+        data: {
+            id: $('#cliente').val(),
+            emitirTicket: emitirTicket
+        },
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            var respuesta = JSON.parse(data);
+            console.log(respuesta);
+
+            var data_2 = JSON.parse(data);
+            ticket.nro_comprobante = nro_comprobante;
+            ticket.nro_doc = data_2.dni;                   //OK
+            ticket.nombre_cliente = data_2.nombre;         //OK
+            ticket.provincia_cliente = data_2.provincia;   //OK
+            ticket.localidad_cliente = data_2.localidad;   //OK
+            ticket.domicilio_cliente = data_2.domicilio;   //OK
+            ticket.imp_total = montoTotal_Absoludo;
+            var array = JSON.stringify(ticket);
+            var enlace_ticket = 'http://localhost/factura/EditableInvoice/index.php?&datos_factura=' + encodeURIComponent(array);
+            window.open(enlace_ticket);
+        }
+    });
 }

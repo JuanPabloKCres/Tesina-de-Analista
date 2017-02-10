@@ -13,6 +13,8 @@ use App\Http\Requests\ProveedorRequestCreate;
 use App\Http\Requests\ProveedorRequestEdit;
 use Carbon\Carbon;
 use Illuminate\Routing\Route;
+use App\Auditoria;
+use Illuminate\Support\Facades\Auth;
 
 class ProveedoresController extends Controller
 {
@@ -42,29 +44,29 @@ class ProveedoresController extends Controller
     public function store(ProveedorRequestCreate $request)
     {
         $proveedor = new Proveedor($request->all());
-
         //Manipulación de Imágenes...
-        $nombreImagen = 'sin imagen';                   //esto saque el 28/4 18:00 ***JUAMPY
-
+        $nombreImagen = 'sin imagen';
         if ($request->file('imagen'))
         {
             $file = $request->file('imagen');
             $nombreImagen = 'GN_' . time() . '.' . $file->getClientOriginalExtension();
             Storage::disk('proveedores')->put($nombreImagen, \File::get($file));
         }
-
         $proveedor->imagen = $nombreImagen;
         $proveedor->save();
-        /*
-        $imagen = new Logo_Proveedor();
-        $imagen->nombre = $nombreImagen;
-        $imagen->proveedor()->associate($proveedor);
-        $imagen->save();
-        */
         Flash::success('El proveedor "'. $proveedor->nombre.'" ha sido registrado de forma exitosa.');
+        /** Auditoria almacena creacion */
+        $auditoria = new Auditoria();
+        $auditoria->tabla = "proveedores";
+        $auditoria->elemento_id = $proveedor->id;
+        $autor = new Auth();
+        $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
+        $auditoria->accion = "alta";
+        $auditoria->dato_nuevo = "nombre: ".$proveedor->nombre." || cuit: ".$proveedor->cuit." || localidad_id: ".$proveedor->localidad_id." || direccion:".$proveedor->calle." ".$proveedor->altura." || horario de atencion: ".$proveedor->hora_a_manana." a ".$proveedor->hora_c_mañana." y de ".$proveedor->hora_a_tarde." a ".$proveedor->hora_c_tarde." || teléfono:".$proveedor->telefono." || celular:".$proveedor->celular." || web:".$proveedor->web." || rubro_id:".$proveedor->rubro_id." || imagen:".$proveedor->imagen;
+        $auditoria->save();
         return redirect()->route('admin.proveedores.index');
     }
-
 
     public function show($id)
     {
@@ -73,10 +75,10 @@ class ProveedoresController extends Controller
         return view('admin.proveedores.show')->with('proveedor', $proveedor);
     }
 
-
     public function update(ProveedorRequestEdit $request, $id)
     {
     	$proveedor = Proveedor::find($id);
+        $dato_anterior = "nombre: ".$proveedor->nombre." || cuit: ".$proveedor->cuit." || localidad_id: ".$proveedor->localidad_id." || direccion:".$proveedor->calle." ".$proveedor->altura." || horario de atencion: ".$proveedor->hora_a_manana." a ".$proveedor->hora_c_mañana." y de ".$proveedor->hora_a_tarde." a ".$proveedor->hora_c_tarde." || teléfono:".$proveedor->telefono." || celular:".$proveedor->celular." || web:".$proveedor->web." || rubro_id:".$proveedor->rubro_id." || imagen:".$proveedor->imagen;
         if ($request->file('imagen'))
         {
             $file = $request->file('imagen');
@@ -90,19 +92,50 @@ class ProveedoresController extends Controller
             Storage::disk('proveedores')->put($nombreImagen, \File::get($file));  // Movemos la imagen nueva al directorio /imagenes/proveedores
             $proveedor->save();
             Flash::success("Se ha realizado la actualización del proveedor: ".$proveedor->name.".");
+            /** Auditoria actualizacion */
+            $auditoria = new Auditoria();
+            $auditoria->tabla = "proveedores";
+            $auditoria->elemento_id = $proveedor->id;
+            $autor = new Auth();
+            $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+            $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
+            $auditoria->accion = "modificacion";
+            $auditoria->dato_nuevo = "nombre: ".$proveedor->nombre." || cuit: ".$proveedor->cuit." || localidad_id: ".$proveedor->localidad_id." || direccion:".$proveedor->calle." ".$proveedor->altura." || horario de atencion: ".$proveedor->hora_a_manana." a ".$proveedor->hora_c_mañana." y de ".$proveedor->hora_a_tarde." a ".$proveedor->hora_c_tarde." || teléfono:".$proveedor->telefono." || celular:".$proveedor->celular." || web:".$proveedor->web." || rubro_id:".$proveedor->rubro_id." || imagen:".$proveedor->imagen;
+            $auditoria->dato_anterior = $dato_anterior;
+            $auditoria->save();
             return redirect()->route('admin.proveedores.show', $id);
         }
-
         $proveedor->fill($request->all());
         $proveedor->save();
         Flash::success("Se ha realizado la actualización del registro: ".$proveedor->nombre.".");
+        /** Auditoria actualizacion */
+        $auditoria = new Auditoria();
+        $auditoria->tabla = "proveedores";
+        $auditoria->elemento_id = $proveedor->id;
+        $autor = new Auth();
+        $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
+        $auditoria->accion = "modificacion";
+        $auditoria->dato_nuevo = "nombre: ".$proveedor->nombre." || cuit: ".$proveedor->cuit." || localidad_id: ".$proveedor->localidad_id." || direccion:".$proveedor->calle." ".$proveedor->altura." || horario de atencion: ".$proveedor->hora_a_manana." a ".$proveedor->hora_c_mañana." y de ".$proveedor->hora_a_tarde." a ".$proveedor->hora_c_tarde." || teléfono:".$proveedor->telefono." || celular:".$proveedor->celular." || web:".$proveedor->web." || rubro_id:".$proveedor->rubro_id." || imagen:".$proveedor->imagen;
+        $auditoria->dato_anterior = $dato_anterior;
+        $auditoria->save();
         return redirect()->route('admin.proveedores.show', $id);
     }
-
 
     public function destroy($id)
     {
     	$proveedor = Proveedor::find($id);
+        $dato_anterior = "nombre: ".$proveedor->nombre." || cuit: ".$proveedor->cuit." || localidad_id: ".$proveedor->localidad_id." || direccion:".$proveedor->calle." ".$proveedor->altura." || horario de atencion: ".$proveedor->hora_a_manana." a ".$proveedor->hora_c_mañana." y de ".$proveedor->hora_a_tarde." a ".$proveedor->hora_c_tarde." || teléfono:".$proveedor->telefono." || celular:".$proveedor->celular." || web:".$proveedor->web." || rubro_id:".$proveedor->rubro_id." || imagen:".$proveedor->imagen;
+        /** Auditoria eliminación */
+        $auditoria = new Auditoria();
+        $auditoria->tabla = "proveedor";
+        $auditoria->elemento_id = $proveedor->id;
+        $autor = new Auth();
+        $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
+        $auditoria->accion = "eliminacion";
+        $auditoria->dato_anterior = $dato_anterior;
+        $auditoria->save();
         Storage::disk('proveedores')->delete($proveedor->imagen); // Borramos la imagen asociada.
         $proveedor->delete();
         Flash::error("Se ha realizado la eliminación del registro: ".$proveedor->nombre.".");

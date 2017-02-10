@@ -46,7 +46,7 @@ class TiposController extends Controller
         $auditoria->elemento_id = $tipo->id;
         $autor = new Auth();
         $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
-        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
         $auditoria->accion = "alta";
         $auditoria->dato_nuevo = "nombre: ".$tipo->nombre." || descripcion: ".$tipo->descripcion;
         $auditoria->dato_anterior = null;
@@ -73,7 +73,7 @@ class TiposController extends Controller
         $auditoria->elemento_id = $tipo->id;
         $autor = new Auth();
         $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
-        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
         $auditoria->accion = "modificacion";
         $auditoria->dato_nuevo =  "nombre: ".$tipo->nombre." || descripcion: ".$tipo->descripcion;
         $auditoria->dato_anterior = $dato_anterior;
@@ -91,7 +91,7 @@ class TiposController extends Controller
         $auditoria->elemento_id = $tipo->id;
         $autor = new Auth();
         $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
-        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditoria
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
         $auditoria->accion = "eliminacion";
         $auditoria->dato_anterior = $dato_anterior;
         $auditoria->save();

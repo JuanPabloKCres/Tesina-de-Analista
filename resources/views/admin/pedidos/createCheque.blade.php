@@ -9,14 +9,14 @@
             </div>
             <div class="modal-body">
 
-                {{----{!! Form::open(['route' => 'admin.cheques.store', 'method' => 'POST', 'id' =>'form-crear', 'class' => 'form-horizontal']) !!} --}}
+                {!! Form::open(['method' => 'POST', 'id' =>'form-crear', 'class' => 'form-horizontal']) !!}
                     <div class="form-group"><label class="col-sm-3 control-label">Nro Serie</label>
                         <div class="col-sm-9 controls">
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="input-icon right">
                                         <i class="fa fa-pencil"></i>
-                                        {!! Form::text('nro_serie', null, ['class' => 'form-control', 'id'=>'nro_serie', 'placeholder' => 'campo requerido', 'maxlength' => '50', 'required']) !!}
+                                        {!! Form::text('nro_serie', null, ['class' => 'form-control', 'id'=>'nro_serie', 'maxlength' => '50', 'required']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -140,9 +140,9 @@
             </div>
         </div>
     </div>
-                {{-- {!! Form::submit('Crear registro', ['class' => 'btn btn-green btn-block']) !!}       --}}
-                <button type="button" data-dismiss="modal" class="btn btn-white btn-block" onclick="cargarDatosCheque()">Cerrar</button>
-                {{-- {!! Form::close() !!}      --}}
+                {!! Form::submit('Crear registro', ['class' => 'btn btn-green btn-block']) !!}
+                <button type="button" data-dismiss="modal" class="btn btn-white btn-block" onclick="validarFormCheque()">Cerrar</button>
+                {!! Form::close() !!}
 </div>
 
 

@@ -46,8 +46,8 @@
                                               <th>Fecha y hora de la venta</th>
                                               <th>Importe</th>
                                               <th>Cantidad señada</th>
-                                              <th>Usuario que tomó el pedido</th>
-                                              <th>Usuario que realizó la venta</th>
+                                              <th class="text-center">Usuario que tomó el pedido</th>
+                                              <th class="text-center">Usuario que realizó la venta</th>
                                               <th class="text-center">Acciones</th>
                                           </tr>
                                       </thead>
@@ -59,12 +59,12 @@
                                               <td>{{ $pedido->fecha_venta }} - {{ $pedido->hora_venta }}</td>
                                               <td>${{ $pedido->importe() }}</td>
                                               @if ($pedido->senado == $pedido->importe())
-                                                  <td>Se abonó la totalidad</td>
+                                                  <td class="text-center">Se abonó la totalidad</td>
                                               @else
-                                                  <td>${{ $pedido->senado }}</td>
+                                                  <td class="text-center">${{ $pedido->senado }}</td>
                                               @endif
-                                              <td>{{ $pedido->usuarioPedido->name }}</td>
-                                              <td>{{ $pedido->usuarioVenta->name }}</td>
+                                              <td class="text-center">{{ $pedido->usuarioPedido->name }}</td>
+                                              <td class="text-center">{{ $pedido->usuarioVenta->name }}</td>
                                               <td class="text-center">
                                                   <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá tener acceso al detalle de la venta que fue efectuada" href="{{ route('admin.pedidos.edit', $pedido->id) }}" class="btn btn-info"> <span class="fa fa-eye" aria-hidden="true"></span></a>
                                               </td>

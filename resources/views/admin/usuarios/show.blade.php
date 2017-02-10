@@ -64,7 +64,7 @@
                                                     <table class="table table-striped table-hover">
                                                         <tbody> 
                                                             <tr>
-                                                                <td><h4 class="box-heading">Nombre y apellido:</h4></td>
+                                                                <td><h4 class="box-heading">Apellido y nombre:</h4></td>
                                                                 <td><h4>{{ $usuario->name }}</h4></td>
                                                             </tr> 
                                                             <tr>

@@ -17,6 +17,10 @@ class Cliente extends Model {
         return $this->hasMany('App\Cheque');
     }
 
+    public function comprobantes() {
+        return $this->hasMany('App\Comprobante');
+    }
+
     public function localidad() {
         return $this->belongsTo('App\Localidad');
     }
@@ -44,6 +48,16 @@ class Cliente extends Model {
         foreach ($this->ventas as $venta) {
             if (($venta->pagado) && ($venta->entregado)) {
                 $total = $total + $venta->importe();
+            }
+        }
+        return $total;
+    }
+
+    public function importeVentasRealizadas_sinRestarIva() {
+        $total = 0;
+        foreach ($this->ventas as $venta) {
+            if (($venta->pagado) && ($venta->entregado)) {
+                $total = $total + $venta->importeConIvaIncluido();
             }
         }
         return $total;

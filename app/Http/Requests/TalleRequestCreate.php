@@ -25,7 +25,6 @@ class TalleRequestCreate extends Request
     {
         return [
             'nombre' => 'required|max:50|unique:talles',
-            'descripcion'
         ];
     }
 }

@@ -10,7 +10,7 @@ class Provincia extends Model
 
     protected $fillable = ['nombre', 'pais_id']; 
 
-    public function pais()   
+    public function pais()
     {
         return $this->belongsTo('App\Pais');
     }

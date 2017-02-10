@@ -32,6 +32,11 @@ class Articulo extends Model
         return $this->belongsTo('App\Iva');
     }
 
+    public function alle()
+    {
+        return $this->belongsTo('App\Talle');
+    }
+
 /******************************************************************************************************/
     public function scopeSearchNombres($query, $nombre)
     {
