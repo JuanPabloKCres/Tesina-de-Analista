@@ -5,7 +5,6 @@
 
 				<p class="main-header">Quienes somos</p>
 				<p class="sub-header">
-					<link rel="stylesheet" href="style.css">
 					<a href="/institucional" target="_blank">Conozca mas</a>
 				</p>
 			</div>

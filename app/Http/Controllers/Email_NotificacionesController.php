@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Cliente;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -11,32 +12,22 @@ use Session;
 use Redirect;
 use Laracasts\Flash\Flash;
 use Illuminate\Support\Facades;
+use Carbon\Carbon;
 
-class MailController extends Controller
+class Email_NotificacionesController extends Controller
 {
-    public function store(Request $request)     /**Para email de contacto desde el Front**/
-    {
-        Mail::send('emails.contact', $request->all(), function($msj){
-            $msj->subject('Correo de contacto');
-            $msj->to('jpaulnava@gmail.com');
-        });
-
-        Flash::overlay('Bien! su mensaje se envio correctamente');
-
-        return Redirect::to('/');
-    }
-
     public function index(Request $request)     /**Para notificacion automatica de stock bajo a administrador**/
     {
         if($request->ajax()){
             if($request->email_info_pedido){
-                Mail::send('emails.datos_pedido', $request->all(), function($msj){
-                    $msj->subject('Información de su pedido');
+                $cliente = Cliente::find($request->id_cliente);
+                $nombre_y_apellido = $cliente->nombre." ".$cliente->apellido;
+                Mail::send('emails.datos_pedido', ['cliente'=>$nombre_y_apellido, 'total'=>$request->total, 'fecha_hoy'=>$request->fecha_hoy, 'fecha_entrega'=>$request->fecha_entrega], function($msj){
+                    $msj->subject('InformaciÃ³n de su pedido');
                     $msj->to('jpcaceres.nea@gmail.com');
                 });
                 Flash::overlay('Se ha enviado email con la info del pedido');
                 return response()->json(json_encode("Se envio el email del pedido, desde MailController.php", true));
-                return view('emails.datos_pedido');
             }
 
 

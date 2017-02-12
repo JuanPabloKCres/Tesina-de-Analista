@@ -23,8 +23,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
    Route::resource('articulos','ArticulosController');
    Route::resource('factura','FacturasController');
    Route::resource('comprobantes','ComprobantesController');
-
-   Route::resource('notificacion','MailController');
+   /*************** EMAILS del FRONT ***************/
+   Route::resource('mail','Email_NotificacionesController');
 
    Route::resource('colores','ColoresController');
    Route::resource('bancos','BancosController');         //Bancos
@@ -68,9 +68,9 @@ Route::get('/institucional', function () {
 
 
 //Route::get('/home', 'HomeController@index');
-
-//FRONT:
+/*************** EMAILS del FRONT ***************/
 Route::resource('mail','MailController');
+/** ********************************************/
 
 // Authentication routes...
 Route::get('admin/auth/login', [

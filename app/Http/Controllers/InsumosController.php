@@ -94,7 +94,7 @@ class InsumosController extends Controller
         $dato_anterior = "nombre: ".$insumo->nombre." || unidad_medida_id: ".$insumo->unidad_medida_id." || alto: ".$insumo->alto." || ancho:".$insumo->ancho." || stock:".$insumo->stock." || stock minimo: ".$insumo->stockMinimo." || costo: ".$insumo->costo." || costo anterior: ".$insumo->costo_anterior." || descripcion: ".$insumo->descripcion." || talle_id: ".$insumo->talle_id." || color_id: ".$insumo->color_id." || material_id: ".$insumo->material_id;
         $insumo->fill($request->all());
         $insumo->save();
-        Flash::success("Se ha realizado la actualización del registro: ".$insumo->nombre.".");
+        Flash::success("Se ha actualizado informaciÃ³n del registro: ".$insumo->nombre.".");
         /** Auditoria actualizacion */
         $auditoria = new Auditoria();
         $auditoria->tabla = "insumos";
@@ -113,7 +113,7 @@ class InsumosController extends Controller
     {
         $insumo = Insumo::find($id);
         $dato_anterior = "nombre: ".$insumo->nombre." || unidad_medida_id: ".$insumo->unidad_medida_id." || alto: ".$insumo->alto." || ancho:".$insumo->ancho." || stock:".$insumo->stock." || stock minimo: ".$insumo->stockMinimo." || costo: ".$insumo->costo." || costo anterior: ".$insumo->costo_anterior." || descripcion: ".$insumo->descripcion." || talle_id: ".$insumo->talle_id." || color_id: ".$insumo->color_id." || material_id: ".$insumo->material_id;
-        /** Auditoria eliminación */
+        /** Auditoria eliminaciÃ³n */
         $auditoria = new Auditoria();
         $auditoria->tabla = "insumos";
         $auditoria->elemento_id = $insumo->id;

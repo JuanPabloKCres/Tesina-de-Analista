@@ -26,4 +26,6 @@
     <link href="{{ asset('plantillas/DataTables/media/css/jquery.dataTables.css') }}" rel='stylesheet' type='text/css'>
     <link href="{{ asset('plantillas/DataTables/extensions/Responsive/css/dataTables.responsive.css') }}" rel='stylesheet' type='text/css'>
 
+    <!--
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
+   -->

@@ -69,6 +69,16 @@ function validarFormCheque(){
         cargarDatosCheque();
     }
 }
+/** Devuelve la fecha de HOY */
+function fecha_hoy(){
+    var hoy = new Date();
+    var dd = hoy.getDate();
+    var mm = hoy.getMonth()+1;      //Enero seria 1
+    var yyyy = hoy.getFullYear();
+    if(dd<10) {dd='0'+dd}   if(mm<10) {mm='0'+mm}
+    hoy = mm+'/'+dd+'/'+yyyy;
+    return hoy;
+}
 
 function cargarDatosCheque(){                           //valida y carga los datos del modal-cheque
     nro_serie = $('#nro_serie').val();
@@ -310,10 +320,8 @@ $("#form-agregar").submit(function (e) {
     comprobar($('#articulo_select').val(), $('#cantidad_number').val(), $('#precioU_number').val(), $('#importe_number').val());
 });
 
-/*
- * Este método jquery captura el evento de submit del peuqeño formulario que posee los campos
- * seña y cliente y lanza el método que solicita confirmación de los datos ingresados.
- */
+/** Este método jquery captura el evento de submit del peuqeño formulario que posee los campos
+ * seña y cliente y lanza el método que solicita confirmación de los datos ingresados.*/
 $("#form-pedido").submit(function (e) {
     e.preventDefault();
     confirmar();
@@ -347,17 +355,15 @@ function confirmar()
 
 /** Function enviarPedido: Este método se encarga de recorrer los renglones de la tabla y empaquetar el contenido de
  * interés de cada renglón en un objeto json y añadirlo a un array que se enviará a la controladora con otros datos
- * requeridos para realizar el registro de pedido/venta. Por ahora solo lanza un alert advirtiendo de que el método se ejecuto bien.
- * Resta dirigir la página hacia la pantalla de pedidos (pendiente).
+ * requeridos para realizar el registro de pedido/venta.
  * El parámetro que ingresa "entregado" es un boolean que solo toma valor true si se trata de la confirmación de una
  * venta a través del momodal-confirmarVenta
  */
 function enviarPedido(pagado, entregado)
 {
-    alert('pagado: '+pagado+" entregado: "+entregado+" pagoCheque: "+pagoCheque);
+    console.log('pagado: '+pagado+" entregado: "+entregado+" pagoCheque: "+pagoCheque);
     var numLi = 0;
     var lineas = [];
-
     var factura = {
             iva: $('#iva').val(),
             tipo_cbte: $('#factura').val(),
@@ -367,8 +373,6 @@ function enviarPedido(pagado, entregado)
             imp_total: $('#montoTotal').val(),
             items: []
         };
-
-
     $('#tblListaProductos tbody tr').each(function () {
         var dataFila = $('#tblListaProductos').DataTable().row(this).data();
         var linea = {articulo_id: dataFila[1], articulo_nombre: dataFila[2], cantidad: dataFila[3], precio_unitario: dataFila[4], importe: dataFila[5]};
@@ -380,7 +384,6 @@ function enviarPedido(pagado, entregado)
     if (!pagarTotal) {
         montoTotal = $('#sena').val();
     }
-
     /**factura electrónica */
     if ($('input:checkbox[name=factura]:checked').val()) {
         $.ajax({    //en esta peticion se busca obtener los datos del cliente para confecc. la factura
@@ -390,10 +393,11 @@ function enviarPedido(pagado, entregado)
                 id: $('#cliente').val()
             },
             success: function (data) {
-                console.log("De ClientesController se obtuvieron estos datos para FE: "+data);
-                console.log("El monto total que se manda a la FE es =" + montoTotal);
-
+                console.log("De ClientesController se obtuvieron estos datos para FE: "+data); console.log("El monto total que se manda a la FE es =" + montoTotal);
                 var data_2 = JSON.parse(data);
+
+                informacion_de_operacion = data_2;
+
                 factura.tipo_cbte = data_2.tipo_cbte;   //OK
                 factura.nro_doc = data_2.dni;           //OK
                 factura.nombre_cliente = data_2.nombre;         //OK
@@ -407,19 +411,11 @@ function enviarPedido(pagado, entregado)
               }
         });
     }
-
     console.log(lineas);
-    console.log("usuario pedido: "+$('#usuarioPedido').val()+" cliente: "+$('#cliente').val());
     console.log("la seña es: "+montoPedido);
 
     if(entregado){
-        var hoy = new Date();
-        var dd = hoy.getDate();
-        var mm = hoy.getMonth()+1;      //Enero seria 1
-        var yyyy = hoy.getFullYear();
-        if(dd<10) {dd='0'+dd}   if(mm<10) {mm='0'+mm}
-        hoy = mm+'/'+dd+'/'+yyyy;
-        fecha_entrega_estimada = hoy;
+        fecha_entrega_estimada = fecha_hoy();
     }
     else{
         fecha_entrega_estimada = $('#fecha_entrega_date').val();
@@ -431,7 +427,6 @@ function enviarPedido(pagado, entregado)
         alert('Se paga con cheque');
         console.log( "nro_serie: "+nro_serie+", banco: "+banco+", sucursal: "+sucursal_banco+" fecha_emision: "+fecha_emision+" ,fecha_cobro: "+fecha_cobro);
     }
-
     /** persistir venta o pedido */
     $.ajax({
         dataType: 'json',
@@ -440,7 +435,7 @@ function enviarPedido(pagado, entregado)
             renglones: lineas,
             pagado: pagado,
             pagoCheque: pagoCheque,
-            //******** Datos Cheque *******//
+            //********* Datos Cheque ********/
             nro_serie: nro_serie,
             banco: banco,
             sucursal_banco: sucursal_banco,
@@ -459,15 +454,14 @@ function enviarPedido(pagado, entregado)
             $('#mensajeExito').html(data);
             $('#botonExito').click();
             //enviarNotificacion();       //email stock bajo
+            email_info_pedido_cliente(lineas, fecha_entrega_estimada, montoPedido, montoTotal_Absoludo, $('#usuarioPedido').val(), fecha_hoy());
         }
     });
     /** Se emite un comprobante **/
-            emitirTicket();
+            //emitirTicket();
 }
 
-/*
- * Este método jquery es el que toma el valor total de un pedido o si por el contrario solo se quiere señar el mismo.
- */
+/** Este método jquery es el que toma el valor total de un pedido o si por el contrario solo se quiere señar el mismo*/
 $("#botonModalidad").click(function () {
     if ($('#divSena').hasClass('hide')) {
         $('#botonModalidad').html("Pagar totalidad del pedido");
@@ -490,7 +484,6 @@ $("#botonModalidad").click(function () {
  * Function registrarCliente: Este método se encarga de enviar al servidor los datos para registrar a un nuevo cliente
  * y lo selecciona; todo esto durante el proceso de carga de un nuevo pedido.
  */
-
 function registrarCliente()
 {
     $.ajax({
@@ -561,11 +554,8 @@ function generarFactura() {
             window.open(enlace_factura);
         }
     });
-
     $('#form-crear').submit();      //actualiza el estado del pedido (pago completo, o entrega 'pedidos.update'
 }
-
-
 $(document).ready(function () {
     $("#cantidad_number").keydown(function (e) {
         // Allow: backspace, delete, tab, escape, enter and .
@@ -587,7 +577,6 @@ $(document).ready(function () {
                                 }
                             });
 });
-
 /** Este eveto se dispara al cambiar el valor del iva en la venta y actualiza el valor del iva
          * en todos los importes incluyendo a los de los items. */  //NO VA EN LA TESIS, SOLO PARA LA GRAFICA
 /*
@@ -611,8 +600,6 @@ $(document).ready(function () {
             //window.location = "/admin/pedidos";
         });
 */
-
-
 /** Al elegir un articulo, se ejecuta una funcion que busca el precio de venta y disponibilidad de insumos*/
 $('#articulo_select').on('change',function(){
     var articulo_id = $('#articulo_select').val();
@@ -654,13 +641,11 @@ function mostrarStockRemanente(articulo_id){        //devuelve los insumos que q
         }
     });
 }
-
 /** Al seleccionar cliente devolver su responsabilidad ante iva y porcentaje de iba a abonar*/
 $('#cliente').on('change',function(){
     var cliente_id = $('#cliente').val();
     mostrarInfoTributaria(cliente_id);      //obtener responsabilidad IVA y % IVA
 });
-
 function mostrarInfoTributaria(cliente_id){
     $.ajax({
         url: "/admin/clientes",
@@ -678,7 +663,6 @@ function mostrarInfoTributaria(cliente_id){
         }
     });
 }
-
 /** Al presionar 'Pagar con Cheque' cargar el cheque con la info del cliente y el pedido si no paga con seña ni es "Consumidor Final"*/
 function rellenarModalCheque(){
     if(pagarTotal == true){                       //si no se va a señar, permitir Pagar con Cheque
@@ -712,9 +696,8 @@ function rellenarModalCheque(){
     }
 }
 
-
 /** Envia el email de notificacion de stock bajo **/
-function enviarNotificacion(){
+function email_notificacion_stockBajo(){
     var articulo_id = $('#articulo_select').val();      //con esto solo notificara el ultimo articulo, despues hay que hacer que recorra la tabla de pedido
     var mensaje;
     $.ajax({
@@ -748,6 +731,7 @@ function enviarNotificacion(){
     });
 }
 
+/** Esta fucnion genera un comprobante 'nota de pedido' para el cliente. Crea un objeto Comprobante y lo persiste*/
 function emitirTicket(){
     var nro_comprobante = 0;
     var emitirTicket = true;
@@ -764,7 +748,6 @@ function emitirTicket(){
     if(pagarTotal){
         ticket.sena = montoPedido;
     }
-
     var numLi = 0;
     var lineas = [];
     $('#tblListaProductos tbody tr').each(function () {
@@ -790,17 +773,14 @@ function emitirTicket(){
     });
 
     $.ajax({
-        url: "/admin/clientes",
+        url: "/admin/clientes", dataType: 'json',
         data: {
             id: $('#cliente').val(),
             emitirTicket: emitirTicket
         },
-        dataType: 'json',
         success: function (data) {
-            console.log(data);
             var respuesta = JSON.parse(data);
             console.log(respuesta);
-
             var data_2 = JSON.parse(data);
             ticket.nro_comprobante = nro_comprobante;
             ticket.nro_doc = data_2.dni;                   //OK
@@ -814,4 +794,26 @@ function emitirTicket(){
             window.open(enlace_ticket);
         }
     });
+}
+
+/** Enviar email con datos de pedido al cliente despues de efectuado el pedido (solo si no se entrega el mismo en el acto) **/
+function email_info_pedido_cliente(lineas, fecha_entrega_estimada, sena, total, user, fecha_hoy){
+    console.log('items: '+lineas);
+    $.ajax({
+        url: "/admin/mail", dataType: 'json',
+        data: {
+            id_cliente: $('#cliente').val(),
+            items:lineas,
+            fecha_entrega:fecha_entrega_estimada,
+            sena:sena, total:total,
+            user:user ,
+            fecha_hoy:fecha_hoy,
+            email_info_pedido: true
+        },
+        success: function (data) {
+            alert('Se elvio la chipa a MailController.php...revisa si te llego un email');
+            var recibido = JSON.parse(data);
+            console.log(recibido);
+        }
+    })
 }

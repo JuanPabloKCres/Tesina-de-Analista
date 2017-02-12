@@ -34,6 +34,7 @@ class ClientesController extends Controller {
             $direccion = "";
             $localidad = "";
             $provincia = "";
+            $email = $cliente->email;
             $tipo_cbte = $cliente->responiva->factura;
             if ($cliente->cuit) {
                 $dni = $cliente->cuit;
@@ -56,7 +57,7 @@ class ClientesController extends Controller {
                 $provincia = "No registrado";
             }
 
-            $datosValidados = array("nombre" => $nombre, "n" =>$n, "a" => $a, "empresa"=>$empresa, "dni" => $dni, "domicilio" => $direccion, "localidad" => $localidad, "provincia" => $provincia, "tipo_cbte" => $tipo_cbte, "responiva"=>$responiva, "iva"=>$iva);
+            $datosValidados = array("nombre" => $nombre, "email" => $email, "n" => $n, "a" => $a, "empresa"=>$empresa, "dni" => $dni, "domicilio" => $direccion, "localidad" => $localidad, "provincia" => $provincia, "tipo_cbte" => $tipo_cbte, "responiva"=>$responiva, "iva"=>$iva);
             return response()->json(json_encode($datosValidados, true));
         }
         $clientes = Cliente::all();
