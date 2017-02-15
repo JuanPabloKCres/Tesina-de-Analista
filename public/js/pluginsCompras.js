@@ -7,7 +7,7 @@
  * si al registrar estoy en la pág 1, el 11º registro será ignorado.
  */
 
-//alert('Se entra a pluginsCompras.js');
+//alert('Se entra a pluginsCompras.js, el User es: '+$('#usuarioCompra').val());
 
 $(document).ready(function () {
     $('#tblListaInsumos').DataTable({
@@ -60,7 +60,7 @@ function comprobar(insumo_select, cantidad_number, proveedor_select, costo_numbe
             dataType: 'json',
             success: function (data) {
                 var d = JSON.parse(data);
-                agregarContenido(insumo_select, proveedor_select, d.nombreInsumo, cantidad_number, costo_number, d4);
+                agregarContenido(insumo_select, proveedor_select, d.nombre, cantidad_number, costo_number, d4);
             }
         });
         //agregarContenido(insumo_select, d.nombreArticulo, proveedor_select, cantidad_number, d4);
@@ -84,7 +84,11 @@ function agregarContenido(insumo_select, proveedor_select, nombreInsumo, cantida
     nombreProveedor = $('#proveedor_select option:selected').text();
     valorItemTotal = parseFloat(d4); //valor neto (valor*cantidad)
     montoPedido = montoPedido + valorItemTotal;
+    montoPedido = montoPedido.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+    montoPedido = parseFloat(montoPedido);
     montoTotal = montoTotal + valorItemTotal;
+    montoTotal = montoTotal.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+    montoTotal = parseFloat(montoTotal);
     tPro.row.add([
         numFila,            //ok
         insumo_select,      //ok
@@ -109,7 +113,6 @@ $("#botonModalidad").click(function () {
 });
 
 
-
 /** enviarPedido: Este método se encarga de recorrer los renglones de la tabla y empaquetar el contenido de
  interés de cada renglón en un objeto json y añadirlo a un array que se enviará a la controladora con otros datos
   requeridos para realizar el registro de pedido/compra.
@@ -123,25 +126,14 @@ function enviarPedido(pagado, entregado, confirmado)
     pagado = true;
     confirmado = true;
     recibido = true;
-    //
 
+    var usuario_id = $('#usuarioCompra').val();
     var numLi = 0;
     var lineas = [];
-    /*
-    var factura = {
-        nro_doc: "",
-        nombre_cliente: "",
-        domicilio_cliente: "",
-        imp_neto: "",
-        tipo_cbre: "",
-        items: []
-    };
-    */
-
     $('#tblListaInsumos tbody tr').each(function () {
         var dataFila = $('#tblListaInsumos').DataTable().row(this).data();
         var proveedor_id = $('#proveedor_select').val();
-        var linea = {insumo_id: dataFila[1], cantidad: dataFila[3]/*, proveedor_select: dataFila[4]*/, proveedor_id: proveedor_id, costo_unitario: dataFila[5], importe: dataFila[6]};
+        var linea = {insumo_id: dataFila[1], cantidad: dataFila[3]/*, proveedor_select: dataFila[4]*/, proveedor_id: proveedor_id, costo_unitario: dataFila[5], importe: dataFila[6].toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]};
         lineas [numLi] = linea;
         console.log(lineas);
         //factura.items [numLi] = linea;
@@ -150,7 +142,7 @@ function enviarPedido(pagado, entregado, confirmado)
 
     var proveedor_id = $('#proveedor_select').val();
     var costo_envio = $('#costo_envio').val();
-    //persistir venta o pedido
+    /*persistir compra o pedido*/
     $.ajax({
         dataType: 'JSON',
         url: "/admin/compras/create",
@@ -161,16 +153,16 @@ function enviarPedido(pagado, entregado, confirmado)
             pagado: pagado,
             entregado: entregado,
             recibido: recibido,
-            usuarioPedido: $('#usuarioPedido').val(),
+            usuarioPedido: usuario_id,
             costo_envio: costo_envio,
             montoPedido: montoPedido
 
         },
         success: function (data) {
-            //alert('Los datos de la compra fueron exitosamente enviados a ComprasController@create');
-            /* Una vez completado el proceso se muestra el mensaje de exito*/
-            $('#mensajeExito').html(data);
+            $('#mensajeExito').html(data);      /* Una vez completado el proceso se muestra el mensaje de exito*/
             $('#botonExito').click();
+            /* 1# Proveedor 2# DetalledeInsumos 3--6# Estados #7 UsuarioQueOrdenoCompra #8 $Envio #9TOTAL*/
+            recibo_compra_insumos(proveedor_id, lineas, confirmado, pagado, entregado, recibido,  usuario_id, costo_envio, montoPedido);
         }
     });
 }
@@ -227,10 +219,7 @@ $(document).ready(function () {
 /** limpiar campos **/
 function limpiar()
 {
-    $('#cantidad_number').val("");
-    $('#costo_number').val("");
-    $('#d4').val("");
-    $('#total').val("");
+    $('#cantidad_number').val("");    $('#costo_number').val("");    $('#d4').val("");    $('#total').val("");
 }
 
 /** confirmar: Este método verifica que la tabla contenga al menos un renglón, de ser así
@@ -280,7 +269,6 @@ function completarPrecio(n)
         }
     }
 }
-
 /**  captura el evento de cuando se suelta la tecla despues de presionarla sobre el campo "Precio unitario"
  * y lanza el método que se encarga de calcular el contenido para el campo "Importe". */
 $("#costo_number").keypress(function () {
@@ -337,13 +325,9 @@ $(document).ready(function () {
 $('#costo_envio').keypress(function () {
 }).keyup(function () {
         sumaraTotal();});
-
 function sumaraTotal(){
     var costo_envio = $('#costo_envio').val();
     costo_envio = parseFloat(costo_envio);
-    //alert('Se deberia actualizar MontoTotal +'+costo_envio);
-    //costo_envio;
-
     $('#mt').html(parseFloat(montoTotal+costo_envio));
 }
 
@@ -389,3 +373,65 @@ function mostrarPrecioInsumo(insumo_id){
  });
  }
  */
+
+function recibo_compra_insumos(proveedor_id, lineas, confirmado, pagado, entregado, recibido, usuario_id, costo_envio, montoPedido)
+{
+    var proveedor = null; proveedor_email= null; proveedor_telefono = null;
+    var nro_comprobante;
+    var recibo = {                          /*El ticket es una 'nota de pedido'*/
+        nro_comprobante: null,
+        proveedor: proveedor, proveedor_email: proveedor_email, proveedor_telefono: proveedor_telefono,
+        costo_envio: costo_envio,
+        imp_total: montoPedido,
+        items: lineas,
+    };
+    /* Dentro se persiste un nuevo comprobante */
+    $.ajax({
+        url: "/admin/comprobantes", dataType: 'json',
+        data: {
+            usuario_id: usuario_id,
+            proveedor_id: proveedor_id,
+            recibo_compra_insumos: true,
+        },
+        success: function (data) {
+            var respuesta = JSON.parse(data);
+            console.log("La respuesta de ComprobantesController es: ");
+            console.log(respuesta);
+            nro_comprobante = respuesta.comprobante_id;             //Funciona
+            proveedor = respuesta.proveedor;
+            proveedor_email = respuesta.proveedor_email;
+            proveedor_telefono = respuesta.proveedor_telefono;
+            /*Una vez que se obtiene el id de comprobante grabado arriba, se rellena el recibo por pantalla */
+            recibo.nro_comprobante = nro_comprobante;      //OK
+            recibo.proveedor = proveedor;
+            recibo.proveedor_email = proveedor_email;
+            recibo.proveedor_telefono = proveedor_telefono;
+            //recibo.imp_total = montoTotal_Absoludo;
+            console.log("El contenido del array 'recibo' es:");
+            console.log(recibo);
+            var array = JSON.stringify(recibo);
+            console.log(array);
+            var enlace_recibo = 'http://localhost/factura/EditableInvoice/recibo_compra_insumos.php?&datos_comprobante=' + encodeURIComponent(array);
+            window.open(enlace_recibo);
+        }
+    });
+}
+
+/**Buscar y mosrar la cantidad de Insumos que hay */
+/** Al elegir un articulo, se ejecuta una funcion que busca el precio de venta y disponibilidad de insumos*/
+$('#insumo_select').on('change',function(){
+    var insumo_id = $('#insumo_select').val();
+    mostrarStockRemanente(insumo_id);
+});
+function mostrarStockRemanente(insumo_id){        //devuelve los insumos que quedan
+    $.ajax({
+        url: "/admin/insumos", dataType: 'json',
+        data: {
+            id:insumo_id,
+        },
+        success: function (data) {
+            var respuesta = JSON.parse(data);
+            console.log(respuesta);
+        }
+    });
+}

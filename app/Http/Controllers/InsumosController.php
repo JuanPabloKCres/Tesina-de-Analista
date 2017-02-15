@@ -30,8 +30,6 @@ class InsumosController extends Controller
     {
         if($request->ajax()){
             if($request->confeccionArticulos){        //si se llama desde vista Articulos (rellenando insumos para articulo)
-                /*
-                }*/
                 if($request->encontrarUnidad){
                     $insumo = Insumo::find($request->id);
                     $unidad_medida_id = $insumo->unidad_medida_id;
@@ -50,8 +48,11 @@ class InsumosController extends Controller
             }
             else{                                       //si se llama desde vista Compra de insumos (rellenando insumos para comprar)
                 $insumo = Insumo::find($request->id);
-                $datosValidados = array("nombreInsumo"=>$insumo->nombre, "stockSuficiente"=>$insumo->stockSuficiente($request->cantidadSolicitada));
-                return response()->json(json_encode($datosValidados, true));
+                $unidad_medida_id = $insumo->unidad_medida_id;
+                $unidad = Unidad_Medida::find($unidad_medida_id);
+                /** devuelvo a pluginsCompras.js:    nombre, stock y unidad de medida del stock */
+                $datos_insumo = array("nombre"=>$insumo->nombre, 'stock'=>$insumo->stock, 'unidad'=>$unidad);
+                return response()->json(json_encode($datos_insumo, true));
             }
         }
         $insumos = Insumo::all();

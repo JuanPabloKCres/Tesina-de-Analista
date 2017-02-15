@@ -41,8 +41,7 @@ class ComprasController extends Controller {
         } else {
             /*
              * Si la solicitud se realiza a través de ajax quiere decir que que se quiere impactar en caja una nueva compra.
-             * En caso contrario se devuelve la pantalla para realizar una compra.
-             */
+             * En caso contrario se devuelve la pantalla para realizar una compra */
             if ($request->ajax()) {
                 /** Primero se recoge en una variable el array de renglones y se crea y persiste el registro de pedido/compra */
                 $arrayRenglones = $request->renglones;
@@ -55,7 +54,7 @@ class ComprasController extends Controller {
                 $compra->importe_insumos = $request->montoPedido;
                 $compra->importe_costo_envio = $request->costo_envio;
                 $compra->importe = ($request->montoPedido) + ($compra->importe_costo_envio);   //aca se deben sumar costos de envio e importe_insumos
-                $compra->concepto = "Esto es una prueba";
+                $compra->concepto = "Reposicion de stock";
 
                 // en compra no permitimos señas        $compra->senado = $request->sena;
                 if ($request->confirmado == "true") {

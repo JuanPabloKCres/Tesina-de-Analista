@@ -453,7 +453,7 @@ function enviarPedido(pagado, entregado)
             console.log(data);
             $('#mensajeExito').html(data);
             $('#botonExito').click();
-            //enviarNotificacion();       //email stock bajo
+            email_notificacion_stockBajo();       //email stock bajo
             email_info_pedido_cliente(lineas, fecha_entrega_estimada, montoPedido, montoTotal_Absoludo, $('#usuarioPedido').val(), fecha_hoy());
         }
     });
@@ -479,7 +479,6 @@ $("#botonModalidad").click(function () {
         generarFactura();
     }
 });
-
 /*
  * Function registrarCliente: Este método se encarga de enviar al servidor los datos para registrar a un nuevo cliente
  * y lo selecciona; todo esto durante el proceso de carga de un nuevo pedido.
@@ -606,7 +605,6 @@ $('#articulo_select').on('change',function(){
     mostrarPrecioArticulo(articulo_id);
     mostrarStockRemanente(articulo_id);
 });
-
 // Las funciones:
 function mostrarPrecioArticulo(articulo_id){        //devuelve el precio de venta del articulo elegido
     $.ajax({
@@ -716,11 +714,11 @@ function email_notificacion_stockBajo(){
                 //alert("**STOCK REMANENTE**          "+respuesta[i].insumo+": "+respuesta[i].cantidad_actual+ " "+respuesta[i].unidad);
             }
             $.ajax({
-                url: "/emails/notificacion",
+                url: "/admin/mail", dataType: 'json',
                 data: {
                     mensaje:mensaje,
+                    email_stockBajo:true,
                 },
-                dataType: 'json',
                 success: function(data) {
                     var respuesta = JSON.parse(data);
                     alert(data);
@@ -764,11 +762,12 @@ function emitirTicket(){
         data: {
             cliente_id: $('#cliente').val(),
             usuario_id: $('#usuarioPedido').val(),
+            nota_pedido: true,
         },
         dataType: 'json',
         success: function (data) {
             var respuesta = JSON.parse(data);
-            nro_comprobante = respuesta.comprobante_id;             //Funciona?
+            nro_comprobante = respuesta.comprobante_id;             //Funciona
         }
     });
 
@@ -782,7 +781,7 @@ function emitirTicket(){
             var respuesta = JSON.parse(data);
             console.log(respuesta);
             var data_2 = JSON.parse(data);
-            ticket.nro_comprobante = nro_comprobante;
+            ticket.nro_comprobante = nro_comprobante;      //OK
             ticket.nro_doc = data_2.dni;                   //OK
             ticket.nombre_cliente = data_2.nombre;         //OK
             ticket.provincia_cliente = data_2.provincia;   //OK

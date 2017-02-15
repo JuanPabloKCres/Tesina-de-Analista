@@ -5,6 +5,7 @@
     <title>Document</title>
 </head>
 <body>
-<p><strong>Se ha detectado que el stock del insumo esta muy bajo, por favor repongalo a la brevedad: </strong>{{--!!$name!!--}}</p>
+<p><h1 style="color:#FF0000"><strong>Se ha detectado que el stock de algunos insumos esta muy bajo, por favor repongalos a la brevedad: </strong></h1></p>
+<strong>{{$mensaje}}</strong>
 </body>
 </html>

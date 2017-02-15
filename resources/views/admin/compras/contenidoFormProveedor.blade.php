@@ -10,13 +10,12 @@
                             <div class="col-xs-12">
                                 <div class="input-icon right">
                                     <i class="fa fa-map-marker"></i>
-                                    <input class="form-control" value="{!! Auth::user()->id !!}" id="usuarioPedido" required/>
+                                    <input class="form-control" value="{!! Auth::user()->id !!}" id="usuarioCompra" required/>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
