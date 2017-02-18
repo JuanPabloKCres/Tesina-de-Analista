@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use App\Http\Requests;
 use App\Localidad;
+use App\Provincia;
 use App\Cliente;
 use App\Venta;
 use App\Responiva;
@@ -51,11 +52,11 @@ class ClientesController extends Controller {
             } else {
                 $localidad = "No registrado";
             }
-            if ($cliente->provincia) {
-                $provincia = $cliente->localidad->provincia_id->nombre;
-            } else {
-                $provincia = "No registrado";
-            }
+            //if ($cliente->localidad->provincia->nombre) {
+                $provincia = $cliente->localidad->provincia->nombre;
+            //} else {
+              //  $provincia = "No registrado";
+            //}
 
             $datosValidados = array("nombre" => $nombre, "email" => $email, "n" => $n, "a" => $a, "empresa"=>$empresa, "dni" => $dni, "domicilio" => $direccion, "localidad" => $localidad, "provincia" => $provincia, "tipo_cbte" => $tipo_cbte, "responiva"=>$responiva, "iva"=>$iva);
             return response()->json(json_encode($datosValidados, true));

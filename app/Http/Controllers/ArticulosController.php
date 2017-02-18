@@ -34,6 +34,7 @@ class ArticulosController extends Controller
                 return response()->json(json_encode($precio, true));
             }
             elseif($request->comprobarSiHayInsumosSuficientes){             //bandera antes de consultar
+                $aceptarPedido = false;
                 $id = $request->id;
                 $insumosArticulo= InsumoArticulo::where('articulo_id', $id)->get();          //devuelve los insumos_articulo vinculados a un Articulo
                 foreach($insumosArticulo as $ia){
@@ -41,20 +42,23 @@ class ArticulosController extends Controller
                     $insumo = Insumo::find($ia->insumo_id);
                     $stockDisponible = $insumo->stock;
                     if($stockDisponible < $cantidadNecesaria){
+                        $aceptarPedido = false;
                         $faltante = $cantidadNecesaria - $stockDisponible;
                         //no se tiene suficiente insumo para aceptar el pedido
                         $respuesta = array("mensaje"=>'No hay stock suficiente para cubrir el pedido (faltan ', "faltante"=>$faltante, "permitir"=>false, "insumo"=>$insumo->nombre);
-                        return response()->json(json_encode($respuesta, true));
+                        //return response()->json(json_encode($respuesta, true));
                     }
                     else{
                         //se deberia aceptar el articulo
-                        $respuesta = array("mensaje"=>'se acepta el insumo', "permitir"=>true);
-                        return response()->json(json_encode($respuesta, true));
+                        $aceptarPedido = true;
                     }
                 }
-
-                //$datos = array("insumo_id" => $insumosArticulo->insumo_id, "cantidad" => $insumosArticulo->cantidad);
-                //return response()->json(json_encode($datos, true));
+                if($aceptarPedido == true){
+                    $respuesta = array("mensaje"=>'se acepta el insumo', "permitir"=>true);
+                    return response()->json(json_encode($respuesta, true));
+                }else{
+                    return response()->json(json_encode($respuesta, true));
+                }
             }
             elseif($request->informarStockRestante){             //bandera antes de consultar
                 $id = $request->id;

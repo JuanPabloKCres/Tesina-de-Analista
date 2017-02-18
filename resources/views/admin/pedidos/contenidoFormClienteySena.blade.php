@@ -22,7 +22,7 @@
                         <div class="row">
                             <div class="col-xs-8">
                                 <div class="input-icon right">
-                                    <input class="form-control" id="responiva_select" readonly type="text"/>
+                                    <input class="form-control text-center" id="responiva_select" readonly type="text"/>
                                 </div>
                             </div>
                         </div>
@@ -36,8 +36,7 @@
                                     <!--
                                     <input class="form-control" id="iva_select" readonly type="text"/>
                                     -->
-
-                                    <select class="form-control" id="iva_select" readonly>
+                                    <select class="form-control text-center" id="iva_select" readonly align="center">
                                         <option value='21'>21%</option>
                                         <option value='10.5'>10.5%</option>
                                         <option value='0'>0%</option>

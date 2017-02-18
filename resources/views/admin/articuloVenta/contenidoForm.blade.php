@@ -33,6 +33,12 @@
                                 <i class="fa fa-pencil"></i>
                                 {!! Form::select('articulo_id', $articulos, null, ['class' => 'form-control selectBoot', 'id' => 'articulo_select','data-live-search' => 'true', 'required']) !!}
                             </div>
+                            <label class="col-sm-3 control-label">Listado de Insumos</label>
+                            <div class="input-icon right">
+                                <select class="form-control text-right" id="insumos_necesarios" readonly>
+
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>

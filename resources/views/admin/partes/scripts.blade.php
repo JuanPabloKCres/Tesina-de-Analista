@@ -49,11 +49,7 @@
 <script src="{{ asset('plantillas/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
 
 <script src="{{ asset('plantillas/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
-<!--
-<script src="{{ asset('plantillas/jonthornton-jquery-timepicker/jquery.timepicker.css') }}"></script>
-<script src="{{ asset('plantillas/jonthornton-jquery-timepicker/jquery.timepicker.min.js') }}"></script>
-<script src="{{ asset('plantillas/jonthornton-jquery-timepicker/jquery.timepicker.js') }}"></script>
--->
+
 
 <script src="{{ asset('plantillas/parsley/dist/i18n/es.js') }}"></script>
 <script src="{{ asset('plantillas/parsley/dist/parsley.js') }}"></script>

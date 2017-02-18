@@ -37,9 +37,6 @@ class Email_NotificacionesController extends Controller
                 Flash::overlay('Se ha notificado al repositor de la necesidad de reponer insumos');
                 return response()->json(json_encode("Se envio el email, al administrador para reponer stock de insumos faltantes", true));
             }
-
-
         }
-        return view('emails.datos_pedido');
     }
 }

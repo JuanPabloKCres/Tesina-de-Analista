@@ -44,10 +44,9 @@
                                     <table class="display dataTable table table-hover table-striped">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">Apellido/s</th>
-                                                <th class="text-center">Nombre/s</th>
-                                                <th class="text-center">Razón Social</th>
+                                                <th class="text-center">Nombre</th>
                                                 <th class="text-center">Responsabilidad ante IVA</th>
+                                                <th class="text-center">Representante</th>
                                                 <th class="text-center">CUIT</th>
                                                 <th class="text-center">DNI</th>
                                                 <th class="text-center">Localidad y dirección</th>
@@ -58,14 +57,19 @@
                                         <tbody>
                                         @foreach($clientes as $cliente)
                                             <tr>
-                                                <td class="text-center">{{ $cliente->apellido }}</td>
-                                                <td class="text-center">{{ $cliente->nombre }}</td>
                                                 @if ( $cliente->empresa)
-                                                    <td class="text-center">{{ $cliente->empresa }}</td>
+                                                    <td class="text-center text-dark">{{ $cliente->empresa }}</td>
+                                                @else
+                                                    <td class="text-center">{{ $cliente->apellido }}, {{ $cliente->nombre }}</td>
+                                                @endif
+
+                                                <td class="text-center">{{ $cliente->responiva->nombre }}</td>
+                                                @if ( $cliente->empresa)
+                                                    <td class="text-center">{{ $cliente->apellido }}, {{ $cliente->nombre }}</td>
                                                 @else
                                                     <td class="text-center">{{ "-" }}</td>
                                                 @endif
-                                                <td class="text-center">{{ $cliente->responiva->nombre }}</td>
+
                                                   @if ( $cliente->cuit)
                                                      <td class="text-center">{{ $cliente->cuit }}</td>
                                                   @else

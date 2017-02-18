@@ -3,7 +3,7 @@
  * Si se selecciona "Responsable Inscripto" debe anular el campo de ingreso de DNI
  * Si se selecciona alguna otra anula campo CUIT y habilita solo DNI
  */
-
+document.getElementById("empresa_text").disabled=true;
 $('select#responiva_id').on('change',function(){
     var valor = $( "#responiva_id option:selected").text();
     //var valor = $(this).val();
@@ -12,11 +12,12 @@ $('select#responiva_id').on('change',function(){
     {
         document.getElementById("dni").disabled=true;
         document.getElementById("cuit").disabled=false;
+        document.getElementById("empresa_text").disabled=false;
     }
     else if (valor=='Consumidor Final') {
         document.getElementById("cuit").disabled=true;
         document.getElementById("dni").disabled=false;
-        document.getElementById("empresa_text").isDisabled=true;
+        document.getElementById("empresa_text").disabled=true;
     }
     //alert(valor);
 });

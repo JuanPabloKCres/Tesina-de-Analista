@@ -14,7 +14,12 @@ Detalle del cliente
 <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
     <div class="page-header pull-left">
         <div class="page-title">
-            Cliente: {{ $cliente->apellido }}, {{ $cliente->nombre }} ({{ $cliente->responiva->nombre }})</div>
+            Cliente:   @if($cliente->empresa)
+                         {{ $cliente->empresa }} (representante: {{ $cliente->apellido }}, {{ $cliente->nombre}})
+                       @else
+                        {{ $cliente->apellido }}, {{ $cliente->nombre }} ({{ $cliente->responiva->nombre }})
+                       @endif
+        </div>
     </div>
     <div class="page-header pull-right">
         <div class="page-toolbar">
@@ -50,12 +55,97 @@ Detalle del cliente
                                                 <div class="col-md-10">
                                                     <table class="table table-striped table-hover">
                                                         <tbody>
+                                                        @if($cliente->empresa)
                                                             <tr>
-                                                                <td><h4 class="box-heading">Apellido/s:</h4></td>
+                                                                <td><h4 class="box-heading text-dark">Empresa:</h4></td>
+                                                                <td><h4 class="text-dark">{{ $cliente->empresa }}</h4></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">CUIT:</h4></td>
+                                                                @if ( $cliente->cuit)
+                                                                    <td><h4>{{ $cliente->cuit }}</h4></td>
+                                                                @else
+                                                                    <td><h4>No se registró</h4></td>
+                                                                @endif
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Responsabilidad Tributaria:</h4></td>
+                                                                @if ( $cliente->responiva->nombre)
+                                                                    <td><h4>{{ $cliente->responiva->nombre }}</h4></td>
+                                                                @else
+                                                                    <td><h4>No se registró</h4></td>
+                                                                @endif
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Representante:</h4></td>
+                                                                <td><h4>{{ $cliente->nombre }} {{ $cliente->apellido }}</h4></td>
+                                                            </tr>
+                                                            <tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Localidad y dirección:</h4></td>
+                                                                <td><h4>
+                                                                        @if ( $cliente->direccion)
+                                                                            {{ $cliente->direccion }}  ({{ $cliente->localidad->nombre}} - {{$cliente->localidad->provincia->nombre}})
+                                                                        @else
+                                                                            No se registró
+                                                                        @endif
+                                                                    </h4></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Teléfono:</h4></td>
+                                                                @if ($cliente->telefono )
+                                                                    <td><h4>{{ $cliente->telefono }}</h4></td>
+                                                                @else
+                                                                    <td><h4>No se registró</h4></td>
+                                                                @endif
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Email:</h4></td>
+                                                                @if ( $cliente->email)
+                                                                    <td><h4>{{ $cliente->email }}</h4></td>
+                                                                @else
+                                                                    <td><h4>No se registró</h4></td>
+
+                                                                @endif
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Descripcion:</h4></td>
+                                                                @if ( $cliente->descripcion)
+                                                                    <td><h4>{{ $cliente->descripcion }}</h4></td>
+                                                                @else
+                                                                    <td><h4>No se registró</h4></td>
+
+                                                                @endif
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Cantidad de pedidos o ventas asociadas:</h4></td>
+                                                                <td><h4>{{$cliente->ventas->count()}}</h4></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Cantidad de dinero invertido por este cliente:</h4></td>
+                                                                <td><h4 class="text-google-plus">${{$cliente->importeVentasRealizadas_sinRestarIva()}}</h4>  <h4 class="text-green">(${{$cliente->importeVentasRealizadas()}} pesos limpios)</h4></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Fecha de la última compra:</h4></td>
+                                                                <td><h4>{{$cliente->ventas->last()->updated_at->diffForHumans() }}</h4></td>
+                                                                <td>
+
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Fecha de alta del cliente:</h4></td>
+                                                                <td><h4>{{ $cliente->created_at->diffForHumans() }}</h4></td>
+                                                            </tr>
+
+
+                                                        @else
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Apellido:</h4></td>
                                                                 <td><h4>{{ $cliente->apellido}}</h4></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><h4 class="box-heading">Nombre/s:</h4></td>
+                                                                <td><h4 class="box-heading">Nombres:</h4></td>
                                                                 <td><h4>{{ $cliente->nombre }}</h4></td>
                                                             </tr>
                                                             <tr>
@@ -70,15 +160,6 @@ Detalle del cliente
                                                                 <td><h4 class="box-heading">DNI:</h4></td>
                                                                 @if ( $cliente->dni)
                                                                 <td><h4>{{ $cliente->dni }}</h4></td>
-                                                                @else
-                                                                <td><h4>No se registró</h4></td>
-                                                                @endif
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td><h4 class="box-heading">Empresa:</h4></td>
-                                                                @if ( $cliente->empresa)
-                                                                <td><h4>{{ $cliente->empresa }}</h4></td>
                                                                 @else
                                                                 <td><h4>No se registró</h4></td>
                                                                 @endif
@@ -132,10 +213,7 @@ Detalle del cliente
                                                                 <td><h4 class="box-heading">Cantidad de pedidos o ventas asociadas:</h4></td>
                                                                 <td><h4>{{$cliente->ventas->count()}}</h4></td>
                                                             </tr>
-                                                            <tr>
-                                                                <td><h4 class="box-heading">Cantidad de dinero invertido por este cliente:</h4></td>
-                                                                <td><h4 class="text-google-plus">${{$cliente->importeVentasRealizadas_sinRestarIva()}}   &nbsp;&nbsp;&nbsp; (${{$cliente->importeVentasRealizadas()}} pesos limpios)</h4></td>
-                                                            </tr>
+                                                            <td><h4 class="text-google-plus">${{$cliente->importeVentasRealizadas_sinRestarIva()}}</h4>  <h4 class="text-green">(${{$cliente->importeVentasRealizadas()}} pesos limpios)</h4></td>
                                                             <tr>
                                                                 <td><h4 class="box-heading">Fecha de la última compra:</h4></td>
                                                                 <td><h4>{{$cliente->ventas->last()->updated_at->diffForHumans() }}</h4></td>
@@ -147,6 +225,7 @@ Detalle del cliente
                                                                 <td><h4 class="box-heading">Fecha de alta del cliente:</h4></td>
                                                                 <td><h4>{{ $cliente->created_at->diffForHumans() }}</h4></td>
                                                             </tr>
+                                                         @endif
                                                         </tbody>
                                                     </table>
                                                 </div>

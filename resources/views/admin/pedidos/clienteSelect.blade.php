@@ -8,7 +8,7 @@
                 @foreach($clientes as $cliente)
                     @if($cliente->cuit)
                         @if($cliente->empresa)
-                              <option value="{{ $cliente->id }}">{{ $cliente->apellido }}, {{ $cliente->nombre }} &nbsp;&nbsp;&nbsp;( {{$cliente->empresa}} -  CUIT: {{ $cliente->cuit }})  </option>
+                              <option value="{{ $cliente->id }}">{{$cliente->empresa}} -  CUIT: {{ $cliente->cuit }} &nbsp;&nbsp;&nbsp;(representante: {{ $cliente->apellido }}, {{ $cliente->nombre }})  </option>
                         @else
                               <option value="{{ $cliente->id }}">{{ $cliente->apellido }}, {{ $cliente->nombre }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(CUIT: {{ $cliente->cuit }})  </option>
                         @endif

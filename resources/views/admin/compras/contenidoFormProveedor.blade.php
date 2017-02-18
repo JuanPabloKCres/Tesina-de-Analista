@@ -1,4 +1,4 @@
-<form role="form" id="form-pedido">
+<form  role="form" id="form-pedido">
     <div class="form-horizontal">
         <div class="row">
             <div class="col-lg-12">

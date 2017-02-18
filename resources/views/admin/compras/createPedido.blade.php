@@ -8,8 +8,6 @@ var elemFaltante = "nada";
 </script>
 @endsection
 
-
-
 @section('title')
 Pedidos - Registrar compra Insumos
 @endsection
@@ -52,13 +50,15 @@ Pedidos - Registrar compra Insumos
                     <div class="row mtl">
                         <div class="col-lg-3">
                             <div class="row">
-                                <div class="col-md-12">
+
+                                <div class="col-md-12 hide">
                                     <div class="panel">
                                         <div class="panel-body">
                                             @include('admin.compras.contenidoFormProveedor')
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="col-md-12">
                                     <div class="panel">
                                         <div class="panel-body">
@@ -119,11 +119,6 @@ Pedidos - Registrar compra Insumos
                                 </div>
                             </div>
 
-                            {{--
-
-
-
-                            --}}
                             @include('admin.compras.msjTablaVacia')
                             @include('admin.compras.msjSenaExepcion')
                             @include('admin.compras.msjStockExepcion')

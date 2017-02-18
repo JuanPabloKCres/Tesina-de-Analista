@@ -34,6 +34,7 @@ $("#form-agregar").submit(function (e) {
 });
 /**captura el evento de 'submit' del peuqeño formulario (invisible) que posee los campos seña y cliente y lanza el método que solicita confirmación de los datos ingresados */
 $("#form-pedido").submit(function (e) {
+    alert('se envia lo que esta en form-pedido invisible');
     e.preventDefault();
     confirmar();
 });
@@ -111,8 +112,6 @@ function agregarContenido(insumo_select, proveedor_select, nombreInsumo, cantida
 $("#botonModalidad").click(function () {
         pagarTotal = true;
 });
-
-
 /** enviarPedido: Este método se encarga de recorrer los renglones de la tabla y empaquetar el contenido de
  interés de cada renglón en un objeto json y añadirlo a un array que se enviará a la controladora con otros datos
   requeridos para realizar el registro de pedido/compra.
@@ -133,7 +132,7 @@ function enviarPedido(pagado, entregado, confirmado)
     $('#tblListaInsumos tbody tr').each(function () {
         var dataFila = $('#tblListaInsumos').DataTable().row(this).data();
         var proveedor_id = $('#proveedor_select').val();
-        var linea = {insumo_id: dataFila[1], cantidad: dataFila[3]/*, proveedor_select: dataFila[4]*/, proveedor_id: proveedor_id, costo_unitario: dataFila[5], importe: dataFila[6].toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]};
+        var linea = {insumo_id: dataFila[1], nombre: dataFila[2], cantidad: dataFila[3], proveedor: dataFila[4], proveedor_id: proveedor_id, costo_unitario: dataFila[5], importe: dataFila[6].toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]};
         lineas [numLi] = linea;
         console.log(lineas);
         //factura.items [numLi] = linea;
@@ -144,8 +143,7 @@ function enviarPedido(pagado, entregado, confirmado)
     var costo_envio = $('#costo_envio').val();
     /*persistir compra o pedido*/
     $.ajax({
-        dataType: 'JSON',
-        url: "/admin/compras/create",
+        dataType: 'JSON', url: "/admin/compras/create",
         data: {
             proveedor_id: proveedor_id,
             renglones: lineas,
@@ -156,7 +154,6 @@ function enviarPedido(pagado, entregado, confirmado)
             usuarioPedido: usuario_id,
             costo_envio: costo_envio,
             montoPedido: montoPedido
-
         },
         success: function (data) {
             $('#mensajeExito').html(data);      /* Una vez completado el proceso se muestra el mensaje de exito*/
@@ -380,6 +377,7 @@ function recibo_compra_insumos(proveedor_id, lineas, confirmado, pagado, entrega
     var nro_comprobante;
     var recibo = {                          /*El ticket es una 'nota de pedido'*/
         nro_comprobante: null,
+        usuario: null,
         proveedor: proveedor, proveedor_email: proveedor_email, proveedor_telefono: proveedor_telefono,
         costo_envio: costo_envio,
         imp_total: montoPedido,
@@ -401,9 +399,11 @@ function recibo_compra_insumos(proveedor_id, lineas, confirmado, pagado, entrega
             proveedor = respuesta.proveedor;
             proveedor_email = respuesta.proveedor_email;
             proveedor_telefono = respuesta.proveedor_telefono;
+            usuario = respuesta.usuario;
             /*Una vez que se obtiene el id de comprobante grabado arriba, se rellena el recibo por pantalla */
             recibo.nro_comprobante = nro_comprobante;      //OK
             recibo.proveedor = proveedor;
+            recibo.usuario = usuario;
             recibo.proveedor_email = proveedor_email;
             recibo.proveedor_telefono = proveedor_telefono;
             //recibo.imp_total = montoTotal_Absoludo;

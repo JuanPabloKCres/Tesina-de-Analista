@@ -1,5 +1,3 @@
-<script src="{{ asset('plantillas/jonthornton-jquery-timepicker/jquery.timepicker.css') }}"></script>
-<script src="{{ asset('plantillas/jonthornton-jquery-timepicker/jquery.timepicker.min.js') }}"></script>
 
 <h3>Información General</h3>
                       <br>

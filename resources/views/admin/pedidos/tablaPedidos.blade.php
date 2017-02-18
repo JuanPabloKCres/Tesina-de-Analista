@@ -41,6 +41,7 @@
                                   <table class="display dataTable table table-hover table-striped">
                                       <thead>
                                           <tr>
+                                              <th class="text-center">#</th>
                                               <th class="text-center">Cliente</th>
                                               <th>Fecha y hora de pedido</th>
                                               <th class="text-center">Importe</th>
@@ -54,7 +55,12 @@
                                       <tbody>
                                       @foreach($pedidos as $pedido)
                                           <tr>
+                                              <td class="text-center">{{ $pedido->id }}</td>
+                                              @if($pedido->cliente->empresa)
+                                                  <td class="text-center text-facebook text">{{ $pedido->cliente->empresa }}</td>
+                                              @else
                                               <td class="text-center">{{ $pedido->cliente->apellido }} {{ $pedido->cliente->nombre }}</td>
+                                              @endif
                                               <td class="text-center">{{ $pedido->fecha_pedido }} - {{ $pedido->hora_pedido }}</td>
                                               <td class="text-center">${{ $pedido->importe() }}</td>
                                               @if ($pedido->senado == $pedido->importe())
