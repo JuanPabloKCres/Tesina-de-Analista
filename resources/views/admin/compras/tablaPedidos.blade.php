@@ -33,7 +33,7 @@
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="panel panel-yellow">
+                            <div class="panel panel-success">
                                 <div class="panel-heading">Compras solicitadas</div>
                                 <div class="panel-body">
                                   @include('admin.partes.msjError')
@@ -41,26 +41,26 @@
                                   <table class="display dataTable table table-hover table-striped">
                                       <thead>
                                           <tr>
-                                              <th>Proveedor</th>
-                                              <th>Fecha y hora de compra</th>
-                                              <th>Importe</th>
-                                              <th>Se pagó</th>
-                                              <th>Usuario que tomó el compra</th>
-                                              <th class="text-center">Acciones</th>
+                                              <th class="text-center">N° Compra</th>
+                                              <th class="text-center">Fecha y hora de compra</th>
+                                              <th class="text-center">Importe</th>
+                                              <th class="text-center">Se pagó</th>
+                                              <th class="text-center">Usuario que computo la compra</th>
+                                              <th class="text-center">Detalle</th>
                                           </tr>
                                       </thead>
                                       <tbody>
                                       @foreach($compras as $compra)
                                           <tr>
-                                              <td>{{ $compra->proveedor->nombre }}</td>
-                                              <td>{{ $compra->fecha_compra }} - {{ $compra->hora_compra }}</td>
-                                              <td>${{ $compra->importe() }}</td>
+                                              <td class="text-center">{{ $compra->id }}</td>
+                                              <td class="text-center">{{ $compra->fecha_compra }} - {{ $compra->hora_compra }}</td>
+                                              <td class="text-center">${{ $compra->importe }}</td>
                                               @if ($compra->pagado)
-                                                  <td>Si</td>
+                                                  <td class="text-center">Si</td>
                                               @else
-                                                  <td>No</td>
+                                                  <td class="text-center">No</td>
                                               @endif
-                                              <td>{{ $compra->usuarioPedido->name }}</td>
+                                              <td class="text-center">{{ $compra->usuarioCompra->name }}</td>
                                               <td class="text-center">
                                                   <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá señar la totalidad del compra o realizar la entrega del compra" href="{{ route('admin.compras.edit', $compra->id) }}" class="btn btn-info"> <span class="fa fa-eye" aria-hidden="true"></span></a>
                                               </td>

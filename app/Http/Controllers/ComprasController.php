@@ -181,23 +181,15 @@ class ComprasController extends Controller {
         }
     }
 
-
     public function store(Request $request) {
         return response()->json("Exito PRUEBA!");
     }
 
     public function edit($id) {
-        $pedido = Venta::find($id);
-        return view('admin.pedidos.showPedido')->with('pedido', $pedido);
+        $compra = Compra::find($id);
+        return view('admin.compras.showCompra')->with('compra', $compra);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id) {
         $pedido = Venta::find($id);
         $fecha = \Carbon\Carbon::now('America/Buenos_Aires');
@@ -230,5 +222,4 @@ class ComprasController extends Controller {
         Flash::success("Se ha realizado la actualización del estado del pedido.");
         return redirect()->route('admin.pedidos.edit', $id);
     }
-
 }

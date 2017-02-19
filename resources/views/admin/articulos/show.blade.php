@@ -66,7 +66,7 @@
                                                                 @if($articulo->talle)
                                                                     <td><h4>{{ $articulo->talle->nombre}}</h4></td>
                                                                 @else
-                                                                    <td><h4>{{ "No corresponde"}}</h4></td>
+                                                                    <td><h4>{{ "-"}}</h4></td>
                                                                 @endif
                                                             </tr>
                                                             <tr>
@@ -74,7 +74,7 @@
                                                                 @if ($articulo->alto)
                                                                     <td><h4>{{ $articulo->alto }}</h4></td>
                                                                 @else
-                                                                    <td><h4>No se registró</h4></td>
+                                                                    <td><h4>-</h4></td>
                                                                 @endif
                                                             </tr>
                                                             <tr>
@@ -82,7 +82,7 @@
                                                                 @if ($articulo->ancho)
                                                                     <td><h4>{{ $articulo->ancho }}</h4></td>
                                                                 @else
-                                                                    <td><h4>No se registró</h4></td>
+                                                                    <td><h4>-</h4></td>
                                                                 @endif
                                                             </tr>
                                                             <tr>
@@ -99,11 +99,11 @@
                                                                 @if($articulo->costo)
                                                                     <td><h4>$ {{ $articulo->costo}}</h4></td>
                                                                 @else
-                                                                    <td><h4>{{ "No tiene"}}</h4></td>
+                                                                    <td><h4>{{ "-"}}</h4></td>
                                                                 @endif
                                                             </tr>
                                                             <tr>
-                                                                <td><h4 class="box-heading">Mergen:</h4></td>
+                                                                <td><h4 class="box-heading">Margen:</h4></td>
                                                                 @if($articulo->margen)
                                                                     <td><h4>{{ $articulo->margen}}%</h4></td>
                                                                 @else

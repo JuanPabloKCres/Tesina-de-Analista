@@ -33,7 +33,7 @@
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="panel panel-yellow">
+                            <div class="panel panel-violet">
                                 <div class="panel-heading">Produccion de Articulos</div>
                                 <div class="panel-body">
                                     @include('admin.partes.msjError')

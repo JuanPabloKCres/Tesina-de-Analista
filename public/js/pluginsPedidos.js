@@ -798,7 +798,7 @@ function email_info_pedido_cliente(lineas, sena, total, user){
     var fecha_entrega_estimada = $('#fecha_entrega_date').val();
     var fecha_hoy = fechahoy();
     console.log('items: '+lineas);
-    console.log(fecha_entrega_estimada, sena, total, user, fecha_hoy);
+    console.log("fecha entrega estimada"+fecha_entrega_estimada+" seña: "+sena+" total: "+total+" user: "+ user+ "fecha de hoy: "+ fecha_hoy);
     $.ajax({
         url: "/admin/mail", dataType: 'json',
         data: {

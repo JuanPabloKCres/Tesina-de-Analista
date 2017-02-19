@@ -58,13 +58,7 @@ Articulos - Registrar Articulo
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="panel">
-                                        <div class="panel-body">
-                                            @include('admin.articulos.contenidoForm')
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
 
@@ -74,7 +68,13 @@ Articulos - Registrar Articulo
                 @include('admin.articulos.msjTablaVacia')
                 @include('admin.insumoArticulo.tablaRegistros')
                 <button id="botonExito" type="button" data-hover="tooltip" data-toggle="modal" data-target="#modal-exito"  class="btn hide"></button>
-
+                <div class="col-md-12">
+                    <div class="panel">
+                        <div class="panel-body">
+                            @include('admin.articulos.contenidoForm')
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

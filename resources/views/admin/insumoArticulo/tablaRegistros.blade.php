@@ -1,6 +1,6 @@
 
 <div id="tab-lista2" class="tablaResultados2">
-    <div class="panel panel-violet">
+    <div class="panel panel-info">
         <div class="panel-heading">Listado de Insumos del Articulo</div>
         <div class="panel-body">
             <br>

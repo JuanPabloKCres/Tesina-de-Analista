@@ -32,7 +32,7 @@ class Articulo extends Model
         return $this->belongsTo('App\Iva');
     }
 
-    public function alle()
+    public function talle()
     {
         return $this->belongsTo('App\Talle');
     }

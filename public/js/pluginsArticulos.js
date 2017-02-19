@@ -18,8 +18,9 @@ var montoPedido = 0;
 var montoTotal = 0;
 var costosTotales = 0;
 
+
 //$('#unidad_text').prop( "disabled", true );
-//alert('Estamos en pluginsArticulos');
+
 
 $('select#tipo_id').on('change',function() {
     var tipo = $("#tipo_id option:selected").text();
@@ -68,7 +69,6 @@ $('#color_id').on('change',function() {
         element.value = '5';
     }
 });
-
 
 /***************************** 27/11/16 ********************************/
 /** al elegir un insumo, se ejecuta una funcion que busca el costo de el insumo seleccionado */
@@ -121,10 +121,10 @@ function limpiar()
     $('#d4').val("");
 }
 
-/** completarCosto: Este método se encarga de completar el valor para un campo a partir de otros dos
- * campos. Generalmente el campo "Cantidad" está completo cada vez que se llama a este método y el otro campo
- * que se usa es el pasado como parámetro. Si es "Precio unitario" se calcula el importe y viceversa.
- * Si el campo "Cantidad" se encuentra vacío este se toma para el cálculo como valor 0 (cero).
+/** completarCosto: Este mÃ©todo se encarga de completar el valor para un campo a partir de otros dos
+ * campos. Generalmente el campo "Cantidad" estÃ¡ completo cada vez que se llama a este mÃ©todo y el otro campo
+ * que se usa es el pasado como parÃ¡metro. Si es "Precio unitario" se calcula el importe y viceversa.
+ * Si el campo "Cantidad" se encuentra vacÃ­o este se toma para el cÃ¡lculo como valor 0 (cero).
  */
 function completarCosto(n)
 {
@@ -176,23 +176,23 @@ $('#iva_select').on('change',function(){
 });
 
 /**  captura el evento de cuando se suelta la tecla despues de presionarla sobre el campo "Precio unitario"
- * y lanza el método que se encarga de calcular el contenido para el campo "Importe". */
+ * y lanza el mÃ©todo que se encarga de calcular el contenido para el campo "Importe". */
 $("#costo_number").keypress(function () {
 }).keyup(function () {
     completarCosto("d4");
 });
 
-/** Este método jquery captura el evento de cuando se suelta la tecla despues de presionarla sobre
- * el campo "Importe" y lanza el método que se encarga de calcular el contenido para el campo "Costo unitario" */
+/** Este mÃ©todo jquery captura el evento de cuando se suelta la tecla despues de presionarla sobre
+ * el campo "Importe" y lanza el mÃ©todo que se encarga de calcular el contenido para el campo "Costo unitario" */
 $("#d4").keypress(function () {
 }).keyup(function () {
     completarCosto("costo_number");
 });
 
-/** Este método jquery captura el evento de cuando se suelta la tecla despues de presionarla sobre
- * el campo "Artículo" y verifica si alguno de los campos "Importe" o "Precio unitario" tienen algún
- * contenido y a partir de ello lanza el método que se encarga de calcular el contenido para el campo sobrante.
- * Este método verifica primero si el campo "Precio unitario" no está vacio. Otro cosa a saber de este método es que
+/** Este mÃ©todo jquery captura el evento de cuando se suelta la tecla despues de presionarla sobre
+ * el campo "ArtÃ­culo" y verifica si alguno de los campos "Importe" o "Precio unitario" tienen algÃºn
+ * contenido y a partir de ello lanza el mÃ©todo que se encarga de calcular el contenido para el campo sobrante.
+ * Este mÃ©todo verifica primero si el campo "Precio unitario" no estÃ¡ vacio. Otro cosa a saber de este mÃ©todo es que
  * si ambos campos a verificar se encuentran vacios no hace nada.
  */
 $("#cantidad_number").keypress(function () {
@@ -215,22 +215,22 @@ $("#gananciaPorcent_number").keypress(function () {
         $('#costoArticulo_text').select();
     }
 });
-/** Captura el evento de submit del formulario "Insumos" * y lanza el método que se encarga de crear un renglón en la tabla. */
+/** Captura el evento de submit del formulario "Insumos" * y lanza el mÃ©todo que se encarga de crear un renglÃ³n en la tabla. */
 $("#form-agregar").submit(function (e) {
     e.preventDefault();
     //alert('se presiono agregar!');
     comprobar($('#insumo_select').val(), $('#cantidad_number').val(), $('#unidad_text').val(), $('#costo_number').val(), $('#d4').val());
 });
-/**captura el evento de 'submit' del peuqeño formulario (invisible) que posee los campos seña y cliente y lanza el método que solicita confirmación de los datos ingresados */
+/**captura el evento de 'submit' del peuqeÃ±o formulario (invisible) que posee los campos seÃ±a y cliente y lanza el mÃ©todo que solicita confirmaciÃ³n de los datos ingresados */
 $("#form-pedido").submit(function (e) {
     e.preventDefault();
     confirmar();
 });
 
-/**  comprobar: Este método devuelve true si detecta que algún valor (insumo_id, cantidad, importe, precio_unitario)
- * se encuentra sin completar. Este método comienza con verificaciones, prosigue solicitando
- * a la controladora a través de la id del artículo el nombre del mismo y si es suficiente el stock
- * para luego pasar el nombre al método que se encarga de agregar el contenido en la tabla.
+/**  comprobar: Este mÃ©todo devuelve true si detecta que algÃºn valor (insumo_id, cantidad, importe, precio_unitario)
+ * se encuentra sin completar. Este mÃ©todo comienza con verificaciones, prosigue solicitando
+ * a la controladora a travÃ©s de la id del artÃ­culo el nombre del mismo y si es suficiente el stock
+ * para luego pasar el nombre al mÃ©todo que se encarga de agregar el contenido en la tabla.
  */
 function comprobar(insumo_select, cantidad_number, unidad_text, costo_number, d4)  //d4 es la casilla de costo neto
 {
@@ -256,12 +256,12 @@ function comprobar(insumo_select, cantidad_number, unidad_text, costo_number, d4
 }
 
 
-/** agregarContenido: Este método recibe parámetros para crear renglones y crea
- * una nueva linea en la tabla de insumos. También agrega otros valores útiles para otros métodos
- * como el número de fila que se inserta y un link que dispara el método para borrar esa fila.
- * También incrementa el valor del monto del pedido a partir del importe del renglón.
- * La tabla funciona como un array y el 1º registro ocupa la posición 0 (cero).
- * parseFloat: método de javascript para convertir a decimal la variable y usarla para el pertinente cálculo.
+/** agregarContenido: Este mÃ©todo recibe parÃ¡metros para crear renglones y crea
+ * una nueva linea en la tabla de insumos. TambiÃ©n agrega otros valores Ãºtiles para otros mÃ©todos
+ * como el nÃºmero de fila que se inserta y un link que dispara el mÃ©todo para borrar esa fila.
+ * TambiÃ©n incrementa el valor del monto del pedido a partir del importe del renglÃ³n.
+ * La tabla funciona como un array y el 1Âº registro ocupa la posiciÃ³n 0 (cero).
+ * parseFloat: mÃ©todo de javascript para convertir a decimal la variable y usarla para el pertinente cÃ¡lculo.
  */
 function agregarContenido(insumo_select, nombreInsumo, cantidad_number, unidad_text, costo_number, d4)
 {
@@ -295,9 +295,9 @@ function agregarContenido(insumo_select, nombreInsumo, cantidad_number, unidad_t
 
 }
 
-/** confirmar: Este método verifica que la tabla contenga al menos un renglón, de ser así
- * verifica si el valor de la seña es igual, menor o mayor al monto del pedido. Si es igual lanza un modal el
- * cual solicita la confirmación */
+/** confirmar: Este mÃ©todo verifica que la tabla contenga al menos un renglÃ³n, de ser asÃ­
+ * verifica si el valor de la seÃ±a es igual, menor o mayor al monto del pedido. Si es igual lanza un modal el
+ * cual solicita la confirmaciÃ³n */
 function confirmar()
 {
     if (cantFilas > 0) {
@@ -307,16 +307,17 @@ function confirmar()
     }
 }
 
-/** enviarPedido: Este método se encarga de recorrer los renglones de la tabla y empaquetar el contenido de
- interés de cada renglón en un objeto json y añadirlo a un array que se enviará a la controladora con otros datos
+/** enviarPedido: Este mÃ©todo se encarga de recorrer los renglones de la tabla y empaquetar el contenido de
+ interÃ©s de cada renglÃ³n en un objeto json y aÃ±adirlo a un array que se enviarÃ¡ a la controladora con otros datos
  requeridos para realizar el registro de pedido/compra.
 
- * El parámetro que ingresa "recibido" es un boolean que solo toma valor true si se trata de la confirmación de una
- * compra a través del momodal-confirmarVenta
+ * El parÃ¡metro que ingresa "recibido" es un boolean que solo toma valor true si se trata de la confirmaciÃ³n de una
+ * compra a travÃ©s del momodal-confirmarVenta
  */
 function enviarPedido()
 {
-    //alert('se entra a enviarPedido()');
+    var user_id = $('#usuarioAltaArticulo').val;
+    alert(user_id);
     var numLi = 0;
     var lineas = [];
     $('#tblListaInsumos tbody tr').each(function () {
@@ -331,11 +332,10 @@ function enviarPedido()
     var tipo_id= $('#tipo_id').val();       var talle_id= $('#talle_id').val();     var color_id= $('#color_id').val();
     var costoArticulo= $('#costoArticulo_text').val();      var margen= $('#gananciaPorcent_number').val();
     var gananciaArticulo= $('#gananciaDinero_text').val();      var precioVta= $('#precioVta_text').val();
-    var iva= $('#iva_select').val();    var montoIva= $('#montoIva_number').val();
-
+    var iva_id= $('#iva_select').val();    var montoIva= $('#montoIva_number').val();
+    console.log("user_id"+user_id+" nombre "+nombre+" alto "+alto+" ancho "+ancho+" tipo_id: "+tipo_id+" talle_id: "+talle_id+" color_id: "+color_id+" costoArticulo: "+costoArticulo+ "margen: "+margen+" ganancia: "+gananciaArticulo+" iva_id: "+iva_id+" montoIva: "+montoIva+" precioVta: "+precioVta);
     $.ajax({
-        dataType: 'JSON',
-        url: "/admin/articulos/create",
+        dataType: 'JSON', url: "/admin/articulos/create",
         data: {
             renglones: lineas,
             nombre: nombre,
@@ -347,25 +347,15 @@ function enviarPedido()
             costoArticulo: costoArticulo,
             margen: margen,
             gananciaArticulo: gananciaArticulo,
-            iva: iva,
+            iva_id: iva_id,
             montoIva: montoIva,
             precioVta: precioVta
-            //articuloAjax: articulo
-            //usuarioAltaArticulo: $('#usuarioAltaArticulo').val(),
-            //montoPedido: montoPedido
         },
         success: function (data) {
-            console.log(data);
-            /* Una vez completado el proceso se muestra el mensaje de exito*/
             $('#mensajeExito').html(data);
             $('#botonExito').click();
         }
     });
 }
-
-/* Este método es el que toma el valor total de un pedido o si por el contrario solo se quiere señar el mismo. */
-$("#botonModalidad").click(function () {
-
-});
 
 

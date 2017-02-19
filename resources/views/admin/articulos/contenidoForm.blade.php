@@ -135,7 +135,10 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="input-icon right">
-                    {!! Form::select('iva', array('0' => '0%', '10.5' => '10.5%', '21'=>'21%'),21, ['class' => 'form-control', 'id'=>'iva_select']) !!}
+                    {{--
+                    {!! Form::select('iva', array('3' => '0%', '2' => '10.5%', '1'=>'21%'),1, ['class' => 'form-control', 'id'=>'iva_select']) !!}
+                    --}}
+                    {!! Form::select('iva', $ivas, 1, ['class' => 'form-control selectBoot', 'id'=>'iva_select','data-live-search' => 'true']) !!}
                 </div>
             </div>
         </div>

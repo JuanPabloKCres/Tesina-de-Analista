@@ -36,7 +36,7 @@
                         </a>
                     </li>
                     <li id="li6">
-                        <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de artículos" href="{{ route('admin.articulos.index') }}">
+                        <a data-toggle="tooltip" data-placement="right" title="Ver Articulos listos para la venta, o diseñar nuevos" href="{{ route('admin.articulos.index') }}">
                             <i class="fa fa-tags">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
@@ -119,7 +119,7 @@
                         </a>
                     </li>
                     <li id="li13">
-                        <a data-toggle="collapse" href="#dropdown-administrarFront" data-placement="right" title="Gestión de contenido de la web de GN Soluciones" ">
+                        <a data-toggle="collapse" href="#dropdown-administrarFront" data-placement="right" title="Gestión de contenido de la web de GN Soluciones">
                             <i class="fa fa-mixcloud">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
@@ -141,7 +141,6 @@
                                             <span class="menu-title">Publicar Producto</span>
                                         </a>
                                     </li>
-
                                     <!-- Dropdown Nivel 2 -->
                                     <!--
                                     <li class="panel panel-default" id="dropdown">
@@ -162,11 +161,7 @@
                                 </ul>
                             </div>
                         </div>
-
-
-
                     </li>
-
                 </ul>
             </div>
         </nav>

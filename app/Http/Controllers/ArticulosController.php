@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\ArticuloRequestCreate;
 use App\Http\Requests\ArticuloRequestEdit;
+use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
 use Illuminate\Routing\Route;
 
@@ -85,7 +86,6 @@ class ArticulosController extends Controller
         }
     }
 
-
     public function store(Request $request)
     {
         $articulo = new Articulo($request->all()); // Guardamos los valores cargados en la vista en una variable de tipo marca.
@@ -98,34 +98,42 @@ class ArticulosController extends Controller
     {
         if ($request->ajax()) {
             //$fecha = \Carbon\Carbon::now('America/Buenos_Aires');
-            // $fillable = ['nombre','alto','ancho', 'tipo_id', 'talle_id', 'color_id' , 'cantidad_insumos', 'costo', 'margen','ganancia','iva','montoIva', 'precioVta','descripcion', 'estado', 'user_id'];
             /** Primero se instancia y se persiste un articulo */
             $articulo = new Articulo();
-            $articulo->nombre = $request->nombre;
-            $articulo->alto = $request->alto;
-            $articulo->ancho = $request->ancho;
-            $articulo->tipo_id = $request->tipo_id;
-            $articulo->talle_id = 0;
-            $articulo->color_id = $request->color_id;
-            $articulo->costo = $request->costoArticulo;
-            $articulo->margen = $request->margen;
-            $articulo->ganancia = $request->gananciaArticulo;
-            $articulo->precioVta = $request->precioVta;
+            $articulo->nombre = $request->nombre;   #ok
+            $articulo->alto = $request->alto;       #ok
+            $articulo->ancho = $request->ancho;     #ok
+            $articulo->tipo_id = $request->tipo_id;     #ok
+            $articulo->talle_id = $request->talle_id;   #ok
+            $articulo->color_id = $request->color_id;   #ok
+            $articulo->costo = $request->costoArticulo;     #ok
+            $articulo->margen = $request->margen;           #ok
+            $articulo->ganancia = $request->gananciaArticulo;       #ok
+            $articulo->precioVta = $request->precioVta;             #ok
             $articulo->estado = 'se fabrica';
             $articulo->descripcion = 'no hay';
             $articulo->cantidad_insumos = 1;
             //
-            $articulo->iva = $request->iva;
+            $articulo->iva_id = $request->iva_id;             #ok
             $articulo->montoIva = $request->montoIva;
             //
             $articulo->user_id = 1;
             $articulo->save();
+            /** Auditoria almacena creacion */
+            $auditoria = new Auditoria();
+            $auditoria->tabla = "articulos";
+            $auditoria->elemento_id = $articulo->id;
+            $autor = new Auth();
+            $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+            $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
+            $auditoria->accion = "alta";
+            $auditoria->dato_nuevo = "nombre: ".$articulo->nombre." || alto: ".$articulo->alo." || ancho: ".$articulo->ancho." || tipo_id:".$articulo->tipo_id." ".$articulo->talle_id." || color_id: ".$articulo->color_id." || costo:".$articulo->costo." || margen:".$articulo->margen." || ganancia:".$proveedor->web." || rubro_id:".$proveedor->rubro_id." || imagen:".$proveedor->imagen;
+            $auditoria->save();
 
             /** Se recoge en una variable el array de renglones y se crea y persiste el registro de insumos
             Se recorre el array creando a su paso objetos "InsumoArticulo" a partir de los json que se hallan en
              * el array y se persisten*/
             $arrayRenglones = $request->renglones;
-            //return response()->json(json_encode($arrayRenglones, true));
             foreach($arrayRenglones as $clave) {    //InsumoArticulo
                 $renglon = new InsumoArticulo();
                 $renglon->cantidad = $clave['cantidad'];
@@ -135,10 +143,8 @@ class ArticulosController extends Controller
                 $renglon->articulo_id = $articulo->id;
                 $renglon->save();
             }
-
-            //return response()->json("¡La compra fue registrada con éxito!");
-            Flash::success('El articulo "'. $articulo->nombre.'"" ha sido registrada de forma existosa.');
-            return redirect()->route('admin.articulos.index');
+            //Flash::success('El articulo "'. $articulo->nombre.'"" ha sido registrada de forma existosa.');
+            //return redirect()->route('admin.articulos.index');
         }
         return view('admin.articulos.create');
     }
