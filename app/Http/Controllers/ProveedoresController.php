@@ -78,7 +78,7 @@ class ProveedoresController extends Controller
     public function update(ProveedorRequestEdit $request, $id)
     {
     	$proveedor = Proveedor::find($id);
-        $dato_anterior = "nombre: ".$proveedor->nombre." || cuit: ".$proveedor->cuit." || localidad_id: ".$proveedor->localidad_id." || direccion:".$proveedor->calle." ".$proveedor->altura." || horario de atencion: ".$proveedor->hora_a_manana." a ".$proveedor->hora_c_mañana." y de ".$proveedor->hora_a_tarde." a ".$proveedor->hora_c_tarde." || teléfono:".$proveedor->telefono." || celular:".$proveedor->celular." || web:".$proveedor->web." || rubro_id:".$proveedor->rubro_id." || imagen:".$proveedor->imagen;
+        $dato_anterior = "nombre: ".$proveedor->nombre." || estado: ".$proveedor->estado." || cuit: ".$proveedor->cuit." || localidad_id: ".$proveedor->localidad_id." || direccion:".$proveedor->calle." ".$proveedor->altura." || horario de atencion: ".$proveedor->hora_a_manana." a ".$proveedor->hora_c_mañana." y de ".$proveedor->hora_a_tarde." a ".$proveedor->hora_c_tarde." || teléfono:".$proveedor->telefono." || celular:".$proveedor->celular." || web:".$proveedor->web." || rubro_id:".$proveedor->rubro_id." || imagen:".$proveedor->imagen;
         if ($request->file('imagen'))
         {
             $file = $request->file('imagen');
@@ -128,7 +128,7 @@ class ProveedoresController extends Controller
         $dato_anterior = "nombre: ".$proveedor->nombre." || cuit: ".$proveedor->cuit." || localidad_id: ".$proveedor->localidad_id." || direccion:".$proveedor->calle." ".$proveedor->altura." || horario de atencion: ".$proveedor->hora_a_manana." a ".$proveedor->hora_c_mañana." y de ".$proveedor->hora_a_tarde." a ".$proveedor->hora_c_tarde." || teléfono:".$proveedor->telefono." || celular:".$proveedor->celular." || web:".$proveedor->web." || rubro_id:".$proveedor->rubro_id." || imagen:".$proveedor->imagen;
         /** Auditoria eliminación */
         $auditoria = new Auditoria();
-        $auditoria->tabla = "proveedor";
+        $auditoria->tabla = "proveedores";
         $auditoria->elemento_id = $proveedor->id;
         $autor = new Auth();
         $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
@@ -142,4 +142,24 @@ class ProveedoresController extends Controller
         return redirect()->route('admin.proveedores.index');
     }
 
+    /** Cambiar estado del Proveedor (de activo a inactivo) */
+    public function edit($id)
+    {
+        $proveedor = Proveedor::find($id);
+        $proveedor->estado = 'inactivo';
+        $proveedor->save();
+        $dato_anterior = "nombre: ".$proveedor->nombre." || estado: ".$proveedor->estado." || cuit: ".$proveedor->cuit." || localidad_id: ".$proveedor->localidad_id." || direccion:".$proveedor->calle." ".$proveedor->altura." || horario de atencion: ".$proveedor->hora_a_manana." a ".$proveedor->hora_c_mañana." y de ".$proveedor->hora_a_tarde." a ".$proveedor->hora_c_tarde." || teléfono:".$proveedor->telefono." || celular:".$proveedor->celular." || web:".$proveedor->web." || rubro_id:".$proveedor->rubro_id." || imagen:".$proveedor->imagen;
+        /** Auditoria cambio de estado */
+        $auditoria = new Auditoria();
+        $auditoria->tabla = "proveedores";
+        $auditoria->elemento_id = $proveedor->id;
+        $autor = new Auth();
+        $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
+        $auditoria->accion = "eliminacion";
+        $auditoria->dato_anterior = $dato_anterior;
+        $auditoria->save();
+        Flash::error("Se cambio el estado del proveedor ".$proveedor->nombre." a 'inactivo'.");
+        return redirect()->route('admin.proveedores.index');
+    }
 }

@@ -9,7 +9,7 @@ class Proveedor extends Model
   	protected $table =  "proveedores";
 
     protected $fillable = ['nombre', 'cuit', 'localidad_id','imagen', 'web', 'calle', 'altura',
-                            'rubro_id', 'telefono', 'celular', 'email', 'hora_a_manana','hora_c_manana', 'hora_a_tarde','hora_c_tarde'];
+                            'rubro_id', 'telefono', 'celular', 'email', 'hora_a_manana','hora_c_manana', 'hora_a_tarde','hora_c_tarde', 'estado'];
 
 
     public function rubro() 

@@ -31,6 +31,7 @@ class AddProveedoresTable extends Migration
             $table->string('web');
             $table->integer('rubro_id')->unsigned();
             $table->foreign('rubro_id')->references('id')->on('rubros')->onDelete('cascade');
+            $table->string('estado');
 
             $table->timestamps();
         });

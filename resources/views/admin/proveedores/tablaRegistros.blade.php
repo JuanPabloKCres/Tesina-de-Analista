@@ -19,6 +19,7 @@
                                 <th>Celular</th>
                                 <th>Origen</th>
                                 <th>Dirección</th>
+                                <th>Estado</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
@@ -42,6 +43,7 @@
                                 @endif
                                 <td>{{ $proveedor->localidad->nombre }} ({{ $proveedor->localidad->provincia->nombre }})</td>
                                 <td>{{ $proveedor->calle}} {{ $proveedor->altura }}</td>
+                                <td>{{ $proveedor->estado }}</td>
                                 <td class="text-center">
                                     <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá acceder acciones como edición y eliminación del mismo" href="{{ route('admin.proveedores.show', $proveedor->id) }}" class="btn btn-info"> <span class="fa fa-eye" aria-hidden="true"></span></a>
                                 </td>

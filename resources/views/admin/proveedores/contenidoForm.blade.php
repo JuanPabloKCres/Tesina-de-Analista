@@ -176,6 +176,17 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group"><label class="col-sm-3 control-label">Estado</label>
+                            <div class="col-sm-9 controls">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="input-icon right">
+                                            {!! Form::select('estado', array('activo'=>'activo','inactivo'=>'inactivo'),null, ['class' => 'form-control']) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <br>
                         <hr/>
                         <br>
