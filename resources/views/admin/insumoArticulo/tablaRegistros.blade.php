@@ -1,4 +1,3 @@
-
 <div id="tab-lista2" class="tablaResultados2">
     <div class="panel panel-info">
         <div class="panel-heading">Listado de Insumos del Articulo</div>
@@ -7,7 +6,7 @@
             <table id="tblListaInsumos" class="display table table-hover table-striped">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th class="text-center">#</th>
                         <th>ID</th>
                         <th>Insumo</th>
                         <th>Cantidad</th>

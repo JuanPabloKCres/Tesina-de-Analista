@@ -63,8 +63,8 @@
                                                             </tr>
                                                             <tr>
                                                                 <td><h4 class="box-heading">Talle:</h4></td>
-                                                                @if($articulo->talle)
-                                                                    <td><h4>{{ $articulo->talle->nombre}}</h4></td>
+                                                                @if($articulo->talle->nombre!='Ninguno')
+                                                                    <td><h4>{{ $articulo->talle->talle}}</h4></td>
                                                                 @else
                                                                     <td><h4>{{ "-"}}</h4></td>
                                                                 @endif
@@ -121,7 +121,7 @@
                                                             <tr>
                                                                 <td><h4 class="box-heading">IVA:</h4></td>
                                                                 @if($articulo->iva)
-                                                                    <td><h4>{{ $articulo->iva}}% (${{$articulo->montoIva}})</h4></td>
+                                                                    <td><h4>{{ $articulo->iva->iva}}% (${{$articulo->montoIva}})</h4></td>
                                                                 @else
                                                                     <td><h4>{{ "No corresponde"}}</h4></td>
                                                                 @endif
@@ -138,7 +138,7 @@
 
                                                             <tr>
                                                                 <td><h4 class="box-heading">Cantidad de ventas asociadas:</h4></td>
-                                                                <td><h4 class="box-heading"></h4></td>
+                                                                <td><h4 class="box-heading">{{ $articulo->articulos_venta->count() }}</h4></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><h4 class="box-heading">Fecha de alta:</h4></td>
@@ -169,6 +169,38 @@
             </div>
         </div>
     </div>
+        <!-- TABLA de DETALLE -->
+        <div id="tab-lista2" class="tablaResultados2">
+            <div class="panel panel-info">
+                <div class="panel-heading">Listado de Insumos del Articulo</div>
+                <div class="panel-body">
+                    <br>
+                    <table id="tblListaInsumos" class="display table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Insumo</th>
+                            <th>Cantidad</th>
+                            <th>Unidad de cantidad</th>
+                            <th>Precio unitario</th>
+                            <th>Importe total</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                        @foreach($articulo->insumos_articulos as $insumo)
+                         <tr>
+                            <td class="text-center">{{ $insumo->insumo->id }}</td>
+                            <td class="text-center">{{ $insumo->insumo->nombre }}</td>
+                            <td class="text-center">{{ $insumo->cantidad }}</td>
+                            <td class="text-center">{{ $insumo->insumo->unidad_medida->unidad }}</td>
+                            <td class="text-center">{{ $insumo->insumo->costo }}</td>
+                            <td class="text-center">{{ $insumo->insumo->costo * $insumo->cantidad }}</td>
+                         </tr>
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+        </div>
 </div>
 @endsection
 @section('script')

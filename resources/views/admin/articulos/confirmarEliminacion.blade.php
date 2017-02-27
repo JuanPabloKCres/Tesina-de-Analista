@@ -7,21 +7,24 @@
                 <h4 class="modal-title">
                     Eliminar registro: {{ $articulo->nombre }}</h4>
             </div>
-           <!-- Aca falta poner condicional de mostrar alerta si hay VENTAS asociadas al cliente para que no elemine-->
 
-            <div class="modal-body">
-                {!! Form::open(['route' => ['admin.articulos.destroy', $articulo], 'method' => 'DELETE']) !!}
-                @include('admin.partes.msjConfirmar')
-                <hr>
-                <div class="pull-right">
-                    <button type="button" data-dismiss="modal" class="btn btn-white"> Cerrar</button>
-                    {!! Form::submit('Eliminar registro', ['class' => 'btn btn-danger ']) !!}
+            @if($articulo->articulos_venta->count() != 0)
+                 @include('admin.partes.msjRegAsociados')
+            @else
+                <div class="modal-body">
+                    {!! Form::open(['route' => ['admin.articulos.destroy', $articulo], 'method' => 'DELETE']) !!}
+                    Se modificara el estado del articulo a "No se fabrica"
+                    @include('admin.partes.msjConfirmar')
+                    <hr>
+                    <div class="pull-right">
+                        <button type="button" data-dismiss="modal" class="btn btn-white"> Cerrar</button>
+                        {!! Form::submit('Eliminar registro', ['class' => 'btn btn-danger ']) !!}
+                    </div>
+                    <br>
+                    {!! Form::close() !!}
+                    <br>
                 </div>
-                <br>
-                {!! Form::close() !!}
-                <br>
-            </div>
-
+            @endif
         </div>
     </div>
 </div>

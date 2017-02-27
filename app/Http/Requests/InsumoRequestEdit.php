@@ -13,7 +13,7 @@ class InsumoRequestEdit extends Request
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,15 @@ class InsumoRequestEdit extends Request
     public function rules()
     {
         return [
-
+            'nombre'=> 'required|max:50|unique:insumos',
+            'unidad_medida_id' =>'required',
+            'stock'=>'required',
+            'stockMinimo'=>'required',
+            'costo'=>'required',
+            //'color_id' => 'required',         no es obligatorio
+            //'tipo_id' => 'required',
+            //'talle_id'=> 'required',          no es obligatorio
+            'material_id'=> 'required'
         ];
     }
 }

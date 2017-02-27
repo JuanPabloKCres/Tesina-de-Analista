@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Articulo;
+use App\Auditoria;
 use App\InsumoArticulo;
 use App\Insumo;
 use App\Unidad_Medida;
+use App\Venta;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -79,10 +81,11 @@ class ArticulosController extends Controller
             }
         }
         $articulos = Articulo::all();
+        $ventas = Venta::all();
         if ($articulos->count() == 0) { // la funcion count te devuelve la cantidad de registros contenidos en la cadena
             return view('admin.articulos.sinRegistros'); //se devuelve la vista para crear un registro
         } else {
-            return view('admin.articulos.tabla')->with('articulos', $articulos);
+            return view('admin.articulos.tabla')->with('articulos', $articulos, 'ventas', $ventas);
         }
     }
 
@@ -117,7 +120,7 @@ class ArticulosController extends Controller
             $articulo->iva_id = $request->iva_id;             #ok
             $articulo->montoIva = $request->montoIva;
             //
-            $articulo->user_id = 1;
+            $articulo->user_id = $request->user_id;
             $articulo->save();
             /** Auditoria almacena creacion */
             $auditoria = new Auditoria();
@@ -127,7 +130,8 @@ class ArticulosController extends Controller
             $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
             $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
             $auditoria->accion = "alta";
-            $auditoria->dato_nuevo = "nombre: ".$articulo->nombre." || alto: ".$articulo->alo." || ancho: ".$articulo->ancho." || tipo_id:".$articulo->tipo_id." ".$articulo->talle_id." || color_id: ".$articulo->color_id." || costo:".$articulo->costo." || margen:".$articulo->margen." || ganancia:".$proveedor->web." || rubro_id:".$proveedor->rubro_id." || imagen:".$proveedor->imagen;
+            $auditoria->dato_anterior = null;
+            $auditoria->dato_nuevo = "nombre: ".$articulo->nombre." || alto: ".$articulo->alto." || ancho: ".$articulo->ancho." || tipo_id:".$articulo->tipo_id." ".$articulo->talle_id." || color_id: ".$articulo->color_id." || costo:".$articulo->costo." || margen:".$articulo->margen." || ganancia:".$articulo->ganancia." || precioVta:".$articulo->precioVta." || estado:".$articulo->estado;
             $auditoria->save();
 
             /** Se recoge en una variable el array de renglones y se crea y persiste el registro de insumos
@@ -173,8 +177,40 @@ class ArticulosController extends Controller
     public function destroy($id)
     {
         $articulo = Articulo::find($id);
+        $dato_anterior = "nombre: ".$articulo->nombre." || alto: ".$articulo->alo." || ancho: ".$articulo->ancho." || tipo_id:".$articulo->tipo_id." ".$articulo->talle_id." || color_id: ".$articulo->color_id." || costo:".$articulo->costo." || margen:".$articulo->margen." || ganancia:".$articulo->ganancia." || precioVta:".$articulo->precioVta." || estado:".$articulo->estado;
         $articulo->delete();
+        /** Auditoria cambio de estado */
+        $auditoria = new Auditoria();
+        $auditoria->tabla = "articulos";
+        $auditoria->elemento_id = $articulo->id;
+        $autor = new Auth();
+        $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
+        $auditoria->accion = "eliminacion";
+        $auditoria->dato_anterior = $dato_anterior;
+        $auditoria->save();
         Flash::error("Se ha eliminado el articulo ".$articulo->nombre.".");
+        return redirect()->route('admin.articulos.index');
+    }
+
+    /** Cambiar estado del Proveedor (de activo a inactivo) */
+    public function edit($id)
+    {
+        $articulo = Articulo::find($id);
+        $articulo->estado = 'no se fabrica';
+        $articulo->save();
+        $dato_anterior = "nombre: ".$articulo->nombre." || alto: ".$articulo->alo." || ancho: ".$articulo->ancho." || tipo_id:".$articulo->tipo_id." ".$articulo->talle_id." || color_id: ".$articulo->color_id." || costo:".$articulo->costo." || margen:".$articulo->margen." || ganancia:".$articulo->ganancia." || precioVta:".$articulo->precioVta." || estado:".$articulo->estado;
+        /** Auditoria cambio de estado */
+        $auditoria = new Auditoria();
+        $auditoria->tabla = "articulos";
+        $auditoria->elemento_id = $articulo->id;
+        $autor = new Auth();
+        $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+        $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
+        $auditoria->accion = "modificacion";
+        $auditoria->dato_anterior = $dato_anterior;
+        $auditoria->save();
+        Flash::error("Se cambio el estado del articulo ".$articulo->nombre." a 'inactivo'.");
         return redirect()->route('admin.articulos.index');
     }
 }

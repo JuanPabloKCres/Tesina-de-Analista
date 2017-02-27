@@ -14,27 +14,12 @@
                 </div>
                 <div class="form-group">
                     <h4>                       
-                        <label class="col-sm-4 control-label">Emitir comprobante</label>
+                        <label class="col-sm-4 control-label">Emitir comprobante interno de compra</label>
                         <div class="col-sm-4 controls">
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="input-icon right">
                                         {!! Form::checkbox('factura', '1') !!}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </h4>
-                </div>
-                <br><br>
-                <div class="form-group">
-                    <h4>
-                        <label class="col-sm-4 control-label">Confirmada</label>
-                        <div class="col-sm-4 controls">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="input-icon right">
-                                        {!! Form::checkbox('confirmado', '1') !!}
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +48,7 @@
                     Cerrar
                 </button>
                 <button type="button" data-dismiss="modal" class="btn btn btn-success" onclick="enviarPedido(true, false);">
-                    Registrar como compra pendiente (pedido)
+                    Registrar como pedido de compra
                 </button>
                 <button type="button" data-dismiss="modal" class="btn btn btn-info" onclick="enviarPedido(true, true);">
                     Registrar como compra

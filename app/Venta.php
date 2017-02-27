@@ -78,9 +78,34 @@ class Venta extends Model
       return $query->where('entregado', 'LIKE', $valor);
     }
 
+    public function scopeSearchSeDebenRetitarHoy($query)
+    {
+        $array_fecha = getdate();
+        $año = $array_fecha['year'];
+        $mes = $array_fecha['mon'];
+        $dia = $array_fecha['mday'];
+
+        if(strlen ($mes)==1){                       #si mes tiene un digito anteponer un 0 al mes
+            if(strlen ($dia)==1){                       #si dia tambien tiene un digito anteponer un 0 al dia
+                $fecha_hoy = $año.'-0'.$mes.'-0'.$dia;
+            }else{
+                $fecha_hoy = $año.'-0'.$mes.'-'.$dia;
+            }
+        }else{
+            if(strlen ($dia)==1){                       #si dia tiene un digito anteponer un 0 al dia
+                $fecha_hoy = $año.'-'.$mes.'-0'.$dia;
+            }else{
+                $fecha_hoy = $año.'-'.$mes.'-'.$dia;
+            }
+        }
+
+        return $query->where('fecha_entrega_estimada', 'LIKE', $fecha_hoy);
+    }
+
+
     public function scopeSearchMayorFechaInicio($query, $fechaInicio)
     {
-      dd($query->where('fecha_venta','bet', $fechaInicio)) ;
+      echo($query->where('fecha_venta','bet', $fechaInicio)) ;      //tenia dd en vez de echo
     }
 
     public function scopeSearchMenorFechaFin($query, $fechaFin)

@@ -8,8 +8,10 @@
                     Eliminar registro: {{ $insumo->nombre }}</h4>
             </div>
            <!-- Aca falta poner condicional de mostrar alerta si hay VENTAS asociadas al cliente para que no elemine-->
-
-            <div class="modal-body">
+            @if($insumo->insumos_articulo->count()!=0)
+                @include('admin.partes.msjRegAsociados')
+            @else
+                <div class="modal-body">
                 {!! Form::open(['route' => ['admin.insumos.destroy', $insumo], 'method' => 'DELETE']) !!}
                 @include('admin.partes.msjConfirmar')
                 <hr>
@@ -21,7 +23,7 @@
                 {!! Form::close() !!}
                 <br>
             </div>
-
+            @endif
         </div>
     </div>
 </div>

@@ -22,16 +22,22 @@ use Illuminate\Routing\Route;
 class PedidosController extends Controller {
 
     public function __construct() {
-        Carbon::setlocale('es'); //
+        Carbon::setlocale('es');
     }
 
     public function index() {
-        $pedidos = Venta::searchEntregado(0)
-                ->orderBy('id', 'ASC')
-                ->paginate();
+        $pedidos = Venta::searchEntregado(0)    /**solo mandar a tablaPedidos los que no se entregaron */
+                ->orderBy('id', 'desc')
+                ->paginate(Venta::searchEntregado(0)->count());
+        $pedidosQueSeRetiranHoy = Venta::searchSeDebenRetitarHoy();
         return view('admin.pedidos.tablaPedidos')->with('pedidos', $pedidos);
     }
 
+    /** Para las notificaciones */
+    public function notificaciones() {
+
+    }
+    /** ***************************/
     public function create(Request $request) {
         $caja = Caja::where('cerrado', false)->first(); //Aca se busca el primer registro de caja que este activo (supuestamente debería ser el único, igual se pone asi para que no siga buscando al pedo)
         if ($caja === null) { //al llegar aca preguta si enncontro algo(si $caja no es un objeto vacio o null)
@@ -48,22 +54,21 @@ class PedidosController extends Controller {
                 $fecha = \Carbon\Carbon::now('America/Buenos_Aires');
                 $venta = new Venta();
                 $movimiento = new Movimiento();
-                $venta->fecha_pedido = $fecha->format('d-m-Y');
-                $venta->hora_pedido = $fecha->format('H:i');
-                $venta->fecha_entrega_estimada = $request->fecha_entrega_estimada;
-                $venta->senado = $request->sena;
-                $venta->userPedido_id = $request->usuarioPedido;
-                $venta->cliente_id = $request->cliente;
-
+                $venta->fecha_pedido = $fecha->format('d-m-Y');     #OK 20 febrero
+                $venta->hora_pedido = $fecha->format('H:i');        #OK 20 febrero
+                $venta->fecha_entrega_estimada = $request->fecha_entrega_estimada;  #OK, guarda en formato Año-mes-dia *20 febrero
+                $venta->senado = $request->sena;                    #OK 20 febrero
+                $venta->userPedido_id = $request->usuarioPedido;    #OK 20 febrero
+                $venta->cliente_id = $request->cliente;             #OK 20 febrero
                 $conceptoMovimiento = "";
-                if ($request->pagado == "true") {
+                if ($request->pagado == "true") {   #if funciona OK
                     $venta->pagado = 1;
                 }
-                if ($request->entregado == "true") {
+                if ($request->entregado == "true") {    #if funciona OK
                     $venta->entregado = 1;
                 }
                 ///////////////////////////// CHEQUE /////////////////////////////////
-                if ($request->pagoCheque == true) {
+                if ($request->nro_serie) {
                     $forma_pago = "cheque totalidad";
                     $cheque = new Cheque();
                     $cheque->nro_serie = $request->nro_serie;     #OK
@@ -141,6 +146,13 @@ class PedidosController extends Controller {
         }
     }
 
+    public function show() {
+
+    }
+    public function destroy() {
+
+    }
+
     public function store(Request $request) {
         return response()->json("Exito PRUEBA!");
     }
@@ -173,7 +185,12 @@ class PedidosController extends Controller {
             }
         }
         if ($request->entregado) {
-            $pedido->entregado = 1;
+            if ($request->entregado=='2') {
+                $pedido->entregado = 2;
+            }
+            else{
+                $pedido->entregado = 1;
+            }
             $pedido->userVenta_id = $request->usuarioPedido;
             $pedido->fecha_venta = $fecha->format('d-m-Y');
             $pedido->hora_venta = $fecha->format('H:i');
@@ -182,11 +199,4 @@ class PedidosController extends Controller {
         Flash::success("Se ha actualizado el estado del pedido.");
         return redirect()->route('admin.pedidos.edit', $id);
     }
-
-    /*
-    public function hacerFactura(Request $request) {
-        return view('admin.pedidos.showPedido')->with('pedido', $pedido);
-    }
-    */
-
 }

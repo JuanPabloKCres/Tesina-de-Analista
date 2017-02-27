@@ -1,6 +1,6 @@
 
 <div id="tab-lista2" class="tablaResultados2">
-    <div class="panel panel-violet">
+    <div class="panel panel-yellow">
         <div class="panel-heading">Insumos</div>
         <div class="panel-body">
             <br>

@@ -6,8 +6,11 @@ Route::get('/', function () {
 });
 */
 
+//Route::resource('admin','PedidosController@notificaciones');
+
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
    Route::resource('usuarios','UsersController');
+   Route::resource('roles','RolesController');
    Route::resource('clientes','ClientesController');
 
    Route::resource('paises','PaisesController');

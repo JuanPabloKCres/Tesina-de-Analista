@@ -93,7 +93,7 @@
                                                      <td class="text-center">{{ "No se registró" }}</td>
                                                   @endif
                                                 <td class="text-center">
-                                                    <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá acceder acciones como edición y eliminación del mismo" href="{{ route('admin.clientes.show', $cliente->id) }}" class="btn btn-info"> <span class="fa fa-eye" aria-hidden="true"></span></a>
+                                                    <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá acceder acciones como edición y eliminación del mismo" href="{{ route('admin.clientes.show', $cliente->id) }}" class="btn btn-info"> <span class="fa fa-pencil" aria-hidden="true"></span></a>
                                                 </td>
                                             </tr>
                                         @endforeach

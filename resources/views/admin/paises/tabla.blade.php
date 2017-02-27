@@ -39,10 +39,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="panel panel-yellow">
+                <div class="col-lg-12 center" >
+                    <div class="row center">
+                        <div class="col-lg-6" >
+                            <div class="panel panel-grey">
                                 <div class="panel-heading">Países registrados</div>
                                 <div class="panel-body">  
                                     @include('admin.partes.msjError')

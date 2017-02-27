@@ -42,7 +42,7 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-pencil"></i>
-                    {!! Form::select('responiva_id', $responIva, null, ['class' => 'form-control selectBoot', 'data-live-search' => 'true', 'required', 'id' => 'responiva_id']) !!}
+                    {!! Form::select('responiva_id', $responIva, null, ['class' => 'form-control selectBoot', 'placeholder'=>'campo requerido', 'data-live-search' => 'true', 'required', 'id' => 'responiva_id']) !!}
                 </div>
             </div>
         </div>
@@ -81,7 +81,7 @@
     <div class="col-sm-9 controls">
         <div class="row">
             <div class="col-xs-12">
-                {!! Form::select('pais_id', $paises, null, ['class' => 'form-control selectBoot', 'data-live-search' => 'true', 'required', 'id' => 'pais_select']) !!}
+                {!! Form::select('pais_id', $paises, null, ['class' => 'form-control selectBoot', 'data-live-search' => 'true', 'required', 'id' => 'pais_select', 'placeholder' =>'seleccione un pais..']) !!}
             </div>
         </div>
     </div>
@@ -90,7 +90,7 @@
     <div class="col-sm-9 controls">
         <div class="row">
             <div class="col-xs-12">
-                {!! Form::select('provincia_id', ['placeholder' => 'campo requerido..'], null, ['id'=>'provincia_select','class' => 'form-control']) !!}
+                {!! Form::select('provincia_id', ['placeholder' => 'campo requerido..'], null, ['id'=>'provincia_select','class' => 'form-control selectBoot']) !!}
             </div>
         </div>
     </div>
@@ -99,7 +99,7 @@
     <div class="col-sm-9 controls">
         <div class="row">
             <div class="col-xs-12">
-                {!! Form::select('localidad_id', ['placeholder' => 'campo requerido..'], null, ['id'=>'localidad_select','class' => 'form-control','required']) !!}
+                {!! Form::select('localidad_id', ['placeholder' => 'campo requerido..'], null, ['id'=>'localidad_select','class' => 'form-control selectBoot','required']) !!}
             </div>
         </div>
     </div>

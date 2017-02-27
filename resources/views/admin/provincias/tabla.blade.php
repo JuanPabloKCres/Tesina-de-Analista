@@ -40,7 +40,7 @@
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="panel panel-yellow">
+                            <div class="panel panel-grey">
                                 <div class="panel-heading">Provincias registradas</div>
                                 <div class="panel-body">
                                     @include('admin.partes.msjError')

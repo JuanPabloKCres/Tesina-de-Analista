@@ -164,6 +164,7 @@ return [
 
         App\Providers\ComposerServiceProvider::class,
 
+        Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
 
     ],
 

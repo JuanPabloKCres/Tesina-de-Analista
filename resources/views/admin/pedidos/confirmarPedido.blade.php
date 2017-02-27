@@ -9,7 +9,7 @@
             <div class="modal-body">
               <div class="note note-info">
                   <h4 class="box-heading">¡Atención!</h4>
-                  <p>Está por registrar de un nuevo pedido. De encontrarse seguro puede proseguir presionando el boton "Registrar".</p>
+                  <p>Está por registrar de un nuevo pedido señado. De encontrarse seguro puede proseguir presionando el boton "Registrar".</p>
               </div>
             </div>
             <div class="modal-footer">

@@ -18,6 +18,8 @@ $('#fecha_entrega_date').on('click', function () {
 //alert(id_cliente_pedidosPendientes);
 
 $('#iva_select').prop('disabled',true);
+$('#precioU_number').prop('disabled',true);
+$('#importe_number').prop('disabled',true);
 
 $(document).ready(function () {
     $('#tblListaProductos').DataTable({
@@ -121,7 +123,6 @@ function agregarContenido(articulo_select, nombre, cantidad_number, precioU_numb
     $('#mp').html(montoPedido);
     $('#mt').html(montoTotal);
     limpiar();
-    $('#cantidad_number').select();
 }
 
 /*
@@ -141,8 +142,8 @@ function borrarFila(d)
         if (dataPla[0] === d) {
             numFilaBorrar = Filas;
             montoPedido = montoPedido - parseFloat(dataPla[5]);
-            montoTotal = montoTotal - parseFloat(dataPla[6]);
-            montoTotal_Absoludo = montoTotal_Absoludo - parseFloat(dataPla[6]);
+            montoTotal = montoTotal - parseFloat(dataPla[5]);
+            montoTotal_Absoludo = montoTotal_Absoludo - parseFloat(dataPla[5]);
         }
         Filas++;
     });
@@ -189,8 +190,7 @@ function comprobar(articulo_select, cantidad_number, precioU_number, importe_num
                 comprobarSiHayInsumosSuficientes: true,
                 cantidadArticuloSolicitado: canti
             },
-            type: 'GET',
-            dataType: 'json',
+            type: 'GET', dataType: 'json',
             success: function (data) {
                 var d = JSON.parse(data);
                 console.log(d);
@@ -203,7 +203,6 @@ function comprobar(articulo_select, cantidad_number, precioU_number, importe_num
                     $('#msjStock').removeClass("hide");
                     $("#cantidad_number").select();
                 }
-
             }
         });
     } else {
@@ -219,9 +218,7 @@ function comprobar(articulo_select, cantidad_number, precioU_number, importe_num
  */
 function limpiar()
 {
-    $('#cantidad_number').val("");
-    $('#precioU_number').val("");
-    $('#importe_number').val("");
+    $('#cantidad_number').val(""); $('#precioU_number').val(""); $('#importe_number').val("");
 }
 /*
  * Este método jquery captura el evento de cuando se suelta la tecla despues de presionarla sobre
@@ -289,6 +286,7 @@ function completarPrecio(n, iva)
             importe = $('#precioU_number').val();
             var importe_x_cantidad = importe * cantidad;
             importe_x_cantidad = importe_x_cantidad.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+            importe_x_cantidad = parseFloat(importe_x_cantidad);
             $('#importe_number').val((importe_x_cantidad));
             precio = $('#importe_number').val();
             impuesto = ((precio * iva) / 100);
@@ -322,7 +320,7 @@ $("#form-pedido").submit(function (e) {
 function confirmar()
 {
     if (cantFilas > 0) {
-        if (pagarTotal) {
+        if (pagarTotal) {   //si se paga el total, abrir el modal de pago total "confirmarVenta.blade.php"
             $('#modal-confirmarVenta').modal('show');
         } else if (!pagarTotal) {
             if ($('#sena').val() == montoTotal) {
@@ -353,7 +351,7 @@ function enviarPedido(pagado, entregado)
     var lineas = [];
     var factura = {
             iva: $('#iva').val(),
-            tipo_cbte: $('#factura').val(),
+            tipo_cbte: 'B',
             nro_doc: $('#cuit').val(),
             nombre_cliente: $('#nombreCliente').val(),
             domicilio_cliente: $('#direccion').val(),
@@ -366,42 +364,42 @@ function enviarPedido(pagado, entregado)
         lineas [numLi] = linea;
         factura.items [numLi] = linea;
         console.log("Se agrego un item para la factura: "+linea.articulo_nombre);
+        console.log("pagarTotal: "+pagarTotal);
         numLi++;
     });
     if (!pagarTotal) {
         montoTotal = $('#sena').val();
     }
+
+    $.ajax({    //en esta peticion se busca obtener los datos del cliente para confecc los comprobantes
+        dataType: 'json',
+        url: "/admin/clientes",
+        data: {
+            id: $('#cliente').val()
+        },
+        success: function (data) {
+            console.log("De ClientesController se obtuvieron estos datos para FE: "+data); console.log("El monto total que se manda a FE es =" + montoTotal);
+            var data_cliente = JSON.parse(data);
+            informacion_de_cliente = data_cliente;
+        }
+    });
     /**factura electrónica */
     if ($('input:checkbox[name=factura]:checked').val()) {
-        $.ajax({    //en esta peticion se busca obtener los datos del cliente para confecc. la factura
-            dataType: 'json',
-            url: "/admin/clientes",
-            data: {
-                id: $('#cliente').val()
-            },
-            success: function (data) {
-                console.log("De ClientesController se obtuvieron estos datos para FE: "+data); console.log("El monto total que se manda a FE es =" + montoTotal);
-                var data_2 = JSON.parse(data);
-
-                informacion_de_cliente = data_2;
-
-                factura.tipo_cbte = data_2.tipo_cbte;   //OK
-                factura.nro_doc = data_2.dni;           //OK
-                if(data_2.empresa==null){   /**Si el cliente no tiene empresa*/
-                    factura.nombre_cliente = data_2.nombre;         //grabar su nombre para la factura
-                }else{
-                    factura.nombre_cliente = data_2.empresa;         //sino grabar nombre de la empresa para la factura, descartar nombre de representante
-                }
-                factura.provincia_cliente = data_2.provincia;   //OK
-                factura.localidad_cliente = data_2.localidad;   //OK
-                factura.domicilio_cliente = data_2.domicilio;   //OK
-                factura.imp_total = montoTotal;                 //OK
-                factura.items = lineas;
-                var array = JSON.stringify(factura);
-                var enlace_factura = 'http://localhost/factura/dinamico-factura.php?&datos_factura=' + encodeURIComponent(array);
-                window.open(enlace_factura);
-              }
-        });
+        factura.tipo_cbte = informacion_de_cliente.tipo_cbte;   //OK
+        factura.nro_doc = informacion_de_cliente.dni;           //OK
+        if(informacion_de_cliente.empresa==null){   /**Si el cliente no tiene empresa*/
+        factura.nombre_cliente = informacion_de_cliente.nombre;         //grabar su nombre para la factura
+        }else{
+            factura.nombre_cliente = informacion_de_cliente.empresa;         //sino grabar nombre de la empresa para la factura, descartar nombre de representante
+        }
+        factura.provincia_cliente = informacion_de_cliente.provincia;   //OK
+        factura.localidad_cliente = informacion_de_cliente.localidad;   //OK
+        factura.domicilio_cliente = informacion_de_cliente.domicilio;   //OK
+        factura.imp_total = montoTotal;                 //OK
+        factura.items = lineas;
+        var array = JSON.stringify(factura);
+        var enlace_factura = 'http://localhost/factura/dinamico-factura.php?&datos_factura=' + encodeURIComponent(array);
+        window.open(enlace_factura);
     }
     console.log(lineas);
     console.log("la seña es: "+montoPedido);
@@ -433,7 +431,7 @@ function enviarPedido(pagado, entregado)
             entregado: entregado,
             usuarioPedido: $('#usuarioPedido').val(),
             cliente: $('#cliente').val(),
-            sena: montoPedido
+            sena: montoTotal,
         },
         success: function (data) {
             /* Una vez completado el proceso se muestra el mensaje de exito */
@@ -449,7 +447,6 @@ function enviarPedido(pagado, entregado)
             }
         }
     });
-
 }
 
 /** Este método jquery es el que toma el valor total de un pedido o si por el contrario solo se quiere señar el mismo*/
@@ -594,8 +591,19 @@ $(document).ready(function () {
 $('#articulo_select').on('change',function(){
     $('#insumos_necesarios').empty();
     var articulo_id = $('#articulo_select').val();
-    mostrarPrecioArticulo(articulo_id);
-    mostrarStockRemanente(articulo_id);
+    if(cantFilas == 0){
+        mostrarPrecioArticulo(articulo_id);
+        mostrarStockRemanente(articulo_id);
+    }
+    else {
+        if(articuloYaEstabaEnLaTabla(articulo_id) == 'si'){
+            alert('El articulo seleccionado ya se encuentra en el carro de Pedidos');
+        }
+        else{
+            mostrarPrecioArticulo(articulo_id);
+            mostrarStockRemanente(articulo_id);
+        }
+    }
 });
 // Las funciones:
 function mostrarPrecioArticulo(articulo_id){        //devuelve el precio de venta del articulo elegido
@@ -736,9 +744,9 @@ function email_notificacion_stockBajo(){
 
 /** Esta fucnion genera un comprobante 'nota de pedido' para el cliente. Crea un objeto Comprobante y lo persiste*/
 function emitirTicket(informacion_de_cliente){
-    var nro_comprobante = 0;
+    var comprobante;
     var ticket = {                          /*El ticket es una 'nota de pedido'*/
-        nro_comprobante: nro_comprobante,
+        nro_comprobante: comprobante,
         iva: $('#iva').val(),
         nro_doc: $('#cuit').val(),
         nombre_cliente: $('#nombreCliente').val(),
@@ -771,20 +779,21 @@ function emitirTicket(informacion_de_cliente){
         dataType: 'json',
         success: function (data) {
             var respuesta = JSON.parse(data);
-            nro_comprobante = respuesta.comprobante_id;             //Funciona
+            console.log(respuesta);
+            comprobante = respuesta.comprobante_id;             //Funciona
         }
     });
 
-    ticket.nro_comprobante = nro_comprobante;      //OK
-    ticket.nro_doc = informacion_de_cliente.dni;                   //OK
-    if(informacion_de_cliente.empresa==null){   /**Si el cliente no tiene empresa*/
+    if(informacion_de_cliente.empresa==""){   /**Si el cliente no tiene empresa*/
         ticket.nombre_cliente = informacion_de_cliente.nombre;         //grabar su nombre para la factura
     }else{
         ticket.nombre_cliente = informacion_de_cliente.empresa;         //sino grabar nombre de la empresa para la factura, descartar nombre de representante
     }
+    ticket.nro_comprobante = comprobante;
     ticket.provincia_cliente = informacion_de_cliente.provincia;   //OK
     ticket.localidad_cliente = informacion_de_cliente.localidad;   //OK
     ticket.domicilio_cliente = informacion_de_cliente.domicilio;   //OK
+    ticket.nro_doc = informacion_de_cliente.dni;                   //OK
     ticket.imp_total = montoTotal_Absoludo;
     ticket.items = lineas;
     var array = JSON.stringify(ticket);
@@ -797,7 +806,8 @@ function emitirTicket(informacion_de_cliente){
 function email_info_pedido_cliente(lineas, sena, total, user){
     var fecha_entrega_estimada = $('#fecha_entrega_date').val();
     var fecha_hoy = fechahoy();
-    console.log('items: '+lineas);
+    console.log('items:');
+    console.log(lineas);
     console.log("fecha entrega estimada"+fecha_entrega_estimada+" seña: "+sena+" total: "+total+" user: "+ user+ "fecha de hoy: "+ fecha_hoy);
     $.ajax({
         url: "/admin/mail", dataType: 'json',
@@ -826,3 +836,53 @@ function fechahoy(){
     hoy = mm+'/'+dd+'/'+yyyy;
     return hoy;
 }
+
+/** Al hacer click en 'seleccionar articulo', se ejecuta una funcion que se fija que el articulo no este en una tabla, recorriendola*/
+function articuloYaEstabaEnLaTabla(articulo_id){
+    var articuloYaEsta = 'no';
+    var numLi = 0;
+    var lineas = [];
+    $('#tblListaProductos tbody tr').each(function () {
+        var dataFila = $('#tblListaProductos').DataTable().row(this).data();
+        var linea = { articulo_id: dataFila[1] };
+        lineas [numLi] = linea;
+        numLi++;
+        if(linea.articulo_id == articulo_id){
+            articuloYaEsta = 'si';
+        }
+    });
+    return articuloYaEsta;
+}
+
+/**validar si la tabla Articulos esta vacia*/
+function laTablaArticulosEstaVacia(){
+    if($('#tblListaProductos tbody tr').length == 0) {
+            return true;
+        }
+        else{
+
+            return false;
+        }
+    };
+
+
+/*
+ var numLi = 0;
+ var lineas = [];
+ var factura = {
+ iva: $('#iva').val(),
+ tipo_cbte: $('#factura').val(),
+ nro_doc: $('#cuit').val(),
+ nombre_cliente: $('#nombreCliente').val(),
+ domicilio_cliente: $('#direccion').val(),
+ imp_total: $('#montoTotal').val(),
+ items: [],
+ };
+ $('#tblListaProductos tbody tr').each(function () {
+ var dataFila = $('#tblListaProductos').DataTable().row(this).data();
+ var linea = {articulo_id: dataFila[1], articulo_nombre: dataFila[2], cantidad: dataFila[3], precio_unitario: dataFila[4], importe: dataFila[5]};
+ lineas [numLi] = linea;
+
+ numLi++;
+ });
+ */

@@ -4,21 +4,21 @@
             <div class="modal-header">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">
                     &times;</button>
-                <h4 class="modal-title">Confirmar alta de Articulo para la venta</h4>
+                <h4 class="modal-title">Confirmar alta del Articulo para su venta</h4>
             </div>
             <div class="modal-body">
                 <div class="note note-info">
-                    <h4 class="box-heading">¡Atención!</h4>
-                    <p>Está a punto de registrar una producción para su comercialización.</p>
+                    <h1 class="box-heading">¡Atención!</h1>
                 </div>
-
-
+                <h2>
+                    <p>Está a punto de registrar una producción para su comercialización.</p>
+                </h2>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-white">
                     Cerrar
                 </button>
                 <button type="button" data-dismiss="modal" class="btn btn btn-info" onclick="enviarPedido();">
-                    Registrar Articulo
+                    Registrar Articulo, estoy seguro.
                 </button>
             </div>
 

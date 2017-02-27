@@ -21,7 +21,7 @@ class Email_NotificacionesController extends Controller
         if($request->ajax()){
             if($request->email_info_pedido){
                 $cliente = Cliente::find($request->id_cliente);
-                $nombre_y_apellido = $cliente->nombre." ".$cliente->apellido;
+                $nombre_y_apellido = "fulano";//$cliente->nombre." ".$cliente->apellido;
                 Mail::send('emails.datos_pedido', ['cliente'=>$nombre_y_apellido, 'total'=>$request->total, 'fecha_hoy'=>$request->fecha_hoy, 'fecha_entrega'=>$request->fecha_entrega, 'items'=>$request->items], function($msj){
                     $msj->subject('Información de su pedido');
                     $msj->to('jpcaceres.nea@gmail.com');

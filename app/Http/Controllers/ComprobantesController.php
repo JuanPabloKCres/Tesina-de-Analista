@@ -24,7 +24,6 @@ class ComprobantesController extends Controller
         if($request->ajax()){
             $usuario_id = $request->usuario_id;
             $usuario = User::find($usuario_id);
-            $usuario = $usuario->nombre;
 
             if($request->nota_pedido){
                 $cliente_id = $request->cliente_id;
@@ -33,7 +32,7 @@ class ComprobantesController extends Controller
                 $comprobante->cliente_id = $cliente_id;
                 $comprobante->comprobante = "Nota de Pedido";
                 $comprobante->save();
-                $respuesta = array("comprobante_id" => $comprobante->id, "tipo" => $comprobante->comprobante, 'usuario'=>$usuario);
+                $respuesta = array("comprobante_id" => $comprobante->id, "tipo" => $comprobante->comprobante, 'usuario'=>$usuario->name);
                 return response()->json(json_encode($respuesta, true));
             }
             if($request->recibo_compra_insumos){
@@ -47,7 +46,7 @@ class ComprobantesController extends Controller
                 $comprobante->comprobante = "Recibo de Compra";
                 $comprobante->save();
 
-                $respuesta = array("comprobante_id" => $comprobante->id, "tipo" => $comprobante->comprobante, "proveedor"=>$proveedor->nombre, "proveedor_email"=>$proveedor_email, "proveedor_telefono"=>$proveedor_telefono, 'usuario'=>$usuario);
+                $respuesta = array("comprobante_id" => $comprobante->id, "tipo" => $comprobante->comprobante, "proveedor"=>$proveedor->nombre, "proveedor_email"=>$proveedor_email, "proveedor_telefono"=>$proveedor_telefono, 'usuario'=>$usuario->name);
                 return response()->json(json_encode($respuesta, true));
             }
         }

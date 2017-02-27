@@ -29,3 +29,5 @@
     <!--
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
    -->
+
+    <script src="{{ asset('plantillas/KAdmin-Dark/script/bootstrap2-toogle.css') }}"></script>

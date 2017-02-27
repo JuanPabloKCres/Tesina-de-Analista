@@ -1,25 +1,4 @@
 <form class="form-horizontal" id="form-agregar">
-    <?php
-        $array_fecha = getdate();
-        $año = $array_fecha['year'];
-        $mes = $array_fecha['mon'];
-        $dia = $array_fecha['mday'];
-
-        if(strlen ($mes)==1){                       #si mes tiene un digito anteponer un 0 al mes
-            if(strlen ($dia)==1){                       #si dia tambien tiene un digito anteponer un 0 al dia
-                $fecha_hoy = $año.'-0'.$mes.'-0'.$dia;
-            }else{
-                $fecha_hoy = $año.'-0'.$mes.'-'.$dia;
-            }
-        }else{
-            if(strlen ($dia)==1){                       #si dia tiene un digito anteponer un 0 al dia
-                $fecha_hoy = $año.'-'.$mes.'-0'.$dia;
-            }else{
-                $fecha_hoy = $año.'-'.$mes.'-'.$dia;
-            }
-        }
-        //echo $fecha_hoy;
-    ?>
 
     <div class="row text-center">
         <div class="col-lg-12">
@@ -33,10 +12,9 @@
                                 <i class="fa fa-pencil"></i>
                                 {!! Form::select('articulo_id', $articulos, null, ['class' => 'form-control selectBoot', 'id' => 'articulo_select','data-live-search' => 'true', 'required']) !!}
                             </div>
-                            <label class="col-sm-3 control-label">Listado de Insumos</label>
                             <div class="input-icon right">
                                 <select class="form-control text-right" id="insumos_necesarios" readonly>
-
+                                    <option selected disabled>Listado de Insumos para armar el producto..</option>
                                 </select>
                             </div>
                         </div>
@@ -80,17 +58,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group"><label class="col-sm-5 control-label">FECHA ENTREGA ESTIMADA:</label>
-                <div class="col-sm-12 controls">
 
-                        <div class="col-xs-19">
-                            <div class="input-icon right">
-                                {!! Form::date('fecha_entrega_tentativa',\Carbon\Carbon::now() , ['id'=>'fecha_entrega_date','min'=>$fecha_hoy])!!}
-                            </div>
-                        </div>
-
-                </div>
-            </div>
             <hr/>
         </div>
     </div>

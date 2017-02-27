@@ -8,9 +8,9 @@
             </div>
             <div class="modal-body">
                 <div class="note note-info">
-                    <h4 class="box-heading">¡Atención!</h4>
-                    <p>Está a punto de registrar un nuevo pedido, también se ha detectado que el pedido ha sido pagado en su totalidad.
-                        Puede optar por entregar el pedido y registrar como una venta a este pedido o proseguir y registrar el pedido para su producción.</p>
+                    <h3 class="box-heading">¡Atención!</h3>
+                    <p><h4>Está a punto de registrar un nuevo pedido, también se ha detectado que el pedido ha sido pagado en su totalidad.
+                        Puede optar por entregar el pedido y registrar como una venta a este pedido o proseguir y registrar el pedido para su producción.</h4></p>
                 </div>
                 <div class="form-group">
                     <h4>                       

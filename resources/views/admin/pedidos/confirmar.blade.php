@@ -61,11 +61,11 @@
                     </div>
                     <div class="note note-warning">
                         <h3 class="box-heading">Registrar pago restante</h3>
-                        <h4><p>Usted está a punto de proceder con la registración del pago por el monto faltante. Adicionalmente puede registrar alguna de las siguientes acciones:</p><h4>
+                        <h4><p>Usted está a punto de proceder con el registro del pago por el monto faltante. Adicionalmente puede registrar alguna de las siguientes acciones:</p><h4>
                     </div>
                     <div class="form-group">
                       <h4>
-                         <label class="col-sm-7 control-label">Generar factura electrónica</label>
+                         <label class="col-sm-7 control-label">Emitir Factura electrónica</label>
                          <div class="col-sm-1 controls"></div>
                          <div class="col-sm-4 controls">
                              <div class="row">
@@ -80,13 +80,14 @@
                     </div>
                         <div class="form-group">
                             <h4>
-                                <label class="col-sm-7 control-label">Se pago con cheque</label>
+                                <label class="col-sm-7 control-label">Se paga con cheque el resto</label>
                                 <div class="col-sm-1 controls"></div>
                                 <div class="col-sm-4 controls">
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <div class="input-icon right">
                                                 {!! Form::checkbox('cheque', '1') !!}
+
                                             </div>
                                         </div>
                                     </div>
@@ -107,6 +108,21 @@
                              </div>
                          </div>
                      </h4>
+                    </div>
+                    <div class="form-group">
+                        <h4>
+                            <label class="col-sm-7 control-label text-danger">Cancelar el pedido</label>
+                            <div class="col-sm-1 controls"></div>
+                            <div class="col-sm-4 controls">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="input-icon right">
+                                            {!! Form::checkbox('entregado', '2') !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </h4>
                     </div>
                 @endif
                <br>

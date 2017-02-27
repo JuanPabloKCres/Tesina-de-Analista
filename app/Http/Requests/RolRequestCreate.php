@@ -25,7 +25,6 @@ class RolRequestCreate extends Request
     {
         return [
             'nombre' => 'required|max:50|unique:roles',
-            'nivel_acceso' => 'required|max:20|unique:roles'
         ];
     }
 }

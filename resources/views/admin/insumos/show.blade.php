@@ -107,10 +107,21 @@
                                                                 <td><h4 class="box-heading">Stock mínimo:</h4></td>
                                                                 <td><h4>{{ $insumo->stockMinimo}} uniddades</h4></td>
                                                             </tr>
+                                                            {{--
                                                             <tr>
                                                                 <td><h4 class="box-heading">Cantidad de ventas asociadas:</h4></td>
-                                                                <td><h4 class="box-heading"></h4></td>
+                                                                @if($insumo->insumos_articulo)
+                                                                    <td><h4 class="box-heading">{{ $insumo->insumos_articulo->articulos_venta->count() }}</h4></td>
+                                                                    @if($insumo)
+                                                                        <td><h4 class="box-heading">{{ $insumo }}</h4></td>
+                                                                    @else
+                                                                        <td><h4 class="box-heading">No hay ventas asociadas al insumo</h4></td>
+                                                                    @endif
+                                                                @else
+                                                                    <td><h4 class="box-heading">Ni siquiera existen articulos comercializables relacionadas a este insumo</h4></td>
+                                                                @endif
                                                             </tr>
+                                                            --}}
                                                             <tr>
                                                                 <td><h4 class="box-heading">Fecha de alta:</h4></td>
                                                                 <td><h4>{{ $insumo->created_at->diffForHumans() }}</h4></td>

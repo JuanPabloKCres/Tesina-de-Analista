@@ -14,8 +14,7 @@ class InsumosArticulosTable extends Migration
     {
         Schema::create('insumos_articulos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('cantidad');
-            //$table->integer('unidad_medida_id');
+            $table->double('cantidad');
 
             $table->double('precio_unitario');  //costo de uno
             $table->double('importe_insumo');   //costo x cantidad solo ese insumo
@@ -25,7 +24,6 @@ class InsumosArticulosTable extends Migration
 
             $table->foreign('articulo_id')->references('id')->on('articulos')->onDelete('cascade');
             $table->foreign('insumo_id')->references('id')->on('insumos')->onDelete('cascade');
-
             $table->timestamps();
         });
     }

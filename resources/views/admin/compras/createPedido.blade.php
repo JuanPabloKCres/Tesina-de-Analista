@@ -48,28 +48,9 @@ Pedidos - Registrar compra Insumos
             <div class="col-lg-12">
                 <div class="row">
                     <div class="row mtl">
-                        <div class="col-lg-3">
-                            <div class="row">
 
-                                <div class="col-md-12 hide">
-                                    <div class="panel">
-                                        <div class="panel-body">
-                                            @include('admin.compras.contenidoFormProveedor')
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="col-md-12">
-                                    <div class="panel">
-                                        <div class="panel-body">
-                                            @include('admin.insumoCompra.contenidoForm')
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-9">
+                        <div class="col-md-12">
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="panel">
@@ -113,6 +94,26 @@ Pedidos - Registrar compra Insumos
                                                         </tr>
                                                     </tbody>
                                                 </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="row">
+
+                                    <div class="col-md-12 hide">
+                                        <div class="panel">
+                                            <div class="panel-body">
+                                                @include('admin.compras.contenidoFormProveedor')
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="panel">
+                                            <div class="panel-body">
+                                                @include('admin.insumoCompra.contenidoForm')
                                             </div>
                                         </div>
                                     </div>

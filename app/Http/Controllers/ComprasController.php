@@ -175,9 +175,9 @@ class ComprasController extends Controller {
                 } else {
                     return response()->json("¡El pedido de compra fue registrado con éxito!");
                 }
+                return view('admin.compras.createPedido'); // se devuelve la caja en cuestion.
             }
             return view('admin.compras.createPedido'); // se devuelve la caja en cuestion.
-
         }
     }
 

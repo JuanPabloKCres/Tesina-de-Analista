@@ -18,9 +18,7 @@ var montoPedido = 0;
 var montoTotal = 0;
 var costosTotales = 0;
 
-
 //$('#unidad_text').prop( "disabled", true );
-
 
 $('select#tipo_id').on('change',function() {
     var tipo = $("#tipo_id option:selected").text();
@@ -138,7 +136,7 @@ function completarCosto(n)
         } else {
             precio = $('#d4').val();
             importe = precio / cantidad;
-            total = parseFloat(precio);         //HACER ALGO PARA REDONDEAR!!!!!
+            total = parseFloat(precio);
             $('#costo_number').val(importe);
             $('#total').val(total);
         }
@@ -147,7 +145,8 @@ function completarCosto(n)
             $('#d4').val("");
         } else {
             importe = $('#costo_number').val();
-            $('#d4').val((importe * cantidad));
+            var iii = importe * cantidad;
+            $('#d4').val(iii.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);  //Se redondea! 0.350000003 --> 0.35
             precio = $('#d4').val();
             total = parseFloat(precio);
             $('#total').val(total);
@@ -161,14 +160,20 @@ function completarGanancia()
     var costo = $('#costoArticulo_text').val();
     var margen = $('#gananciaPorcent_number').val();
     var ganancia_dinero = costo * (margen/100);
-    $('#gananciaDinero_text').val(ganancia_dinero.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
-    var iva = $('#iva_select').val();
+    ganancia_dinero = ganancia_dinero.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+    ganancia_dinero = parseFloat(ganancia_dinero);
+    $('#gananciaDinero_text').val(parseFloat(ganancia_dinero));
+    var iva = $('#iva_select option:selected').text();
+    //alert( $('#iva_select option:selected').text());
     var precioVtasinIva = parseFloat(costo) + parseFloat(ganancia_dinero);
     var montoIva =  (precioVtasinIva * (iva/100));
-    //alert('el monto que representa el IVA: $'+montoIva);
-    $('#montoIva_number').val(montoIva.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
+    montoIva = montoIva.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+    montoIva = parseFloat(montoIva);
+    $('#montoIva_number').val(montoIva);
     var precio_venta = precioVtasinIva + montoIva;
-    $('#precioVta_text').val(precio_venta.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
+    precio_venta = precio_venta.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+    precio_venta = parseFloat(precio_venta);
+    $('#precioVta_text').val(precio_venta);
 }
 /** Al seleccionar IVA, actualizar montoIva*/
 $('#iva_select').on('change',function(){
@@ -316,8 +321,7 @@ function confirmar()
  */
 function enviarPedido()
 {
-    var user_id = $('#usuarioAltaArticulo').val;
-    alert(user_id);
+    var user_id = $('#usuarioAltaArticulo').val();
     var numLi = 0;
     var lineas = [];
     $('#tblListaInsumos tbody tr').each(function () {
@@ -333,10 +337,11 @@ function enviarPedido()
     var costoArticulo= $('#costoArticulo_text').val();      var margen= $('#gananciaPorcent_number').val();
     var gananciaArticulo= $('#gananciaDinero_text').val();      var precioVta= $('#precioVta_text').val();
     var iva_id= $('#iva_select').val();    var montoIva= $('#montoIva_number').val();
-    console.log("user_id"+user_id+" nombre "+nombre+" alto "+alto+" ancho "+ancho+" tipo_id: "+tipo_id+" talle_id: "+talle_id+" color_id: "+color_id+" costoArticulo: "+costoArticulo+ "margen: "+margen+" ganancia: "+gananciaArticulo+" iva_id: "+iva_id+" montoIva: "+montoIva+" precioVta: "+precioVta);
+    //console.log("user_id"+user_id+" nombre "+nombre+" alto "+alto+" ancho "+ancho+" tipo_id: "+tipo_id+" talle_id: "+talle_id+" color_id: "+color_id+" costoArticulo: "+costoArticulo+ "margen: "+margen+" ganancia: "+gananciaArticulo+" iva_id: "+iva_id+" montoIva: "+montoIva+" precioVta: "+precioVta);
     $.ajax({
         dataType: 'JSON', url: "/admin/articulos/create",
         data: {
+            user_id: user_id,
             renglones: lineas,
             nombre: nombre,
             alto: alto,

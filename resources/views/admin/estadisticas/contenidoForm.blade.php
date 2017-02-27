@@ -66,7 +66,12 @@
               <div class="list-group">
                 @foreach($rankingClientes as $cliente)
                     @if ($cliente == $rankingClientes->first())
-                      <a href="{{ route('admin.clientes.show', $cliente->id) }}" class="list-group-item active"><h4 class="list-group-item-heading">{{ $cliente->nombreCompleto }}</h4>
+                      <a href="{{ route('admin.clientes.show', $cliente->id) }}" class="list-group-item active">
+                          @if($cliente->empresa)
+                              <h4 class="list-group-item-heading">{{ $cliente->empresa}} (rep: {{ $cliente->nombreCompleto }}) </h4>
+                          @else
+                              <h4 class="list-group-item-heading">{{ $cliente->nombreCompleto }}</h4>
+                          @endif
                       <p class="list-group-item-text"> Cantidad de compras realizadas: {{ $cliente->cantCompras }}. Total invertido por el cliente: ${{ $cliente->valorCompras }}</p></a>
                     @else
                       <a href="{{ route('admin.clientes.show', $cliente->id) }}" class="list-group-item"><h4 class="list-group-item-heading">{{ $cliente->nombreCompleto }}</h4>

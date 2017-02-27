@@ -40,7 +40,7 @@
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="panel panel-yellow">
+                            <div class="panel panel-grey">
                                 <div class="panel-heading">Localidades registradas</div>
                                 <div class="panel-body">
                                     @include('admin.partes.msjError')
@@ -48,18 +48,18 @@
                                     <table class="dataTable table table-hover table-striped">
                                         <thead>
                                             <tr>                                                
-                                                <th>Nombre</th>                
-                                                <th>País perteneciente</th>
-                                                <th>Provincia perteneciente</th>                                      
+                                                <th class="text-center">Nombre</th>
+                                                <th class="text-center">País perteneciente</th>
+                                                <th class="text-center">Provincia perteneciente</th>
                                                 <th class="text-center">Acciones</th>
                                             </tr>                                           
                                         </thead>
                                         <tbody>
                                         @foreach($localidades as $localidad)
                                             <tr>                                                
-                                                <td>{{ $localidad->nombre }}</td> 
-                                                <td>{{ $localidad->provincia->pais->nombre }}</td>                                                   
-                                                <td>{{ $localidad->provincia->nombre }}</td>                                                   
+                                                <td class="text-center">{{ $localidad->nombre }}</td>
+                                                <td class="text-center">{{ $localidad->provincia->pais->nombre }}</td>
+                                                <td class="text-center">{{ $localidad->provincia->nombre }}</td>
                                                 <td class="text-center">
                                                     <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá acceder acciones como edición y eliminación del mismo" href="{{ route('admin.localidades.show', $localidad->id) }}" class="btn btn-info"> <span class="fa fa-eye" aria-hidden="true"></span></a>
                                                 </td>

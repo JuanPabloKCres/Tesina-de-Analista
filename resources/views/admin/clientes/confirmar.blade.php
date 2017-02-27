@@ -7,8 +7,9 @@
                 <h4 class="modal-title">
                     Eliminar registro: {{ $cliente->apellido }}, {{ $cliente->nombre }}</h4>
             </div>
-           <!-- Aca falta poner condicional de mostrar alerta si hay VENTAS asociadas al cliente para que no elemine-->
-
+            @if($cliente->ventas->count != 0)
+                @include('admin.partes.msjRegAsociados')
+            @else
             <div class="modal-body">
                 {!! Form::open(['route' => ['admin.clientes.destroy', $cliente], 'method' => 'DELETE']) !!}
                 @include('admin.partes.msjConfirmar')
@@ -21,7 +22,7 @@
                 {!! Form::close() !!}
                 <br>
             </div>
-
+            @endif
         </div>
     </div>
 </div>

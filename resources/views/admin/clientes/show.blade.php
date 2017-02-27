@@ -213,8 +213,10 @@ Detalle del cliente
                                                                 <td><h4 class="box-heading">Cantidad de pedidos o ventas asociadas:</h4></td>
                                                                 <td><h4>{{$cliente->ventas->count()}}</h4></td>
                                                             </tr>
-                                                            <td><h4 class="text-google-plus">${{$cliente->importeVentasRealizadas_sinRestarIva()}}</h4>  <h4 class="text-green">(${{$cliente->importeVentasRealizadas()}} pesos limpios)</h4></td>
                                                             <tr>
+                                                                <td><h4 class="box-heading">Cantidad de dinero en producciones solicitadas por este cliente:</h4></td>
+                                                                <td><h4 class="text-google-plus">${{$cliente->importeVentasRealizadas_sinRestarIva()}}</h4>  <h4 class="text-green">${{$cliente->importeVentasRealizadas()}} pesos netos ingresados</h4></td>
+                                                            </tr>
                                                                 <td><h4 class="box-heading">Fecha de la última compra:</h4></td>
                                                                 <td><h4>{{$cliente->ventas->last()->updated_at->diffForHumans() }}</h4></td>
                                                                 <td>

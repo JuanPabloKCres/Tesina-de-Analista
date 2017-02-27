@@ -1,7 +1,14 @@
 @extends('admin.partes.index')
+@section('script')
+    <script src="{{ URL::asset('js/pluginsPedidos.js') }}"></script>
+    <script>
+        var listSidebar = "li8";
+        var elemFaltante = "nada";
+    </script>
+@endsection
 
 @section('title')
-    Pedidos registrados
+    Pedidos registrados pendientes de entraga
 @endsection
 
 @section('sidebar')
@@ -43,7 +50,7 @@
                                           <tr>
                                               <th class="text-center">#</th>
                                               <th class="text-center">Cliente</th>
-                                              <th>Fecha y hora de pedido</th>
+                                              <th class="text-center">Fecha y hora de pedido</th>
                                               <th class="text-center">Importe</th>
                                               <th class="text-center">Cantidad señada</th>
                                               <th class="text-center">Usuario que tomó pedido</th>
@@ -69,7 +76,7 @@
                                                   <td class="text-center">${{ $pedido->senado }}</td>
                                               @endif
                                               <td class="text-center">{{ $pedido->usuarioPedido->name }}</td>
-                                              <td class="text-center">efectivo</td>
+                                              <td class="text-center">{{ $pedido->forma_pago }}</td>
                                               <td class="text-center"> {{  $pedido->fecha_entrega_estimada }}</td>
                                               <th class="text-center">
                                                   <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá señar la totalidad del pedido o realizar la entrega del pedido" href="{{ route('admin.pedidos.edit', $pedido->id) }}" class="btn btn-info"> <span class="fa fa-eye" aria-hidden="true"></span></a>

@@ -30,25 +30,25 @@
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="panel panel-collapse">
+                            <div class="panel panel-info">
                                 <div class="panel-heading">Movimientos en el Sistema</div>
                                 <div class="panel-body">
                                     @include('admin.partes.msjError')
                                     @include('flash::message')
                                     <table class="display dataTable table table-hover table-striped">
                                         <thead>
-                                        <tr>
-                                            <th>id</th>
-                                            <th >Tabla</th>
-                                            <th class="text-center">id elemento</th>
-                                            <th class="text-center">Acción</th>
-                                            <th class="text-center">Dato Anterior</th>
-                                            <th class="text-center">Dato Nuevo</th>
-                                            <th class="text-center">Fecha de Creación</th>
-                                            <th class="text-center">Fecha de Modificación</th>
-                                            <th class="text-center">id_usuario</th>
-                                            <th class="text-center">Acciones</th>
-                                        </tr>
+                                            <tr>
+                                                <th>id</th>
+                                                <th >Tabla</th>
+                                                <th class="text-center">id elemento</th>
+                                                <th class="text-center">Acción</th>
+                                                <th class="text-center">Dato Anterior</th>
+                                                <th class="text-center">Dato Nuevo</th>
+                                                <th class="text-center">Fecha de Creación</th>
+                                                <th class="text-center">Fecha de Modificación</th>
+                                                <th class="text-center">id_usuario</th>
+                                                <th class="text-center">Acciones</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
                                         @foreach($auditorias as $auditoria)
@@ -64,7 +64,13 @@
                                                 @endif
 
                                                 @if($auditoria->accion)
-                                                    <td class="text-center">{{ $auditoria->accion}}</td>
+                                                    @if($auditoria->accion == 'alta')
+                                                        <td class="text-center text-green text-uppercase">{{ $auditoria->accion}}</td>
+                                                    @elseif($auditoria->accion == 'modificacion')
+                                                        <td class="text-center text-yellow text-uppercase">{{ $auditoria->accion}}</td>
+                                                    @elseif($auditoria->accion == 'eliminacion')
+                                                        <td class="text-center text-red text-uppercase">{{ $auditoria->accion}}</td>
+                                                    @endif
                                                 @else
                                                     <td class="text-center">{{ "-" }}</td>
                                                 @endif

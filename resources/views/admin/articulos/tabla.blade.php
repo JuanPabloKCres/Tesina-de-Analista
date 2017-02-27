@@ -42,21 +42,21 @@
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
-                                                <th>Tipo</th>
-                                                <th>Talle</th>
-                                                <th>Alto</th>
-                                                <th>Ancho</th>
-                                                <th>Color</th>
-                                                <th>Costo materiales</th>
-                                                <th>% Gancia</th>
-                                                <th>Gan. x uni.</th>
-                                                <th>Precio Venta</th>
-
+                                                <th class="text-center">Tipo</th>
+                                                <th class="text-center">Talle</th>
+                                                <th class="text-center">Alto</th>
+                                                <th class="text-center">Ancho</th>
+                                                <th class="text-center">Color</th>
+                                                <th class="text-center">Costo insumos</th>
+                                                <th class="text-center">% Gancia</th>
+                                                <th class="text-center">Gan. x uni.</th>
+                                                <th class="text-center">Precio Venta</th>
                                                 <th class="text-center">Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         @foreach($articulos as $articulo)
+                                          @if($articulo->estado != 'no se fabrica')
                                             <tr>
                                                 <td class="text-dark text-uppercase">{{ $articulo->nombre }}</td>
 
@@ -86,7 +86,7 @@
                                                 @if($articulo->color)
                                                     <td class="text-center ">{{ $articulo->color->nombre }}</td>
                                                 @else
-                                                    <td>{{ "Ninguno" }}</td>
+                                                    <td class="text-center">{{ "Ninguno" }}</td>
                                                 @endif
 
                                                 <!--StockMinimo-->
@@ -98,6 +98,7 @@
                                                     <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá acceder acciones como edición y eliminación del mismo" href="{{ route('admin.articulos.show', $articulo->id) }}" class="btn btn-info"> <span class="fa fa-eye" aria-hidden="true"></span></a>
                                                 </td>
                                             </tr>
+                                          @endif
                                         @endforeach
                                         </tbody>
                                     </table>

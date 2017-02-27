@@ -5,20 +5,32 @@
             <div class="sidebar-collapse menu-scroll" id="side-la">
                 <ul id="side-menu" class="nav">
                     <div class="clearfix"></div>
-                    <li id="li1" ><a data-toggle="tooltip" data-placement="right" title="Visualizar los Registros de Usuario" href="{{ route('admin.usuarios.index') }}">
-                        <i class="fa fa-users fa-fw">
-                            <div class="icon-bg bg-orange"></div>
-                        </i>
-                        <span class="menu-title">Usuarios</span></a>
-                    </li>
-                    <li id="li3">
-                        <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de rubros de proveedores" href="{{ route('admin.rubros.index') }}">
-                            <i class="fa fa-industry">
+
+                    @if((Auth::user()->rol->nombre == 'Administrador') || (Auth::user()->rol->nombre == 'Administrador RRHH'))
+                        <li id="li1" ><a data-toggle="tooltip" data-placement="right" title="Visualizar los Registros de Usuario" href="{{ route('admin.usuarios.index') }}">
+                            <i class="fa fa-users fa-fw">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
-                            <span class="menu-title">Rubros de Proveedores</span>
-                        </a>
-                    </li>
+                            <span class="menu-title">Usuarios</span></a>
+                        </li>
+                        <li id="li98" ><a data-toggle="tooltip" data-placement="right" title="Visualizar los Roles de Usuario" href="{{ route('admin.roles.index') }}">
+                                <i class="fa fa-credit-card fa-fw">
+                                    <div class="icon-bg bg-orange"></div>
+                                </i>
+                                <span class="menu-title">Roles</span></a>
+                        </li>
+                    @endif
+                    @if((Auth::user()->rol->nombre == 'Repositor') || (Auth::user()->rol->nombre == 'Administrador'))
+                        <li id="li3">
+                            <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de rubros de proveedores" href="{{ route('admin.rubros.index') }}">
+                                <i class="fa fa-industry">
+                                    <div class="icon-bg bg-orange"></div>
+                                </i>
+                                <span class="menu-title">Rubros de Proveedores</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if((Auth::user()->rol->nombre == 'Administrador') || (Auth::user()->rol->nombre == 'Administrador RRHH'))
                     <li id="li4">
                         <a data-toggle="tooltip" data-placement="right" title="Editar parámetros de la gráfica" href="{{ route('admin.materiales.index') }}">
                             <i class="fa fa-cogs">
@@ -27,6 +39,16 @@
                             <span class="menu-title">Parámetros generales</span>
                         </a>
                     </li>
+                    @endif
+                    <li id="li99">
+                        <a data-toggle="tooltip" data-placement="right" title="Localidades, Provincias, Paises" href="{{ route('admin.paises.index') }}">
+                            <i class="fa fa-map-marker">
+                                <div class="icon-bg bg-orange"></div>
+                            </i>
+                            <span class="menu-title">Localidades</span>
+                        </a>
+                    </li>
+                    @if((Auth::user()->rol->nombre == 'Repositor') || (Auth::user()->rol->nombre == 'Administrador'))
                     <li id="li5">
                         <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de proveedores" href="{{ route('admin.proveedores.index') }}">
                             <i class="fa fa-truck">
@@ -35,6 +57,7 @@
                             <span class="menu-title">Proveedores</span>
                         </a>
                     </li>
+                    @endif
                     <li id="li6">
                         <a data-toggle="tooltip" data-placement="right" title="Ver Articulos listos para la venta, o diseñar nuevos" href="{{ route('admin.articulos.index') }}">
                             <i class="fa fa-tags">
@@ -50,7 +73,7 @@
                             <i class="fa fa-puzzle-piece">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
-                            <span class="menu-title">Stock</span>
+                            <span class="menu-title">Stock Insumos</span>
                         </a>
                         <div id="dropdown-Insumos" class="panel-collapse collapse">
                             <div class="panel-body">

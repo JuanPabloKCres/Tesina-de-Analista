@@ -51,7 +51,7 @@
                                                             <tbody>
                                                             <tr>
                                                                 <td><h4 class="box-heading">Tabla</h4></td>
-                                                                <td><h4>{{ $auditoria->tabla}}</h4></td>
+                                                                <td><h4 class="text-dark">{{ $auditoria->tabla}}</h4></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><h4 class="box-heading">id elemento:</h4></td>
@@ -60,7 +60,13 @@
                                                             <tr>
                                                                 <td><h4 class="box-heading">Acción:</h4></td>
                                                                 @if ( $auditoria->accion)
-                                                                    <td><h4>{{ $auditoria->accion }}</h4></td>
+                                                                    @if($auditoria->accion == 'alta')
+                                                                        <td><h4 class="text-green">{{ $auditoria->accion }}</h4></td>
+                                                                    @elseif($auditoria->accion == 'modificacion')
+                                                                        <td><h4 class="text-yellow">{{ $auditoria->accion }}</h4></td>
+                                                                    @elseif($auditoria->accion == 'eliminacion')
+                                                                        <td><h4 class="text-danger">{{ $auditoria->accion }}</h4></td>
+                                                                    @endif
                                                                 @else
                                                                     <td><h4>No se registró</h4></td>
                                                                 @endif
@@ -70,7 +76,7 @@
                                                                 @if ( $auditoria->dato_nuevo)
                                                                     <td><h4>{{ $auditoria->dato_nuevo }}</h4></td>
                                                                 @else
-                                                                    <td><h4>No se registró</h4></td>
+                                                                    <td><h4>-</h4></td>
                                                                 @endif
                                                             </tr>
                                                             <tr>
@@ -78,7 +84,7 @@
                                                                 @if ( $auditoria->dato_anterior)
                                                                     <td><h4>{{ $auditoria->dato_anterior }}</h4></td>
                                                                 @else
-                                                                    <td><h4>No se registró</h4></td>
+                                                                    <td><h4>-</h4></td>
                                                                 @endif
                                                             </tr>
                                                             <tr>

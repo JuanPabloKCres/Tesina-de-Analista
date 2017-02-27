@@ -61,7 +61,7 @@
                                                                 <td class="text-center"><h4>{{ $iva->created_at->diffForHumans() }}</h4></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><h4 class="box-heading">Cantidad de insumos que asociados a esta unidad de medida:</h4></td>
+                                                                <td><h4 class="box-heading">Cantidad de articulos para la venta que asociados a este impuesto:</h4></td>
                                                                 <td class="text-center"><h4>{{ $iva->articulos->count() }}</h4></td>
                                                             </tr>
                                                             </tbody>

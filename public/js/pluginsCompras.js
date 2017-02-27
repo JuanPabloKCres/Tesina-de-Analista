@@ -34,7 +34,6 @@ $("#form-agregar").submit(function (e) {
 });
 /**captura el evento de 'submit' del peuqeño formulario (invisible) que posee los campos seña y cliente y lanza el método que solicita confirmación de los datos ingresados */
 $("#form-pedido").submit(function (e) {
-    alert('se envia lo que esta en form-pedido invisible');
     e.preventDefault();
     confirmar();
 });

@@ -60,6 +60,7 @@ class EstadisticasController extends Controller
                 $clienteRanking = new ClienteRanking();
                 $clienteRanking->id = $pedido->cliente->id;
                 $clienteRanking->nombreCompleto = $pedido->cliente->apellido." ".$pedido->cliente->nombre;
+                $clienteRanking->empresa = $pedido->cliente->empresa;
                 $clienteRanking->cantCompras = 1;
                 $clienteRanking->valorCompras = $pedido->importe();
                 $rankingClientes[$pedido->cliente->id] = $clienteRanking;

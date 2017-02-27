@@ -1,5 +1,5 @@
 
-<h3>Detalles del registro</h3>
+<h2 class="text-center">Propiedades del nuevo articulo de venta</h2>
 <br>
 <div class="form-group"><label class="col-sm-3 control-label">Nombre</label>
     <div class="col-sm-9 controls">
@@ -99,7 +99,7 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-money"></i>
-                    {!! Form::number('costo', null, ['class' => 'form-control', 'placeholder'=>'campo no requerido', 'readonly', 'id'=>'costoArticulo_text']) !!}
+                    {!! Form::number('costo', null, ['class' => 'form-control', 'placeholder'=>'-', 'readonly', 'id'=>'costoArticulo_text']) !!}
                 </div>
             </div>
         </div>
@@ -111,7 +111,7 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-percent"></i>
-                    {!! Form::number('margen', null, ['class' => 'form-control', 'placeholder'=>'campo no requerido', 'id'=>'gananciaPorcent_number']) !!}
+                    {!! Form::number('margen', null, ['class' => 'form-control', 'placeholder'=>'campo requerido', 'id'=>'gananciaPorcent_number']) !!}
                 </div>
             </div>
         </div>
@@ -123,7 +123,7 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-money"></i>
-                    {!! Form::number('ganancia', null, ['class' => 'form-control', 'placeholder'=>'campo no requerido', 'readonly', 'id'=>'gananciaDinero_text']) !!}
+                    {!! Form::number('ganancia', null, ['class' => 'form-control', 'placeholder'=>'-', 'readonly', 'id'=>'gananciaDinero_text']) !!}
                 </div>
             </div>
         </div>
@@ -138,7 +138,7 @@
                     {{--
                     {!! Form::select('iva', array('3' => '0%', '2' => '10.5%', '1'=>'21%'),1, ['class' => 'form-control', 'id'=>'iva_select']) !!}
                     --}}
-                    {!! Form::select('iva', $ivas, 1, ['class' => 'form-control selectBoot', 'id'=>'iva_select','data-live-search' => 'true']) !!}
+                    {!! Form::select('iva', $ivas, null, ['class' => 'form-control selectBoot', 'id'=>'iva_select','data-live-search' => 'true']) !!}
                 </div>
             </div>
         </div>
@@ -150,7 +150,7 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-money"></i>
-                    {!! Form::number('montoIva', null, ['class' => 'form-control', 'placeholder'=>'campo no requerido', 'readonly', 'id'=>'montoIva_number']) !!}
+                    {!! Form::number('montoIva', null, ['class' => 'form-control', 'placeholder'=>'-', 'readonly', 'id'=>'montoIva_number']) !!}
                 </div>
             </div>
         </div>
@@ -164,7 +164,7 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-money"></i>
-                    {!! Form::number('precioVta', null, ['class' => 'form-control', 'placeholder'=>'campo no requerido', 'readonly', 'id'=>'precioVta_text']) !!}
+                    {!! Form::number('precioVta', null, ['class' => 'form-control', 'placeholder'=>'-', 'readonly', 'id'=>'precioVta_text']) !!}
                 </div>
             </div>
         </div>

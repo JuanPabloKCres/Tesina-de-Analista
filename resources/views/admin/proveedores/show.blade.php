@@ -123,6 +123,10 @@
                                                                 <td><h4 class="box-heading">Fecha de alta:</h4></td>
                                                                 <td><h4>{{ $proveedor->created_at->diffForHumans() }}</h4></td>
                                                             </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Estado:</h4></td>
+                                                                <td><h4>{{ $proveedor->estado }}</h4></td>
+                                                            </tr>
 
                                                         </tbody>
                                                     </table>
