@@ -22,6 +22,10 @@
                     @include('admin.partes.botonesVistas')
                     @include('admin.partes.botonFiltrar')
                 </div>
+                <a data-toggle="tooltip"  data-placement="bottom" title="Gestionar roles de proveedores" type="button" data-hover="tooltip"  href="{{ route('admin.rubros.index') }}" class="btn btn-blue">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Rubros
+                </a>
+
                 <button data-placement="bottom" title="Registrar una nueva empresa proveedora" type="button" data-hover="tooltip" data-toggle="modal" data-target="#modal-config"  class="btn btn-blue">
                       <i class="fa fa-plus-circle" aria-hidden="true"></i> Registrar proveedor
                 </button>

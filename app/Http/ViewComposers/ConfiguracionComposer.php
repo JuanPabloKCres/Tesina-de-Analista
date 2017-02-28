@@ -2,7 +2,7 @@
 
 use Illuminate\Contracts\View\View;
 use App\Localidad;
-
+use App\Responiva;
 
 class ConfiguracionComposer {
     /**
@@ -14,8 +14,9 @@ class ConfiguracionComposer {
     public function compose(View $view)
     {
         $localidades = Localidad::orderBy('nombre','ASC')->lists('nombre','id');
-        $view->with('localidades', json_decode($localidades, true));
-
+        $responIva = Responiva::orderBy('nombre','ASC')->lists('nombre','id');
+        $view->with('localidades', json_decode($localidades, true))
+            ->with('responIva', json_decode($responIva, true));
     }
 
 }

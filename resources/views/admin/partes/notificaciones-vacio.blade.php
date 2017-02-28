@@ -17,7 +17,7 @@
         <li>
             <div class="text-center">
                 <a href="pedidos">
-                    <strong>Ver todas</strong>
+                    <strong>No hay pedidos pendientes de ser retirados hoy</strong>
                     <i class="fa fa-angle-right"></i>
                 </a>
             </div>

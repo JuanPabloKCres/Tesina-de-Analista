@@ -6,7 +6,7 @@
                 <ul id="side-menu" class="nav">
                     <div class="clearfix"></div>
 
-                    @if((Auth::user()->rol->nombre == 'Administrador') || (Auth::user()->rol->nombre == 'Administrador RRHH'))
+                   @if((Auth::user()->rol->nombre == 'Administrador'))
                         <li id="li1" ><a data-toggle="tooltip" data-placement="right" title="Visualizar los Registros de Usuario" href="{{ route('admin.usuarios.index') }}">
                             <i class="fa fa-users fa-fw">
                                 <div class="icon-bg bg-orange"></div>
@@ -19,16 +19,18 @@
                                 </i>
                                 <span class="menu-title">Roles</span></a>
                         </li>
-                    @endif
+
                     @if((Auth::user()->rol->nombre == 'Repositor') || (Auth::user()->rol->nombre == 'Administrador'))
+                        <!--
                         <li id="li3">
-                            <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de rubros de proveedores" href="{{ route('admin.rubros.index') }}">
+                            <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de rubros de proveedores" >
                                 <i class="fa fa-industry">
                                     <div class="icon-bg bg-orange"></div>
                                 </i>
                                 <span class="menu-title">Rubros de Proveedores</span>
                             </a>
                         </li>
+                        -->
                     @endif
                     @if((Auth::user()->rol->nombre == 'Administrador') || (Auth::user()->rol->nombre == 'Administrador RRHH'))
                     <li id="li4">
@@ -63,7 +65,7 @@
                             <i class="fa fa-tags">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
-                            <span class="menu-title">Producciones</span>
+                            <span class="menu-title">Articulos Diseñados</span>
                         </a>
                     </li>
 
@@ -114,7 +116,7 @@
                             <i class="fa fa-archive">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
-                            <span class="menu-title">Ventas</span>
+                            <span class="menu-title">Información de Ventas</span>
                         </a>
                     </li>
                     <li id="li10">
@@ -148,8 +150,6 @@
                             </i>
                             <span class="menu-title">Administrar Sitio Web</span>
                         </a>
-
-
                         <!-- Dropdown level 1 -->
                         <div id="dropdown-administrarFront" class="panel-collapse collapse">
                             <div class="panel-body">
@@ -164,27 +164,11 @@
                                             <span class="menu-title">Publicar Producto</span>
                                         </a>
                                     </li>
-                                    <!-- Dropdown Nivel 2 -->
-                                    <!--
-                                    <li class="panel panel-default" id="dropdown">
-                                        <a data-toggle="collapse" href="#dropdown-lvl2">
-                                            <span class="glyphicon glyphicon-off"></span> Sub Level <span class="caret"></span>
-                                        </a>
-                                        <div id="dropdown-lvl2" class="panel-collapse collapse">
-                                            <div class="panel-body">
-                                                <ul class="nav navbar-nav">
-                                                    <li><a href="#">Link</a></li>
-                                                    <li><a href="#">Link</a></li>
-                                                    <li><a href="#">Link</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    -->
                                 </ul>
                             </div>
                         </div>
                     </li>
+                   @endif
                 </ul>
             </div>
         </nav>

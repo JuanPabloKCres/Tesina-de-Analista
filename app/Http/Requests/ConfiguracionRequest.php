@@ -30,7 +30,7 @@ class ConfiguracionRequest extends Request
             'localidad_id' => 'required',
             'responiva_id' => 'required',
             'email' => 'email|max:100',
-            'cuit'  => 'required|max:12|min:12',
+            'cuit'  => 'required|max:11|min:11',
             'imagen' => 'mimes:jpeg,png|max:3072' 
         ];
     }

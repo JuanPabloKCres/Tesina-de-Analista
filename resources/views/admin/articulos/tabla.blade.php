@@ -16,7 +16,7 @@
         </div>
         <div class="page-header pull-right">
             <div class="page-toolbar">
-                <a data-toggle="tooltip" data-placement="bottom" href="{{ route('admin.articulos.create') }}" title="Registrar un nuevo pedido o venta de uno o mas producto"  class="btn btn-blue"> <span class="fa fa-plus-circle" aria-hidden="true"></span> Generar presupuesto</a>
+                <a data-toggle="tooltip" data-placement="bottom" href="{{ route('admin.articulos.create') }}" title="Registrar un nuevo articulo para su venta"  class="btn btn-blue"> <span class="fa fa-plus-circle" aria-hidden="true"></span> Generar presupuesto</a>
             </div>
         </div>
         <div class="clearfix"></div>
@@ -33,7 +33,7 @@
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="panel panel-violet">
+                            <div class="panel panel-blue">
                                 <div class="panel-heading">Produccion de Articulos</div>
                                 <div class="panel-body">
                                     @include('admin.partes.msjError')

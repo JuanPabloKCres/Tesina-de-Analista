@@ -108,8 +108,15 @@ function agregarContenido(articulo_select, nombre, cantidad_number, precioU_numb
     //valorItemTotal = valorItemNeto + valorItemNeto * parseFloat($('#iva').val()) / 100; //valor con iva incluido
     valorItemTotal = valorItemNeto;
     montoPedido = montoPedido + valorItemNeto;
+    montoPedido = montoPedido.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];  //quitando decimales
+    montoPedido = parseFloat(montoPedido);
     montoTotal = montoTotal + valorItemTotal;
+    montoTotal = montoTotal.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+    montoTotal = parseFloat(montoTotal);
     montoTotal_Absoludo = montoTotal_Absoludo + valorItemTotal;
+    montoTotal_Absoludo = montoTotal_Absoludo.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+    montoTotal_Absoludo = parseFloat(montoTotal_Absoludo);
+
     tPro.row.add([
         numFila,
         articulo_select,
@@ -198,7 +205,7 @@ function comprobar(articulo_select, cantidad_number, precioU_number, importe_num
                     agregarContenido(articulo_select, $('#articulo_select option:selected').text(), cantidad_number, precioU_number, importe_number);
                 }
                 else{
-                    alert(d.mensaje + d.faltante+" unidades de "+ d.insumo+")");
+                    alert(d.mensaje + d.faltante+" "+d.unidad+" de "+ d.insumo+")");
                     document.getElementById("cantidad_number").style.color = "red";
                     $('#msjStock').removeClass("hide");
                     $("#cantidad_number").select();
@@ -221,6 +228,7 @@ function limpiar()
     $('#cantidad_number').val(""); $('#precioU_number').val(""); $('#importe_number').val("");
 }
 /*
+
  * Este método jquery captura el evento de cuando se suelta la tecla despues de presionarla sobre
  * el campo "Precio unitario" y lanza el método que se encarga de calcular el contenido para el campo "Importe".
  */
@@ -381,27 +389,27 @@ function enviarPedido(pagado, entregado)
             console.log("De ClientesController se obtuvieron estos datos para FE: "+data); console.log("El monto total que se manda a FE es =" + montoTotal);
             var data_cliente = JSON.parse(data);
             informacion_de_cliente = data_cliente;
+            /**factura electrónica -->desde pantalla de 'tomar pedido'*/
+            if ($('input:checkbox[name=factura]:checked').val()) {
+                factura.tipo_cbte = informacion_de_cliente.tipo_cbte;   //OK
+                factura.nro_doc = informacion_de_cliente.dni;           //OK
+                if(informacion_de_cliente.empresa==null){   /**Si el cliente no tiene empresa*/
+                factura.nombre_cliente = informacion_de_cliente.nombre;         //grabar su nombre para la factura
+                }else{
+                    factura.nombre_cliente = informacion_de_cliente.empresa;         //sino grabar nombre de la empresa para la factura, descartar nombre de representante
+                }
+                factura.provincia_cliente = informacion_de_cliente.provincia;   //OK
+                factura.localidad_cliente = informacion_de_cliente.localidad;   //OK
+                factura.domicilio_cliente = informacion_de_cliente.domicilio;   //OK
+                factura.imp_total = montoTotal;                 //OK
+                factura.items = lineas;
+                var array = JSON.stringify(factura);
+                var enlace_factura = 'http://localhost/factura/dinamico-factura.php?&datos_factura=' + encodeURIComponent(array);
+                window.open(enlace_factura);
+            }
         }
     });
-    /**factura electrónica */
-    if ($('input:checkbox[name=factura]:checked').val()) {
-        factura.tipo_cbte = informacion_de_cliente.tipo_cbte;   //OK
-        factura.nro_doc = informacion_de_cliente.dni;           //OK
-        if(informacion_de_cliente.empresa==null){   /**Si el cliente no tiene empresa*/
-        factura.nombre_cliente = informacion_de_cliente.nombre;         //grabar su nombre para la factura
-        }else{
-            factura.nombre_cliente = informacion_de_cliente.empresa;         //sino grabar nombre de la empresa para la factura, descartar nombre de representante
-        }
-        factura.provincia_cliente = informacion_de_cliente.provincia;   //OK
-        factura.localidad_cliente = informacion_de_cliente.localidad;   //OK
-        factura.domicilio_cliente = informacion_de_cliente.domicilio;   //OK
-        factura.imp_total = montoTotal;                 //OK
-        factura.items = lineas;
-        var array = JSON.stringify(factura);
-        var enlace_factura = 'http://localhost/factura/dinamico-factura.php?&datos_factura=' + encodeURIComponent(array);
-        window.open(enlace_factura);
-    }
-    console.log(lineas);
+    //console.log(lineas);
     console.log("la seña es: "+montoPedido);
 
     if(entregado){
@@ -412,9 +420,9 @@ function enviarPedido(pagado, entregado)
     }
     /** Si se cargaron datos del cheque*/
     if(pagoCheque==false){
-        alert('Se paga en efectivo');
+        //alert('Se paga en efectivo');
     }else{
-        alert('Se paga con cheque');
+        //alert('Se paga con cheque');
         console.log( "nro_serie: "+nro_serie+", banco: "+banco+", sucursal: "+sucursal_banco+" fecha_emision: "+fecha_emision+" ,fecha_cobro: "+fecha_cobro);
     }
     /** persistir venta o pedido */
@@ -543,6 +551,7 @@ function generarFactura() {
     });
     $('#form-crear').submit();      //actualiza el estado del pedido (pago completo, o entrega 'pedidos.update'
 }
+/** validar que se ingresen solo numeros en cantidad y en nro_cheque */
 $(document).ready(function () {
     $("#cantidad_number").keydown(function (e) {
         // Allow: backspace, delete, tab, escape, enter and .
@@ -564,6 +573,35 @@ $(document).ready(function () {
                                 }
                             });
 });
+$(document).ready(function () {
+    $("#nro_serie").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: Ctrl+C
+            (e.keyCode == 67 && e.ctrlKey === true) ||
+                // Allow: Ctrl+X
+            (e.keyCode == 88 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+            // let it happen, don't do anything
+            return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+});
+
+$(document).ready(function () {
+    $("#fecha_entrega_date").keydown(function (e) {
+            e.preventDefault();
+    });
+});
+
+
 /** Este eveto se dispara al cambiar el valor del iva en la venta y actualiza el valor del iva
          * en todos los importes incluyendo a los de los items. */  //NO VA EN LA TESIS, SOLO PARA LA GRAFICA
 /*
@@ -636,7 +674,7 @@ function mostrarStockRemanente(articulo_id){        //devuelve los insumos que q
             for(i in respuesta) {
                 var x = document.getElementById("insumos_necesarios");
                 var option = document.createElement("option");
-                option.text = "Insumo "+nro_item+": "+respuesta[i].insumo+" (stock: "+respuesta[i].cantidad_actual+ " "+respuesta[i].unidad+")"
+                option.text = "Insumo "+nro_item+": "+respuesta[i].insumo+" x"+respuesta[i].cantidad_insumo+" (stock: "+respuesta[i].cantidad_actual+ " "+respuesta[i].unidad+")"
                 x.add(option);
                 nro_item++;
             }
@@ -744,7 +782,7 @@ function email_notificacion_stockBajo(){
 
 /** Esta fucnion genera un comprobante 'nota de pedido' para el cliente. Crea un objeto Comprobante y lo persiste*/
 function emitirTicket(informacion_de_cliente){
-    var comprobante;
+    var comprobante = '55';
     var ticket = {                          /*El ticket es una 'nota de pedido'*/
         nro_comprobante: comprobante,
         iva: $('#iva').val(),
@@ -768,7 +806,6 @@ function emitirTicket(informacion_de_cliente){
         console.log("Se agrego un item para el ticket: "+linea.articulo_nombre);
         numLi++;
     });
-
     $.ajax({
         url: "/admin/comprobantes",
         data: {
@@ -781,25 +818,28 @@ function emitirTicket(informacion_de_cliente){
             var respuesta = JSON.parse(data);
             console.log(respuesta);
             comprobante = respuesta.comprobante_id;             //Funciona
+            ticket.nro_comprobante = comprobante;
+
+            if(informacion_de_cliente.empresa==""){   /**Si el cliente no tiene empresa*/
+            ticket.nombre_cliente = informacion_de_cliente.nombre;         //grabar su nombre para la factura
+            }else{
+                ticket.nombre_cliente = informacion_de_cliente.empresa;         //sino grabar nombre de la empresa para la factura, descartar nombre de representante
+            }
+
+            ticket.provincia_cliente = informacion_de_cliente.provincia;   //OK
+            ticket.localidad_cliente = informacion_de_cliente.localidad;   //OK
+            ticket.domicilio_cliente = informacion_de_cliente.domicilio;   //OK
+            ticket.nro_doc = informacion_de_cliente.dni;                   //OK
+            ticket.imp_total = montoTotal_Absoludo;
+            ticket.items = lineas;
+            var array = JSON.stringify(ticket);
+            console.log(ticket);
+            var enlace_ticket = 'http://localhost/factura/EditableInvoice/index.php?&datos_factura=' + encodeURIComponent(array);
+            window.open(enlace_ticket);
         }
     });
 
-    if(informacion_de_cliente.empresa==""){   /**Si el cliente no tiene empresa*/
-        ticket.nombre_cliente = informacion_de_cliente.nombre;         //grabar su nombre para la factura
-    }else{
-        ticket.nombre_cliente = informacion_de_cliente.empresa;         //sino grabar nombre de la empresa para la factura, descartar nombre de representante
-    }
-    ticket.nro_comprobante = comprobante;
-    ticket.provincia_cliente = informacion_de_cliente.provincia;   //OK
-    ticket.localidad_cliente = informacion_de_cliente.localidad;   //OK
-    ticket.domicilio_cliente = informacion_de_cliente.domicilio;   //OK
-    ticket.nro_doc = informacion_de_cliente.dni;                   //OK
-    ticket.imp_total = montoTotal_Absoludo;
-    ticket.items = lineas;
-    var array = JSON.stringify(ticket);
-    console.log(ticket);
-    var enlace_ticket = 'http://localhost/factura/EditableInvoice/index.php?&datos_factura=' + encodeURIComponent(array);
-    window.open(enlace_ticket);
+
 }
 
 /** Enviar email con datos de pedido al cliente despues de efectuado el pedido (solo si no se entrega el mismo en el acto) **/

@@ -12,7 +12,7 @@
                 </div>                                     
             </div>   
                <div class="modal-footer">                              
-                   <button type="button" data-dismiss="modal"  class="btn btn-white">Cerrar</button>                        
+                   <button type="button" data-dismiss="modal"  class="btn btn-white" href="{{ route('admin.pedidos.index')}}">Cerrar</button>
             </div>  
         </div>
     </div>

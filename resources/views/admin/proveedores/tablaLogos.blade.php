@@ -20,6 +20,7 @@
                                     @if ($proveedor->imagen === "sin imagen")
                                        <div class="thumbnail"><img class="img-rounded" style="width:300px;height:200px" src="{{ asset('imagenes/proveedores/sin-logo.jpg') }}"/>
                                              <div class="caption"><a data-toggle="tooltip" data-placement="left" title="Visualizar registro. Al visualizar este registro podrá acceder acciones como edición y eliminación del mismo" href="{{ route('admin.proveedores.show', $proveedor->id) }}"> <h3>{{ $proveedor->nombre }}</h3></a>
+
                                                 <p><h4>Origen: {{ $proveedor->localidad->nombre }}</h4></p>
                                                 <p>Rubro: {{ $proveedor->rubro->nombre }}</p>
                                             </div>

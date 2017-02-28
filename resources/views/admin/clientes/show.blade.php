@@ -218,7 +218,12 @@ Detalle del cliente
                                                                 <td><h4 class="text-google-plus">${{$cliente->importeVentasRealizadas_sinRestarIva()}}</h4>  <h4 class="text-green">${{$cliente->importeVentasRealizadas()}} pesos netos ingresados</h4></td>
                                                             </tr>
                                                                 <td><h4 class="box-heading">Fecha de la última compra:</h4></td>
-                                                                <td><h4>{{$cliente->ventas->last()->updated_at->diffForHumans() }}</h4></td>
+                                                                @if($cliente->ventas->count() != 0)
+                                                                    <td><h4>{{$cliente->ventas->last()->updated_at->diffForHumans() }}</h4></td>
+                                                                @else
+                                                                    <td><h4>Aún no tiene compras efectuadas</h4></td>
+                                                                @endif
+
                                                                 <td>
 
                                                                 </td>

@@ -137,12 +137,13 @@
                     </div>
 
                     <br>
+                {!! Form::submit('-', ['class' => 'hide']) !!}
+                <button type="button" data-dismiss="modal" class="btn btn-white btn-block" onclick="validarFormCheque()">Registrar Cheque</button>
+                {!! Form::close() !!}
             </div>
         </div>
     </div>
-                {!! Form::submit('Crear registro', ['class' => 'btn btn-green btn-block']) !!}
-                <button type="button" data-dismiss="modal" class="btn btn-white btn-block" onclick="validarFormCheque()">Cerrar</button>
-                {!! Form::close() !!}
+
 </div>
 
 

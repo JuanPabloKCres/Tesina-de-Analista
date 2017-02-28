@@ -48,8 +48,8 @@ class ArticulosController extends Controller
                         $aceptarPedido = false;
                         $faltante = $cantidadNecesaria - $stockDisponible;
                         //no se tiene suficiente insumo para aceptar el pedido
-                        $respuesta = array("mensaje"=>'No hay stock suficiente para cubrir el pedido (faltan ', "faltante"=>$faltante, "permitir"=>false, "insumo"=>$insumo->nombre);
-                        //return response()->json(json_encode($respuesta, true));
+                        $respuesta = array("mensaje"=>'No hay stock suficiente para cubrir el pedido (faltan ', "faltante"=>$faltante, "permitir"=>false, "insumo"=>$insumo->nombre, "unidad"=>$insumo->unidad_medida->unidad);
+                        return response()->json(json_encode($respuesta, true));
                     }
                     else{
                         //se deberia aceptar el articulo
@@ -70,7 +70,7 @@ class ArticulosController extends Controller
                     $insumo = Insumo::find($ia->insumo_id);
                     $stockDisponible = $insumo->stock;
                     $unidad = Unidad_Medida::find($insumo->unidad_medida_id);
-                    $respuesta[] = array("insumo"=>$insumo->nombre, "minimo"=>$insumo->stockMinimo, "cantidad_actual"=>$stockDisponible, "unidad"=>$unidad->unidad);
+                    $respuesta[] = array("insumo"=>$insumo->nombre, "minimo"=>$insumo->stockMinimo, "cantidad_actual"=>$stockDisponible, "unidad"=>$unidad->unidad, "cantidad_insumo"=>$ia->cantidad);
                 }
                 return response()->json(json_encode($respuesta, true));
             }

@@ -297,7 +297,26 @@ function agregarContenido(insumo_select, nombreInsumo, cantidad_number, unidad_t
     //parseInt(costosTotales, 10);
     //costosTotales = costosTotales.replace(/^0+/, '');
     $('#costoArticulo_text').val(costosTotales);
+}
 
+function borrarFila(d)
+{
+    var numFilaBorrar = 0;
+    var Filas = 0;
+    $('#tblListaProductos tbody tr').each(function () {
+        var dataPla = $('#tblListaInsumos').DataTable().row(this).data();
+        if (dataPla[0] === d) {
+            numFilaBorrar = Filas;
+            montoPedido = montoPedido - parseFloat(dataPla[5]);
+            montoTotal = montoTotal - parseFloat(dataPla[5]);
+            //montoTotal_Absoludo = montoTotal_Absoludo - parseFloat(dataPla[5]);
+        }
+        Filas++;
+    });
+    $('#tblListaProductos').dataTable().fnDeleteRow(numFilaBorrar);
+    $('#mp').html(montoPedido);
+    $('#mt').html(montoTotal);
+    cantFilas--;
 }
 
 /** confirmar: Este método verifica que la tabla contenga al menos un renglón, de ser así

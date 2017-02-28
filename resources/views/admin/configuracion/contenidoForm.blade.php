@@ -11,7 +11,19 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
+<div class="form-group"><label class="col-sm-3 control-label">Responsabilidad ante el IVA</label>
+    <div class="col-sm-9 controls">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="input-icon right">
+                    <i class="fa fa-pencil"></i>
+                    {!! Form::select('responiva_id', $responIva, null, ['class' => 'form-control', 'placeholder'=>'campo requerido', 'data-live-search' => 'true', 'required', 'id' => 'responiva_id']) !!}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="form-group"><label class="col-sm-3 control-label">Cuit de la empresa</label>
     <div class="col-sm-9 controls">
         <div class="row">

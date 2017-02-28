@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Cheque;
+use App\Auditoria;
 use App\InsumoArticulo;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -13,6 +14,7 @@ use App\Movimiento;
 use App\Articulo;
 use App\ArticuloVenta;
 use App\Insumo;
+use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
 use App\Http\Requests\VentaRequestCreate;
 use App\Http\Requests\VentaRequestEdit;
@@ -29,7 +31,6 @@ class PedidosController extends Controller {
         $pedidos = Venta::searchEntregado(0)    /**solo mandar a tablaPedidos los que no se entregaron */
                 ->orderBy('id', 'desc')
                 ->paginate(Venta::searchEntregado(0)->count());
-        $pedidosQueSeRetiranHoy = Venta::searchSeDebenRetitarHoy();
         return view('admin.pedidos.tablaPedidos')->with('pedidos', $pedidos);
     }
 
@@ -67,7 +68,7 @@ class PedidosController extends Controller {
                 if ($request->entregado == "true") {    #if funciona OK
                     $venta->entregado = 1;
                 }
-                ///////////////////////////// CHEQUE /////////////////////////////////
+                ////////////////////////////////// CHEQUE ////////////////////////////////////
                 if ($request->nro_serie) {
                     $forma_pago = "cheque totalidad";
                     $cheque = new Cheque();
@@ -80,11 +81,23 @@ class PedidosController extends Controller {
                     $cheque->fecha_cobro = $request->fecha_cobro;         #OK
                     $cheque->save();                                      #OK
                     $venta->cheque_id = $cheque->id;    //se asocia la venta con el cheque nuevo cargado.
+                    /** Auditoria almacena cheque */
+                    $auditoria = new Auditoria();
+                    $auditoria->tabla = "cheques";
+                    $auditoria->elemento_id = $cheque->id;
+                    $autor = new Auth();
+                    $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+                    $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
+                    $auditoria->accion = "alta";
+                    $auditoria->dato_nuevo = "nro_serie: ".$cheque->nro_serie." || monto: ".$cheque->monto." || cliente_id: ".$cheque->cliente_id." || fecha_emision: ".$cheque->fecha_emision." || fecha_cobro: ".$cheque->fecha_cobro." || banco_id: ".$cheque->banco_id." || sucursal: ".$cheque->sucursal;
+                    $auditoria->dato_anterior = null;
+                    $auditoria->save();
+                ////////////////////////////////////////////////////////////////////////////
                 }else{
                     $forma_pago = "efectivo";
                 }
                 $venta->forma_pago = $forma_pago;
-                //////////////////////////////////////////////////////////////////////
+
                 if (($request->pagado == "true") && ($request->entregado == "true")) {
                     $venta->userVenta_id = $request->usuarioPedido;
                     $venta->fecha_venta = $fecha->format('d-m-Y');
@@ -94,6 +107,17 @@ class PedidosController extends Controller {
                     $conceptoMovimiento = "Seña de un pedido por un monto de $" . $venta->senado;
                 }
                 $venta->save();     //no esta guardando cuando es venta!!!!!!!!!!!!!!
+                /** Auditoria almacena venta */
+                $auditoria = new Auditoria();
+                $auditoria->tabla = "ventas";
+                $auditoria->elemento_id = $venta->id;
+                $autor = new Auth();
+                $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
+                $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
+                $auditoria->accion = "alta";
+                $auditoria->dato_nuevo = "fecha_pedido: ".$venta->fecha_pedido." || hora_pedido: ".$venta->hora_pedido." || fecha entrega estimada: ".$venta->fecha_entrega_estimada." || señado: ".$venta->senado." || usuario que tomo pedido: ".$venta->userPedido_id." || cliente_id: ".$venta->cliente_id;
+                $auditoria->dato_anterior = null;
+                $auditoria->save();
 
                 /** Se recorre el array creando a su paso objetos "ArticuloVenta" a partir de los json que se hallan en
                  * el array y se persisten. Luego se instancia el articulo en cuestion y se descuenta el stock.

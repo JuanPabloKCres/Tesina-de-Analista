@@ -23,7 +23,7 @@
 <li role="presentation" class="dropdown">
     <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
         <i class="fa fa-envelope-o"></i>
-        <span class="badge bg-green">
+        <span class="badge bg-red">
             <?php $i=0; ?>
             @foreach($pedidos as $pedido)
                 @if($pedido->fecha_entrega_estimada == $fecha_hoy)
@@ -34,23 +34,28 @@
         </span>
     </a>
     <ul id="menu1" class="dropdown-menu list-unstyled msg_list animated fadeInDown" role="menu">
+        <span>
+                            <span><h4 class="text-facebook">Hay clientes que podrian retirar sus pedidos</h4></span>
+                        </span>
         @foreach($pedidos as $pedido)
           @if($pedido->fecha_entrega_estimada == $fecha_hoy)
             @if($pedido->entregado == 0)
                 <li>
                     <a>
-                        <span>
-                            <span><h4 class="text-facebook">Hay clientes que podrian retirar sus pedidos</h4></span>
-                        </span>
+
+                        <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá señar la totalidad del pedido o realizar la entrega del pedido" href="{{ route('admin.pedidos.edit', $pedido->id) }}" class="btn btn-info">
                             <span class="message">
                                   <h5 class="text-filter-box">Hoy se debe entregar el pedido de {{$pedido->cliente->nombre}} {{$pedido->cliente->apellido}}, n° de pedido {{$pedido->id}} del {{$pedido->fecha_pedido}}</h5>
                             </span>
+                        </a>
+
                     </a>
                 </li>
             @endif
           @endif
         @endforeach
-        <li>
+        <!--
+            <li>
             <div class="text-center">
                 <a href="inbox.html">
                     <strong>Ver todas</strong>
@@ -58,5 +63,6 @@
                 </a>
             </div>
         </li>
+        -->
     </ul>
 </li>

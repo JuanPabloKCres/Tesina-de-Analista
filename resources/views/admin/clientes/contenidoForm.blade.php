@@ -90,7 +90,7 @@
     <div class="col-sm-9 controls">
         <div class="row">
             <div class="col-xs-12">
-                {!! Form::select('provincia_id', ['placeholder' => 'campo requerido..'], null, ['id'=>'provincia_select','class' => 'form-control selectBoot']) !!}
+                {!! Form::select('provincia_id', ['placeholder' => 'campo requerido..'], null, ['id'=>'provincia_select','class' => 'form-control']) !!}
             </div>
         </div>
     </div>
@@ -99,7 +99,7 @@
     <div class="col-sm-9 controls">
         <div class="row">
             <div class="col-xs-12">
-                {!! Form::select('localidad_id', ['placeholder' => 'campo requerido..'], null, ['id'=>'localidad_select','class' => 'form-control selectBoot','required']) !!}
+                {!! Form::select('localidad_id', ['placeholder' => 'campo requerido..'], null, ['id'=>'localidad_select','class' => 'form-control','required']) !!}
             </div>
         </div>
     </div>
@@ -127,7 +127,7 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-pencil"></i>
-                    {!! Form::text('telefono', null, ['class' => 'form-control', 'placeholder' => 'campo opcional', 'maxlength' => '50']) !!}
+                    {!! Form::text('telefono', null, ['class' => 'form-control', 'placeholder' => 'campo opcional', 'id'=>'tel', 'maxlength' => '50']) !!}
                 </div>
             </div>
         </div>

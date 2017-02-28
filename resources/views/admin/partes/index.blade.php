@@ -6,9 +6,9 @@
 	header("Access-Control-Allow-Origin: *");
 	?>
 	<title>@yield('title','Default') | GN Soluciónes</title>
-	@include('admin.partes.estilos')  
+	@include('admin.partes.estilos')  {{ csrf_field() }}
 </head>
-<body>
+<body>{{ csrf_field() }}
 	<a id="totop" href="#"><i class="fa fa-angle-up"></i></a>
 	@include('admin.partes.navTop') 	
 	<div id="wrapper">
