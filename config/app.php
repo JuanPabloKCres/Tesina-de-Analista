@@ -161,9 +161,7 @@ return [
          */
         Collective\Html\HtmlServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
-
         App\Providers\ComposerServiceProvider::class,
-
         Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
 
     ],

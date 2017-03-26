@@ -22,6 +22,15 @@ class ArticulosController extends Controller
     public function __construct()
     {
         Carbon::setlocale('es'); // Instancio en Esp el manejador de fechas de Laravel
+        $rol_id = Auth::user()->rol->id;
+        if(Auth::user()->rol->searchModulos('Articulos')->where('id', $rol_id)->count() != 0){
+            #PASA#
+        }
+        else{
+            dd("Usted NO tiene permisos para acceder a este subsistema");
+            return view('admin.partes.noAutorizado');
+
+        }
     }
 
     /*

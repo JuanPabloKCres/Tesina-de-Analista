@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Caja;
 use App\Movimiento;
+use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
 use App\Http\Requests\CajasRequestCreate;
 use App\Http\Requests\CajasRequestEdit;
@@ -20,6 +21,15 @@ class CajasController extends Controller
     public function __construct()
     {
         Carbon::setlocale('es'); // Instancio en Español el manejador de fechas de Laravel
+        $rol_id = Auth::user()->rol->id;
+        if(Auth::user()->rol->searchModulos('Cajas')->where('id', $rol_id)->count() != 0 || Auth::user()->rol->searchModulos('Ventas')->where('id', $rol_id)->count() != 0){
+            #PASA#
+        }
+        else{
+            dd("Usted NO tiene permisos para acceder a este subsistema");
+            return view('admin.partes.noAutorizado');
+
+        }
     }
     /**
      * Display a listing of the resource.

@@ -13,9 +13,15 @@ class Rol extends Model
         return $this->hasMany('App\User');
     }
 
-
-    public function scopeSearchModulo($query, $modulo)
+/*
+    public function scopeSearchModulos($query, $modulo)
     {
-        return $query->where('modulos', 'LIKE', $modulo);
+        return $query
+            ->where('modulos', 'LIKE', $modulo);
+    }
+*/
+    public function scopeSearchModulos($query, $modulo)
+    {
+        return $query->where('modulos', 'LIKE', '%'.$modulo.'%')->get();
     }
 }

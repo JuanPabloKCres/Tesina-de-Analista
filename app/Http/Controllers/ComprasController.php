@@ -25,6 +25,15 @@ class ComprasController extends Controller {
     public function __construct()
     {
         Carbon::setlocale('es'); // Instancio en Esp el manejador de fechas de Laravel
+        $rol_id = Auth::user()->rol->id;
+        if(Auth::user()->rol->searchModulos('Insumos_Compras')->where('id', $rol_id)->count() != 0){
+            #PASA#
+        }
+        else{
+            dd("Usted NO tiene permisos para acceder a este subsistema");
+            return view('admin.partes.noAutorizado');
+
+        }
     }
 
     public function index() {
@@ -70,7 +79,7 @@ class ComprasController extends Controller {
                     $compra->recibido = 1;
                 }
                 if (($request->pagado == "true") && ($request->recibido == "true")) {
-                    $compra->userCompra_id = $request->usuarioCompra;
+                    $compra->userCompra_id = Auth::user()->id;
                     $compra->fecha_compra = $fecha->format('d-m-Y');
                     $compra->hora_compra = $fecha->format('H:i');
                     $conceptoMovimiento = "Compra de insumos por un monto de $" . $compra->importe;

@@ -52,9 +52,16 @@ class MovimientosController extends Controller
     public function store(Request $request)
     {
         $movimiento = new Movimiento($request->all());
-        $movimiento->save();
-        Flash::success('El movimiento ha sido registrado de forma existosa.');
-        return redirect()->route('admin.cajas.index');
+        $caja = Caja::find($request->caja_id);
+        if(($caja->totalMovimientos() < $movimiento->monto) && ($movimiento->tipo == 'salida')){
+            Flash::success('No se puede sacar un monto mayor al existente en caja.');
+            return redirect()->route('admin.cajas.index');
+        }
+        else{
+            $movimiento->save();
+            Flash::success('El movimiento ha sido registrado de forma existosa.');
+            return redirect()->route('admin.cajas.index');
+        }
     }
 
     /**

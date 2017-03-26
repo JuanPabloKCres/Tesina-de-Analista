@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\TipoPublicado;
 use App\ProductoPublicado;
 use Laracasts\Flash\Flash;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TipoParaFrontRequestCreate;
 use App\Http\Requests\TipoParaFrontRequestEdit;
 use Carbon\Carbon;
@@ -20,6 +21,16 @@ class TiposParaFrontController extends Controller
     public function __construct()
     {
         Carbon::setlocale('es'); // Instancio en Español el manejador de fechas de Laravel
+        $rol_id = Auth::user()->rol->id;
+        if(Auth::user()->rol->searchModulos('AdminWeb')->where('id', $rol_id)->count() != 0){
+            #PASA#
+        }
+        else{
+            dd("Usted NO tiene permisos para acceder a este subsistema");
+            return view('admin.partes.noAutorizado');
+
+        }
+
        // $this->beforeFilter('@find',['only'=>['edit', 'show', 'update','destroy']]); // Acá hacemos llamado a la función find para optimizar código y no repetir instrucciones en todos esos métodos.
     }
 

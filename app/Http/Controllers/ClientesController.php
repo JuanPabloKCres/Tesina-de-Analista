@@ -17,9 +17,21 @@ use App\Http\Requests\ClienteRequestEdit;
 use App\Auditoria;
 use Illuminate\Support\Facades\Auth;
 
+use Validator;
+
 class ClientesController extends Controller {
     public function __construct() {
-        Carbon::setlocale('es');         // Instancio en Espa�ol el manejador de fechas de Laravel
+        Carbon::setlocale('es');
+        $rol_id = Auth::user()->rol->id;
+
+        if(Auth::user()->rol->searchModulos('Clientes')->where('id', $rol_id)->count() != 0){
+            #PASA#
+        }
+        else{
+            dd("Usted NO tiene permisos para acceder a este subsistema");
+            return view('admin.partes.noAutorizado');
+        }
+
     }
 
     public function index(Request $request) {

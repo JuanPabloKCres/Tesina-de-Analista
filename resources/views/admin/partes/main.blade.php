@@ -2,7 +2,7 @@
 @extends('admin.plantilla.referencias')
 <html>
 <head>
-	<title>@yield('title','Default') | La Auténtica</title>    
+	<title>@yield('title','Default') | </title>
 </head>
 <body>
 	@include('admin.plantilla.parciales.navTop')

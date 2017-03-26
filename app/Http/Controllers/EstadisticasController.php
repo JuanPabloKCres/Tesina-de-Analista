@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Venta;
 use App\ClienteRanking;
 use App\ArticuloRanking;
+use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
 use Carbon\Carbon;
 use Illuminate\Routing\Route;
@@ -16,6 +17,18 @@ use Illuminate\Support\Collection as Collection;
 
 class EstadisticasController extends Controller
 {
+    public function __construct() {
+        Carbon::setlocale('es');
+        $rol_id = Auth::user()->rol->id;
+        if(Auth::user()->rol->searchModulos('Ventas')->where('id', $rol_id)->count() != 0){
+            #PASA#
+        }
+        else{
+            dd("Usted NO tiene permisos para acceder a este subsistema");
+            return view('admin.partes.noAutorizado');
+        }
+    }
+
      public function index(Request $request)
      {
        $pedidos = Venta::whereNotNull('userVenta_id')

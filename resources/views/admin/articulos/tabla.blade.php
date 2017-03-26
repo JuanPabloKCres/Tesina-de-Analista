@@ -16,7 +16,7 @@
         </div>
         <div class="page-header pull-right">
             <div class="page-toolbar">
-                <a data-toggle="tooltip" data-placement="bottom" href="{{ route('admin.articulos.create') }}" title="Registrar un nuevo articulo para su venta"  class="btn btn-blue"> <span class="fa fa-plus-circle" aria-hidden="true"></span> Generar presupuesto</a>
+                <a data-toggle="tooltip" data-placement="bottom" href="{{ route('admin.articulos.create') }}" title="Registrar un nuevo articulo para su venta"  class="btn btn-blue"> <span class="fa fa-plus-circle" aria-hidden="true"></span> Crear Producto</a>
             </div>
         </div>
         <div class="clearfix"></div>

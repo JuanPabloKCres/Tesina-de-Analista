@@ -53,4 +53,16 @@ class User extends Authenticatable
             return $query->where('rol_id', 'LIKE', $rol_id);
         }
     }
+
+    /*  Quitado el 15/03
+    public function scopeSearchModulos($query, $modulo)
+    {
+        if ($modulo == "-1")
+        {
+            return $query;
+        } else {
+            return $query->where('modulos', 'LIKE', $modulo);
+        }
+    }
+    */
 }

@@ -72,7 +72,7 @@
                                                 @if($insumo->material)
                                                     <td class="text-center">{{ $insumo->unidad_medida->unidad }}</td>
                                                 @else
-                                                    <td class="text-center">{{ "Unidades" }}</td>
+                                                    <td class="text-center">{{ $insumo->unidad_medida->unidad }}</td>
                                                 @endif
 
 

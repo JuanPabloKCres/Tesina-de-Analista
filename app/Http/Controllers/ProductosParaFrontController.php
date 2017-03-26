@@ -12,6 +12,7 @@ use App\Http\Requests\ProductoRequestCreate;
 use App\Http\Requests\ProductoRequestEdit;
 use Carbon\Carbon;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Auth;
 
 
 class ProductosParaFrontController extends Controller
@@ -19,6 +20,15 @@ class ProductosParaFrontController extends Controller
     public function __construct()
     {
         Carbon::setlocale('es'); // Instancio en Español el manejador de fechas de Laravel
+        $rol_id = Auth::user()->rol->id;
+        if(Auth::user()->rol->searchModulos('AdminWeb')->where('id', $rol_id)->count() != 0){
+            #PASA#
+        }
+        else{
+            dd("Usted NO tiene permisos para acceder a este subsistema");
+            return view('admin.partes.noAutorizado');
+
+        }
         //$this->beforeFilter('@find',['only'=>['edit', 'show', 'update','destroy']]); // Acá hacemos llamado a la función find para optimizar código y no repetir instrucciones en todos esos métodos.
     }
 

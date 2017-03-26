@@ -11,7 +11,9 @@ Route::get('/', function () {
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
    Route::resource('usuarios','UsersController');
    Route::resource('roles','RolesController');
-   Route::resource('clientes','ClientesController');
+
+   Route::resource('clientes','ClientesController', ['middleware'=>'isVendedor']);
+   //Route::get('clientes',['middleware'=>'isVendedor', 'uses'=>'ClientesController'] );
 
    Route::resource('paises','PaisesController');
    Route::resource('provincias','ProvinciasController');
@@ -44,7 +46,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
    Route::resource('compras','ComprasController');             //Compras de Insumos
    Route::resource('unidades_medidas','UnidadesController');
 
+   /** Auditorias y Backups */
    Route::resource('auditorias','AuditoriasController');       //solo redirecciona a la view de la tabla de auditorias
+   Route::resource('backup', 'BackupsController');
 
    /** Para administrar el Front: **/
    Route::resource('tipos','TiposParaFrontController');

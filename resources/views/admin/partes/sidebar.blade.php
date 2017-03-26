@@ -6,7 +6,7 @@
                 <ul id="side-menu" class="nav">
                     <div class="clearfix"></div>
 
-                   @if((Auth::user()->rol->nombre == 'Administrador'))
+
                         <li id="li1" ><a data-toggle="tooltip" data-placement="right" title="Visualizar los Registros de Usuario" href="{{ route('admin.usuarios.index') }}">
                             <i class="fa fa-users fa-fw">
                                 <div class="icon-bg bg-orange"></div>
@@ -20,7 +20,7 @@
                                 <span class="menu-title">Roles</span></a>
                         </li>
 
-                    @if((Auth::user()->rol->nombre == 'Repositor') || (Auth::user()->rol->nombre == 'Administrador'))
+
                         <!--
                         <li id="li3">
                             <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de rubros de proveedores" >
@@ -31,8 +31,8 @@
                             </a>
                         </li>
                         -->
-                    @endif
-                    @if((Auth::user()->rol->nombre == 'Administrador') || (Auth::user()->rol->nombre == 'Administrador RRHH'))
+
+
                     <li id="li4">
                         <a data-toggle="tooltip" data-placement="right" title="Editar parámetros de la gráfica" href="{{ route('admin.materiales.index') }}">
                             <i class="fa fa-cogs">
@@ -41,7 +41,9 @@
                             <span class="menu-title">Parámetros generales</span>
                         </a>
                     </li>
-                    @endif
+
+
+
                     <li id="li99">
                         <a data-toggle="tooltip" data-placement="right" title="Localidades, Provincias, Paises" href="{{ route('admin.paises.index') }}">
                             <i class="fa fa-map-marker">
@@ -50,7 +52,9 @@
                             <span class="menu-title">Localidades</span>
                         </a>
                     </li>
-                    @if((Auth::user()->rol->nombre == 'Repositor') || (Auth::user()->rol->nombre == 'Administrador'))
+
+
+
                     <li id="li5">
                         <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de proveedores" href="{{ route('admin.proveedores.index') }}">
                             <i class="fa fa-truck">
@@ -59,7 +63,8 @@
                             <span class="menu-title">Proveedores</span>
                         </a>
                     </li>
-                    @endif
+
+
                     <li id="li6">
                         <a data-toggle="tooltip" data-placement="right" title="Ver Articulos listos para la venta, o diseñar nuevos" href="{{ route('admin.articulos.index') }}">
                             <i class="fa fa-tags">
@@ -68,6 +73,7 @@
                             <span class="menu-title">Articulos Diseñados</span>
                         </a>
                     </li>
+
 
 
                     <li id="li14">
@@ -95,6 +101,8 @@
                         </div>
                     </li>
 
+
+
                     <li id="li7">
                         <a data-toggle="tooltip" data-placement="right" title="Ir a los registros de nuestros clientes" href="{{ route('admin.clientes.index') }}">
                             <i class="fa fa-child">
@@ -103,6 +111,8 @@
                             <span class="menu-title">Clientes</span>
                         </a>
                     </li>
+
+
                     <li id="li8">
                         <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de pedidos" href="{{ route('admin.pedidos.index') }}">
                             <i class="fa fa-pencil-square-o">
@@ -119,7 +129,10 @@
                             <span class="menu-title">Información de Ventas</span>
                         </a>
                     </li>
-                    <li id="li10">
+
+
+
+                        <li id="li10">
                         <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de caja" href="{{ route('admin.cajas.registrosCajas') }}">
                             <i class="fa fa-money">
                                 <div class="icon-bg bg-orange"></div>
@@ -135,14 +148,8 @@
                             <span class="menu-title">Caja</span>
                         </a>
                     </li>
-                    <li id="li12">
-                        <a data-toggle="tooltip" data-placement="right" title="Controlar uso del sistema y backup de la información almacenada" href="{{ route('admin.auditorias.index') }}">
-                        <i class="fa fa-eye">
-                            <div class="icon-bg bg-orange"></div>
-                        </i>
-                        <span class="menu-title">Auditoria</span>
-                        </a>
-                    </li>
+
+
                     <li id="li13">
                         <a data-toggle="collapse" href="#dropdown-administrarFront" data-placement="right" title="Gestión de contenido de la web de GN Soluciones">
                             <i class="fa fa-mixcloud">
@@ -168,7 +175,34 @@
                             </div>
                         </div>
                     </li>
-                   @endif
+
+                    <li id="li12">
+                        <a data-toggle="tooltip" data-placement="right" title="Controlar uso del sistema y accciones realizadas" href="{{ route('admin.auditorias.index') }}">
+                            <i class="fa fa-eye">
+                                <div class="icon-bg bg-orange"></div>
+                            </i>
+                            <span class="menu-title">Auditoria</span>
+                        </a>
+                    </li>
+
+                    <li id="li14">
+                        <a data-toggle="tooltip" data-placement="right" title="Controlar uso del sistema y backup de la información almacenada" onclick="backup()"  href="{{--  route('admin.backup.index') --}}">
+                            <i class="fa fa-database">
+                                <div class="icon-bg bg-orange"></div>
+                            </i>
+                            <span class="menu-title">Respaldo de datos</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
+
+
+
+
+<script type="text/javascript">
+        function backup(){
+            var enlace_factura = 'http://localhost/backupGN/hacer_backup.php';
+            window.open(enlace_factura);
+        }
+</script>
