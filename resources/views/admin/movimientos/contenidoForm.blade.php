@@ -75,7 +75,7 @@
             <div class="col-xs-12">
                 <div class="input-icon right">
                     <i class="fa fa-usd"></i>
-                    {!! Form::number('monto', null, ['class' => 'form-control', 'placeholder' => 'campo requerido', 'min' => '0.01','required']) !!}                                
+                    {!! Form::number('monto', null, ['class' => 'form-control', 'placeholder' => 'campo requerido'/*, 'min' => '0.01'*/,'required']) !!}
                 </div>
             </div>
         </div>

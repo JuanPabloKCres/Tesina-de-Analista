@@ -33,7 +33,7 @@ class EstadisticasController extends Controller
      {
        $pedidos = Venta::whereNotNull('userVenta_id')
        ->orderBy('id','ASC')
-       ->paginate();
+       ->paginate(Venta::searchEntregado(1)->count());  /** mandar a la vista estadisticas solo los pedidos entregados (ventas) */
        $fecha1= "";
        $fecha2= "";
        $articulosVendidos = 0;
@@ -50,12 +50,10 @@ class EstadisticasController extends Controller
           $fecha1= $fechahoy->format('d-m-Y');
           $fecha2= $fechahoy->format('d-m-Y');
        }
-       //Empezamos a juntar los datos necesarios para pasar a la vista.
+       /** Empezamos a juntar los datos necesarios para pasar a la vista. */
        foreach ($pedidos as $pedido) {
-           //la fecha del pedido es tomada y transformada en una variable de date
-           $fechaPedido = date_create($pedido->fecha_venta);
-           //se compara que la fecha del pedido se encuentre entre las fechas que determinan el rango
-           if ( ( $fechaPedido >= date_create($fecha1))&&($fechaPedido <= date_create($fecha2))){
+           $fechaPedido = date_create($pedido->fecha_venta); //la fecha del pedido es tomada y transformada en una variable de date
+           if ( ( $fechaPedido >= date_create($fecha1))&&($fechaPedido <= date_create($fecha2))){ //se compara que la fecha del pedido se encuentre entre las fechas que determinan el rango
              //guardamos la pedido en un listado para pasar a la vista
               array_push($pedidos2, $pedido);
               //las dos posteriores variables son contadores que se irán incrementando a medida que transcurra el foreach
@@ -64,7 +62,7 @@ class EstadisticasController extends Controller
               //comenzamos el tratamiento para el ranking de clientes. Si existe el cliente en la lista solo actualizamos los datos.
               // Sino creamos una instancia de clienteRanking y lo asociamos al listado.
               if(array_key_exists($pedido->cliente->id, $rankingClientes)){
-                $clienteRanking = new ClienteRanking ();
+                $clienteRanking = new ClienteRanking();
                 $clienteRanking = $rankingClientes[$pedido->cliente->id];
                 $clienteRanking->cantCompras =   $clienteRanking->cantCompras + 1;
                 $clienteRanking->valorCompras = $clienteRanking->valorCompras + $pedido->importe();
@@ -73,7 +71,7 @@ class EstadisticasController extends Controller
                 $clienteRanking = new ClienteRanking();
                 $clienteRanking->id = $pedido->cliente->id;
                 $clienteRanking->nombreCompleto = $pedido->cliente->apellido." ".$pedido->cliente->nombre;
-                $clienteRanking->empresa = $pedido->cliente->empresa;
+                //$clienteRanking->empresa = $pedido->cliente->empresa;
                 $clienteRanking->cantCompras = 1;
                 $clienteRanking->valorCompras = $pedido->importe();
                 $rankingClientes[$pedido->cliente->id] = $clienteRanking;

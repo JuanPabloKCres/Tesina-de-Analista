@@ -8,7 +8,7 @@ class Caja extends Model
 {
 	protected $table =  "cajas";
 
-    protected $fillable = ['fecha_apertura', 'hora_apertura', 'saldo_inicial', 'saldo', 'saldo_cierre', 'fecha_cierre', 'hora_cierre', 'cerrado', 'userApertura_id', 'userCierre_id'];
+        protected $fillable = ['fecha_apertura', 'hora_apertura', 'saldo_inicial', 'saldo', 'saldo_cierre', 'fecha_cierre', 'hora_cierre', 'cerrado', 'userApertura_id', 'userCierre_id'];
     
     public function usuarioApertura()   
     {

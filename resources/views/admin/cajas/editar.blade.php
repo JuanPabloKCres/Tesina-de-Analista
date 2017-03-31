@@ -20,7 +20,7 @@
                                         <div class="col-xs-12">
                                             <div class="input-icon right">
                                                 <i class="fa fa-calendar"></i>                                               
-                                                {!! Form::text('fecha_cierre', \Carbon\Carbon::now('America/Buenos_Aires')->format('d-m-Y'), ['class' => 'form-control', 'readonly' => 'readonly']) !!}                               
+                                                {!! Form::text('fecha_cierre', \Carbon\Carbon::now('America/Buenos_Aires')->format('d-m-Y'), ['class' => 'form-control', 'readonly' => 'readonly','id'=>'fecha_cierre']) !!}
                                             </div>
                                         </div>
                                     </div>
@@ -32,7 +32,7 @@
                                         <div class="col-xs-12">
                                             <div class="input-icon right">
                                                 <i class="fa fa-clock-o"></i>                                                
-                                                {!! Form::text('hora_cierre', \Carbon\Carbon::now('America/Buenos_Aires')->format('H:i'), ['class' => 'form-control', 'readonly' => 'readonly']) !!}                                                                 
+                                                {!! Form::text('hora_cierre', \Carbon\Carbon::now('America/Buenos_Aires')->format('H:i'), ['class' => 'form-control', 'readonly' => 'readonly','id'=>'hora_cierre']) !!}
                                             </div>
                                         </div>
                                     </div>
@@ -45,7 +45,7 @@
                                     <div class="col-xs-12">
                                         <div class="input-icon right">
                                             <i class="fa fa-map-marker"></i>
-                                             {!! Form::text('userCierre_id', Auth::user()->id, ['class' => 'form-control']) !!} 
+                                             {!! Form::text('userCierre_id', Auth::user()->id, ['class' => 'form-control', 'id'=>'userCierre_id']) !!}
                                         </div>                            
                                     </div>
                                 </div>
@@ -54,7 +54,7 @@
                         <br>
                         <hr/>
                         <br>                    
-                        {!! Form::submit('Cerrar caja', ['class' => 'btn btn-warning btn-block']) !!}  
+                        {!! Form::submit('Cerrar caja', ['class' => 'btn btn-warning btn-block', 'id' =>'form-submit', 'onclick'=>'reporte_caja()']) !!}
                         <button type="button" data-dismiss="modal" class="btn btn-white btn-block">
                         Volver</button>                                                                                                    
                 {!! Form::close() !!}
@@ -62,3 +62,6 @@
         </div>
     </div>
 </div>
+@section('script')
+    <script src="{{ asset('js/pluginsCajas.js') }}"></script>
+@endsection

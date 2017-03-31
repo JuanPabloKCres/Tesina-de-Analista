@@ -1,19 +1,19 @@
 
             <!--BEGIN SIDEBAR MENU-->
             <nav id="sidebar" role="navigation" data-step="2" data-intro="Template has &lt;b&gt;many navigation styles&lt;/b&gt;"
-                data-position="right" class="navbar-default navbar-static-side">
+                data-position="top" class="navbar-default navbar-static-side">
             <div class="sidebar-collapse menu-scroll" id="side-la">
                 <ul id="side-menu" class="nav">
                     <div class="clearfix"></div>
 
 
-                        <li id="li1" ><a data-toggle="tooltip" data-placement="right" title="Visualizar los Registros de Usuario" href="{{ route('admin.usuarios.index') }}">
+                        <li id="li1" ><a data-toggle="tooltip" data-placement="top" title="Visualizar los Registros de Usuario" href="{{ route('admin.usuarios.index') }}">
                             <i class="fa fa-users fa-fw">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
                             <span class="menu-title">Usuarios</span></a>
                         </li>
-                        <li id="li98" ><a data-toggle="tooltip" data-placement="right" title="Visualizar los Roles de Usuario" href="{{ route('admin.roles.index') }}">
+                        <li id="li98" ><a data-toggle="tooltip" data-placement="top" title="Visualizar los Roles de Usuario" href="{{ route('admin.roles.index') }}">
                                 <i class="fa fa-credit-card fa-fw">
                                     <div class="icon-bg bg-orange"></div>
                                 </i>
@@ -23,7 +23,7 @@
 
                         <!--
                         <li id="li3">
-                            <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de rubros de proveedores" >
+                            <a data-toggle="tooltip" data-placement="top title="Visualizar los registros de rubros de proveedores" >
                                 <i class="fa fa-industry">
                                     <div class="icon-bg bg-orange"></div>
                                 </i>
@@ -34,7 +34,7 @@
 
 
                     <li id="li4">
-                        <a data-toggle="tooltip" data-placement="right" title="Editar parámetros de la gráfica" href="{{ route('admin.materiales.index') }}">
+                        <a data-toggle="tooltip" data-placement="top" title="Editar parámetros de la gráfica" href="{{ route('admin.materiales.index') }}">
                             <i class="fa fa-cogs">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
@@ -45,7 +45,7 @@
 
 
                     <li id="li99">
-                        <a data-toggle="tooltip" data-placement="right" title="Localidades, Provincias, Paises" href="{{ route('admin.paises.index') }}">
+                        <a data-toggle="tooltip" data-placement="top" title="Localidades, Provincias, Paises" href="{{ route('admin.paises.index') }}">
                             <i class="fa fa-map-marker">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
@@ -56,7 +56,7 @@
 
 
                     <li id="li5">
-                        <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de proveedores" href="{{ route('admin.proveedores.index') }}">
+                        <a data-toggle="tooltip" data-placement="top" title="Visualizar los registros de proveedores" href="{{ route('admin.proveedores.index') }}">
                             <i class="fa fa-truck">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
@@ -66,7 +66,7 @@
 
 
                     <li id="li6">
-                        <a data-toggle="tooltip" data-placement="right" title="Ver Articulos listos para la venta, o diseñar nuevos" href="{{ route('admin.articulos.index') }}">
+                        <a data-toggle="tooltip" data-placement="top" title="Ver Articulos listos para la venta, o diseñar nuevos" href="{{ route('admin.articulos.index') }}">
                             <i class="fa fa-tags">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
@@ -77,7 +77,7 @@
 
 
                     <li id="li14">
-                        <a data-toggle="collapse" href="#dropdown-Insumos" data-placement="right" title="Visualizar los registros de artículos" >
+                        <a data-toggle="collapse" href="#dropdown-Insumos" data-placement="top" title="Visualizar los registros de artículos" >
                             <i class="fa fa-puzzle-piece">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
@@ -104,7 +104,7 @@
 
 
                     <li id="li7">
-                        <a data-toggle="tooltip" data-placement="right" title="Ir a los registros de nuestros clientes" href="{{ route('admin.clientes.index') }}">
+                        <a data-toggle="tooltip" data-placement="top" title="Ir a los registros de nuestros clientes" href="{{ route('admin.clientes.index') }}">
                             <i class="fa fa-child">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
@@ -114,7 +114,7 @@
 
 
                     <li id="li8">
-                        <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de pedidos" href="{{ route('admin.pedidos.index') }}">
+                        <a data-toggle="tooltip" data-placement="top" title="Visualizar los registros de pedidos" href="{{ route('admin.pedidos.index') }}">
                             <i class="fa fa-pencil-square-o">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
@@ -122,7 +122,7 @@
                         </a>
                     </li>
                     <li id="li9">
-                        <a data-toggle="tooltip" data-placement="right" title="Visualizar el historial de ventas" href="{{ route('admin.estadisticas.index') }}">
+                        <a data-toggle="tooltip" data-placement="top" title="Visualizar el historial de ventas" href="{{ route('admin.estadisticas.index') }}">
                             <i class="fa fa-archive">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
@@ -133,7 +133,7 @@
 
 
                         <li id="li10">
-                        <a data-toggle="tooltip" data-placement="right" title="Visualizar los registros de caja" href="{{ route('admin.cajas.registrosCajas') }}">
+                        <a data-toggle="tooltip" data-placement="top" title="Visualizar los registros de caja" href="{{ route('admin.cajas.registrosCajas') }}">
                             <i class="fa fa-money">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
@@ -141,7 +141,7 @@
                         </a>
                     </li>
                     <li id="li11">
-                        <a data-toggle="tooltip" data-placement="right" title="Abrir Caja" href="{{ route('admin.cajas.index') }}">
+                        <a data-toggle="tooltip" data-placement="top" title="Abrir Caja" href="{{ route('admin.cajas.index') }}">
                             <i class="fa fa-calculator">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
@@ -151,7 +151,7 @@
 
 
                     <li id="li13">
-                        <a data-toggle="collapse" href="#dropdown-administrarFront" data-placement="right" title="Gestión de contenido de la web de GN Soluciones">
+                        <a data-toggle="collapse" href="#dropdown-administrarFront" data-placement="top" title="Gestión de contenido de la web de GN Soluciones">
                             <i class="fa fa-mixcloud">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
@@ -177,7 +177,7 @@
                     </li>
 
                     <li id="li12">
-                        <a data-toggle="tooltip" data-placement="right" title="Controlar uso del sistema y accciones realizadas" href="{{ route('admin.auditorias.index') }}">
+                        <a data-toggle="tooltip" data-placement="top" title="Controlar uso del sistema y accciones realizadas" href="{{ route('admin.auditorias.index') }}">
                             <i class="fa fa-eye">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
@@ -186,7 +186,7 @@
                     </li>
 
                     <li id="li14">
-                        <a data-toggle="tooltip" data-placement="right" title="Controlar uso del sistema y backup de la información almacenada" onclick="backup()"  href="{{--  route('admin.backup.index') --}}">
+                        <a data-toggle="tooltip" data-placement="top" title="Controlar uso del sistema y backup de la información almacenada" onclick="backup()"  href="{{--  route('admin.backup.index') --}}">
                             <i class="fa fa-database">
                                 <div class="icon-bg bg-orange"></div>
                             </i>

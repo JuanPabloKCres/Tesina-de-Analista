@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ClienteRanking extends Model
 {
-  protected $fillable = ['id','nombreCompleto', 'cantCompras', 'valorCompras'];
+  protected $fillable = ['id','nombreCompleto', 'empresa', 'cantCompras', 'valorCompras'];
 }

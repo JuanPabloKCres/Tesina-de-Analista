@@ -7,7 +7,7 @@
                     <br>                   
                     @include('admin.partes.msjError')
                     @include('flash::message')   
-                    <table class="dataTable display table table-hover table-striped">
+                    <table id="tab-movimientos" class="dataTable display table table-hover table-striped">
                         <thead>
                             <tr> 
                                 <th>Concepto</th>                                
@@ -34,3 +34,8 @@
         </div>
     </div>
 </div>
+
+
+@section('script')
+    <script src="{{ asset('js/pluginsCajas.js') }}"></script>
+@endsection

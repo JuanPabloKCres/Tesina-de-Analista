@@ -21,6 +21,9 @@
                 <button data-placement="bottom" title="Registrar un nuevo movimiento de en la caja actual" type="button" data-hover="tooltip" data-toggle="modal" data-target="#modal-config"  class="btn btn-blue">
                     <i class="fa fa-plus-circle" aria-hidden="true"></i> Registrar movimiento
                 </button>
+                <button data-placement="bottom" title="Imprimir un reporte de la caja y sus movimientos" type="button" data-hover="tooltip" onclick="reporte_caja()" class="btn btn-grey">
+                    <i class="fa fa-print" aria-hidden="true"></i> Imprimir reporte Caja
+                </button>
                 <button data-placement="bottom" title="Realizar el cierre de la caja actual" type="button" data-hover="tooltip" data-toggle="modal" data-target="#modal-actualizar"  class="btn btn-warning">
                     <i class="fa fa-times" aria-hidden="true"></i> Cerrar caja
                 </button>
@@ -107,10 +110,13 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            {{-- Este input es invisible porque solo lo necesito para mandar el id de caja a pluginsCajas.js --}}
+                                                   <div>
+                                                       <input class="form-control hide" type="text" id="caja_id" value="{{ $caja->id }}"/>
+                                                   </div>
+                                            {{-- Fin --}}
                                         </div>
                                     </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -122,8 +128,11 @@
 @endsection
 
 @section('script')
+    <script src="{{ asset('js/pluginsCajas.js') }}"></script>
+    {{--
     <script>
         var listSidebar = "li11";
         var elemFaltante = "nada";
-    </script>
+    </script
+    --}}
 @endsection

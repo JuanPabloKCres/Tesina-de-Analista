@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Caja;
+use App\User;
 use App\Movimiento;
 use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
@@ -36,13 +37,28 @@ class CajasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $caja = Caja::where('cerrado', false)->first(); //Aca se busca el primer registro de caja que este activo (supuestamente debería ser el único, igual se pone asi para que no siga buscando al pedo)
-        if ($caja===null){ //al llegar aca preguta si enncontro algo(si $caja no es un objeto vacio o null)
-             return view('admin.cajas.create'); //se devuelve la vista para abrir una caja
-        } else {
-            return view('admin.cajas.index')->with('caja',$caja); // se devuelve la caja en cuestion.
+        if($request->ajax()){
+            $caja = Caja::find($request->caja_id);
+            $user_apertura = User::find($caja->userApertura_id);
+            $user_cierre = User::find($caja->userCierre_id);
+
+            $saldo_actual = $caja->totalMovimientos();
+            //$user_cierre = User::find($request->userCierre_id);
+            $datosCaja = array('fecha_apertura'=>$caja->fecha_apertura, 'hora_apertura'=>$caja->hora_apertura,
+                'ingresos'=>$caja->totalEntrada(), 'egresos'=>$caja->totalSalida(),
+                'saldo_inicial'=>$caja->saldo_inicial, 'saldo_cierre'=>$caja->saldo_cierre, 'saldo_actual'=>$saldo_actual,
+                'user_apertura'=>$user_apertura->name, 'user_cierre'=>'null');
+            return response()->json(json_encode($datosCaja, true));
+        }
+        else{
+            $caja = Caja::where('cerrado', false)->first(); //Aca se busca el primer registro de caja que este activo (supuestamente debería ser el único, igual se pone asi para que no siga buscando al pedo)
+            if ($caja===null){ //al llegar aca preguta si enncontro algo(si $caja no es un objeto vacio o null)
+                return view('admin.cajas.create'); //se devuelve la vista para abrir una caja
+            } else {
+                return view('admin.cajas.index')->with('caja',$caja); // se devuelve la caja en cuestion.
+            }
         }
     }
 
@@ -100,7 +116,6 @@ class CajasController extends Controller
      */
     public function edit($id)
     {
-        //
     }
 
     /**
@@ -116,6 +131,7 @@ class CajasController extends Controller
         $caja->fill($request->all()); // guardo la fecha y hora de cierre
         $caja->cerrado = true;
         $caja->save(); // actualizamos el objeto caja con los valores recolectados y se persiste
+
         Flash::success("Se ha realizado el cierre del registro de caja.");
         return redirect()->route('admin.cajas.show', $id);
     }
