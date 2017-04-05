@@ -60,8 +60,11 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>                         
-                            <div class="form-group"><label class="col-sm-3 control-label">Monto inicial</label>
+                            </div>
+
+
+
+                    <div class="form-group"><label class="col-sm-3 control-label">Monto inicial</label>
                                 <div class="col-sm-9 controls">
                                     <div class="row">
                                         <div class="col-xs-12">
@@ -77,7 +80,7 @@
                             <hr/>
                             <br>                          
                             {!! Form::submit('Abrir Caja', ['class' => 'btn btn-green btn-block']) !!}  
-                            <button type="button" data-dismiss="modal" class="btn btn-white btn-block">
+                            <button type="button" data-dismiss="modal" onclick="reporte_caja()" class="btn btn-white btn-block">
                         Cerrar</button>                        
                     {!! Form::close() !!}
                 </div>                        

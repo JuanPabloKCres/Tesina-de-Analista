@@ -9,6 +9,7 @@
 @endsection
 
 @section('content')
+    {{$id}}
     <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
         <div class="page-header pull-left">
             <div class="page-title">Caja</div>
@@ -130,7 +131,20 @@
             </div>
         </div>
     </div>
+
+    {{--
+    <?php
+    if($id){
+        echo '<script type="text/javascript">',
+        'reporte_cierre_caja();',
+        '</script>'
+        ;
+    }
+    ?>
+    --}}
 @endsection
+
+
 @section('script')
     <script>
         var listSidebar = "li10";

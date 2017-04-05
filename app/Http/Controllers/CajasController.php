@@ -42,14 +42,14 @@ class CajasController extends Controller
         if($request->ajax()){
             $caja = Caja::find($request->caja_id);
             $user_apertura = User::find($caja->userApertura_id);
-            $user_cierre = User::find($caja->userCierre_id);
+            $user_cierre = User::find($request->userCierre_id);
 
             $saldo_actual = $caja->totalMovimientos();
-            //$user_cierre = User::find($request->userCierre_id);
             $datosCaja = array('fecha_apertura'=>$caja->fecha_apertura, 'hora_apertura'=>$caja->hora_apertura,
+                'fecha_cierre'=>$caja->fecha_cierre, 'hora_cierre'=>$caja->hora_cierre,
                 'ingresos'=>$caja->totalEntrada(), 'egresos'=>$caja->totalSalida(),
                 'saldo_inicial'=>$caja->saldo_inicial, 'saldo_cierre'=>$caja->saldo_cierre, 'saldo_actual'=>$saldo_actual,
-                'user_apertura'=>$user_apertura->name, 'user_cierre'=>'null');
+                'user_apertura'=>$user_apertura->name, 'user_cierre'=>$user_cierre->name);
             return response()->json(json_encode($datosCaja, true));
         }
         else{
@@ -133,7 +133,8 @@ class CajasController extends Controller
         $caja->save(); // actualizamos el objeto caja con los valores recolectados y se persiste
 
         Flash::success("Se ha realizado el cierre del registro de caja.");
-        return redirect()->route('admin.cajas.show', $id);
+
+        return redirect()->route('admin.cajas.show', $id)->with('cerrada',$caja->cerrado);
     }
 
 

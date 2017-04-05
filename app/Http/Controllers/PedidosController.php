@@ -170,9 +170,9 @@ class PedidosController extends Controller {
                  * Una vez completado el proceso se procede con redireccionar a la pantalla de pedidos.
                  */
                 if (($request->pagado == "true") && ($request->entregado == "true")) {
-                    return response()->json("¡La venta fue registrada con éxito!");
+                    return response()->json("�La venta fue registrada con exito!");
                 } else {
-                    return response()->json("¡El pedido fue registrado con éxito!");
+                    return response()->json("�El pedido fue registrado con exito!");
                 }
             }
             return view('admin.pedidos.createPedido'); // se devuelve la caja en cuestion.

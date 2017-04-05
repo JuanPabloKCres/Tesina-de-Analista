@@ -54,7 +54,7 @@
                         <br>
                         <hr/>
                         <br>                    
-                        {!! Form::submit('Cerrar caja', ['class' => 'btn btn-warning btn-block', 'id' =>'form-submit', 'onclick'=>'reporte_caja()']) !!}
+                        {!! Form::submit('Cerrar caja', ['class' => 'btn btn-warning btn-block', 'id' =>'form-submit']) !!}
                         <button type="button" data-dismiss="modal" class="btn btn-white btn-block">
                         Volver</button>                                                                                                    
                 {!! Form::close() !!}
