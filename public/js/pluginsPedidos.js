@@ -80,6 +80,7 @@ function cargarDatosCheque(){                           //valida y carga los dat
     fecha_emision = $('#fecha_emision').val();
     fecha_cobro = $('#fecha_cobro').val();
     alert('Se cargaron datos del cheque para el pago');
+    $('#msjChequeCargado').removeClass("hide");
     pagoCheque = true;
 }
 
@@ -394,7 +395,7 @@ function enviarPedido(pagado, entregado)
                 factura.tipo_cbte = informacion_de_cliente.tipo_cbte;   //OK
                 factura.nro_doc = informacion_de_cliente.dni;           //OK
                 if(informacion_de_cliente.empresa==null){   /**Si el cliente no tiene empresa*/
-                factura.nombre_cliente = informacion_de_cliente.nombre;         //grabar su nombre para la factura
+                    factura.nombre_cliente = informacion_de_cliente.nombre;         //grabar su nombre para la factura
                 }else{
                     factura.nombre_cliente = informacion_de_cliente.empresa;         //sino grabar nombre de la empresa para la factura, descartar nombre de representante
                 }
@@ -427,7 +428,7 @@ function enviarPedido(pagado, entregado)
     }
     /** persistir venta o pedido */
     $.ajax({
-        dataType: 'json', url: "/admin/pedidos/create", type: 'get',
+        dataType: 'json', url: "/admin/pedidos/create",
         data: {
             renglones: lineas,
             pagado: pagado,
@@ -443,9 +444,10 @@ function enviarPedido(pagado, entregado)
         },
         success: function (data) {
             /* Una vez completado el proceso se muestra el mensaje de exito */
+            console.log('Lo de abajo se obtuvo por ajax desde PedidosController:');
             console.log(data);
             emitirTicket(informacion_de_cliente);                 /**llamar a emitir nota de pedido (comprobante de transaccion para el cliente)*/
-            $('#mensajeExito').html(data);
+            $('#mensajeExito').html();
             $('#botonExito').click();
             email_notificacion_stockBajo();       /**llamar a email stock bajo*/
 
@@ -710,7 +712,7 @@ function mostrarInfoTributaria(cliente_id){
 }
 /** Al presionar 'Pagar con Cheque' cargar el cheque con la info del cliente y el pedido si no paga con seña ni es "Consumidor Final"*/
 function rellenarModalCheque(){
-    if(pagarTotal == true){                       //si no se va a señar, permitir Pagar con Cheque
+    //if(pagarTotal == true){                       //si no se va a señar, permitir Pagar con Cheque
         var cliente_id = $('#cliente').val();
         $.ajax({
             url: "/admin/clientes",
@@ -730,15 +732,19 @@ function rellenarModalCheque(){
                     $('#apellido_cheque').val(respuesta.a);
                     $('#empresa_cheque').val(respuesta.empresa);
                     $('#cuit_cheque').val(respuesta.dni);
-                    $('#monto_cheque').val(montoTotal);
+                    if(($('#sena').val()>0) && ($('#sena').is(':visible')) && ($('#sena').val()<montoTotal)){
+                        $('#monto_cheque').val($('#sena').val());
+                    }else{
+                        $('#monto_cheque').val(montoTotal);
+                    }
                     $("#modal-create-cheque").modal();              //Abrir el modal de cheque
                 }
             }
         });
-    }
-    else{
-        alert('No se puede pagar con cheque una seña, solo totalidad');
-    }
+    //}
+    //else{
+      //  alert('No se puede pagar con cheque una seña, solo totalidad');
+    //}
 }
 
 /** Envia el email de notificacion de stock bajo **/
@@ -926,3 +932,14 @@ function laTablaArticulosEstaVacia(){
  numLi++;
  });
  */
+
+
+
+
+/**Pedidos STEP */
+$("#wizard").steps({
+    headerTag: "h3",
+    bodyTag: "section",
+    transitionEffect: "slideLeft",
+    autoFocus: true
+});

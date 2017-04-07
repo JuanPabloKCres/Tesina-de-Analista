@@ -1,23 +1,23 @@
 <form role="form" id="form-pedido">
     <?php
-    $array_fecha = getdate();
-    $año = $array_fecha['year'];
-    $mes = $array_fecha['mon'];
-    $dia = $array_fecha['mday'];
+        $array_fecha = getdate();
+        $año = $array_fecha['year'];
+        $mes = $array_fecha['mon'];
+        $dia = $array_fecha['mday'];
 
-    if(strlen ($mes)==1){                       #si mes tiene un digito anteponer un 0 al mes
-        if(strlen ($dia)==1){                       #si dia tambien tiene un digito anteponer un 0 al dia
-            $fecha_hoy = $año.'-0'.$mes.'-0'.$dia;
+        if(strlen ($mes)==1){                       #si mes tiene un digito anteponer un 0 al mes
+            if(strlen ($dia)==1){                       #si dia tambien tiene un digito anteponer un 0 al dia
+                $fecha_hoy = $año.'-0'.$mes.'-0'.$dia;
+            }else{
+                $fecha_hoy = $año.'-0'.$mes.'-'.$dia;
+            }
         }else{
-            $fecha_hoy = $año.'-0'.$mes.'-'.$dia;
+            if(strlen ($dia)==1){                       #si dia tiene un digito anteponer un 0 al dia
+                $fecha_hoy = $año.'-'.$mes.'-0'.$dia;
+            }else{
+                $fecha_hoy = $año.'-'.$mes.'-'.$dia;
+            }
         }
-    }else{
-        if(strlen ($dia)==1){                       #si dia tiene un digito anteponer un 0 al dia
-            $fecha_hoy = $año.'-'.$mes.'-0'.$dia;
-        }else{
-            $fecha_hoy = $año.'-'.$mes.'-'.$dia;
-        }
-    }
     ?>
     <div class="form-horizontal" align="right">
         <div class="row text-center">
@@ -99,3 +99,13 @@
     <input class="hide" id="botonMandar" type="submit" value="Submit">
 </form>
 <button id="botonModalidad" class="btn btn-primary btn-block" title="Haga click para fijar un monto de Seña al pedido, de lo contrario se abona la totalidad del mismo." > Quiero señar el pedido</button>
+
+
+
+
+
+
+
+<!--De aca para abajo se experimenta con JQuery Steap-->
+
+

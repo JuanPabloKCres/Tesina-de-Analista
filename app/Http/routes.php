@@ -57,7 +57,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
    Route::get('tablaRegistros', ['uses' => 'CajasController@registrosCajas', 'as' => 'admin.cajas.registrosCajas']);
    Route::PUT('usuario/{usuarios}', ['uses' => 'UsersController@actPass', 'as' => 'usuario.actpass']);
 });
-
+Route::get('/step', function () {
+   return view('admin.pedidos.step');
+});
 
 Route::auth();
 
@@ -84,4 +86,5 @@ Route::get('admin/auth/login', [
     'uses' => 'Auth\AuthController@getLogin',
     'as' => 'admin.auth.login'
 ]);
+
 
