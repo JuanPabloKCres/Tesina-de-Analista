@@ -48,6 +48,36 @@
                 </tbody>
             </table>
         </div>
+        <div class="col-md-3">
+            <table class="table table-striped table-hover">
+                <tbody>
+                <tr class="success">
+                    <td><h4 class="box-heading">N° Serie:</h4></td>
+                    <td><h4>{{ $pedido->cheque->nro_serie }}</h4></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-3">
+            <table class="table table-striped table-hover">
+                <tbody>
+                <tr class="success">
+                    <td><h4 class="box-heading">Banco:</h4></td>
+                    <td><h4>{{ $pedido->cheque->banco->nombre }} (Sucursal {{ $pedido->cheque->sucursal }})</h4></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <table class="table table-striped table-hover">
+                <tbody>
+                <tr class="success">
+                    <td><h4 class="box-heading">Fecha Cobro:</h4></td>
+                    <td><h4>{{ $pedido->cheque->fecha_cobro}} (emision {{ $pedido->cheque->fecha_emision}}) </h4></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <h3>Datos del Cheque</h3>

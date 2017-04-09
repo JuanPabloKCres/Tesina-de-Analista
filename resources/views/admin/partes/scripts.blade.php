@@ -66,7 +66,7 @@
 <script src="{{ asset('plantillas/parsley/dist/i18n/es.js') }}"></script>
 <script src="{{ asset('plantillas/parsley/dist/parsley.js') }}"></script>
 <script type="text/javascript">
-        window.ParsleyValidator.setLocale('es');
+    window.ParsleyValidator.setLocale('es');
 </script>
 
 <!--CORE JAVASCRIPT-->
@@ -74,10 +74,10 @@
 <script>        (function (i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
         i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
         a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0];
+                m = s.getElementsByTagName(o)[0];
         a.async = 1;
         a.src = g;
         m.parentNode.insertBefore(a, m)
@@ -85,3 +85,4 @@
     ga('create', 'UA-145464-12', 'auto');
     ga('send', 'pageview');
 </script>
+

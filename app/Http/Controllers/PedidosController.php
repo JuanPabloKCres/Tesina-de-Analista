@@ -49,12 +49,12 @@ class PedidosController extends Controller {
     }
     /** ***************************/
     public function create(Request $request) {
-        $caja = Caja::where('cerrado', false)->first(); //Aca se busca el primer registro de caja que este activo (supuestamente debería ser el único, igual se pone asi para que no siga buscando al pedo)
+        $caja = Caja::where('cerrado', false)->first(); //Aca se busca el primer registro de caja que este activo (supuestamente deberÃ­a ser el Ãºnico, igual se pone asi para que no siga buscando al pedo)
         if ($caja === null) { //al llegar aca preguta si enncontro algo(si $caja no es un objeto vacio o null)
             return view('admin.cajas.create'); //se devuelve la vista para abrir una caja
         } else {
             /*
-             * Si la solicitud se realiza a través de ajax quiere decir que que se quiere persistir un nuevo pedido.
+             * Si la solicitud se realiza a travÃ©s de ajax quiere decir que que se quiere persistir un nuevo pedido.
              * En caso contrario se devuelve la pantalla para realizar un pedido.
              */
             if ($request->ajax()) {
@@ -66,7 +66,7 @@ class PedidosController extends Controller {
                 $movimiento = new Movimiento();
                 $venta->fecha_pedido = $fecha->format('d-m-Y');     #OK 20 febrero
                 $venta->hora_pedido = $fecha->format('H:i');        #OK 20 febrero
-                $venta->fecha_entrega_estimada = $request->fecha_entrega_estimada;  #OK, guarda en formato Año-mes-dia *20 febrero
+                $venta->fecha_entrega_estimada = $request->fecha_entrega_estimada;  #OK, guarda en formato AÃ±o-mes-dia *20 febrero
                 $venta->senado = $request->sena;                    #OK 20 febrero
                 $venta->userPedido_id = $request->usuarioPedido;    #OK 20 febrero
                 $venta->cliente_id = $request->cliente;             #OK 20 febrero
@@ -79,11 +79,16 @@ class PedidosController extends Controller {
                 }
                 ////////////////////////////////// CHEQUE ////////////////////////////////////
                 if ($request->nro_serie) {
-                    $forma_pago = "cheque totalidad";
+                    if($request->pagado == "true"){
+                        $forma_pago = "totalidad en cheque";
+                    }
+                    else{
+                        $forma_pago = "seña c/ cheque";
+                    }
                     $cheque = new Cheque();
-                    $cheque->nro_serie = $request->nro_serie;     #OK
-                    $cheque->monto = $request->sena;                        #OK
-                    $cheque->banco_id = $request->banco;          #OK
+                    $cheque->nro_serie = $request->nro_serie;             #OK
+                    $cheque->monto = $request->sena;                      #OK
+                    $cheque->banco_id = $request->banco;                  #OK
                     $cheque->sucursal = $request->sucursal_banco;         #OK
                     $cheque->cliente_id = $request->cliente;              #OK
                     $cheque->fecha_emision = $request->fecha_emision;     #OK
@@ -113,7 +118,7 @@ class PedidosController extends Controller {
                     $venta->hora_venta = $fecha->format('H:i');
                     $conceptoMovimiento = "Venta de artículos por un monto de $" . $venta->senado;
                 } else {
-                    $conceptoMovimiento = "Seña de un pedido por un monto de $" . $venta->senado;
+                    $conceptoMovimiento = "Pago por anticipado de un pedido por un monto de $" . $venta->senado;
                 }
                 $venta->save();     //no esta guardando cuando es venta!!!!!!!!!!!!!!
                 /** Auditoria almacena venta */
@@ -124,7 +129,7 @@ class PedidosController extends Controller {
                 $autor->id = Auth::user()->id;          //Conseguimos el id del usuario actualmente logueado
                 $auditoria->usuario_id = $autor->id;    //lo asignamos a la auditorias
                 $auditoria->accion = "alta";
-                $auditoria->dato_nuevo = "fecha_pedido: ".$venta->fecha_pedido." || hora_pedido: ".$venta->hora_pedido." || fecha entrega estimada: ".$venta->fecha_entrega_estimada." || señado: ".$venta->senado." || usuario que tomo pedido: ".$venta->userPedido_id." || cliente_id: ".$venta->cliente_id;
+                $auditoria->dato_nuevo = "fecha_pedido: ".$venta->fecha_pedido." || hora_pedido: ".$venta->hora_pedido." || fecha entrega estimada: ".$venta->fecha_entrega_estimada." || seÃ±ado: ".$venta->senado." || usuario que tomo pedido: ".$venta->userPedido_id." || cliente_id: ".$venta->cliente_id;
                 $auditoria->dato_anterior = null;
                 $auditoria->save();
 
@@ -144,7 +149,7 @@ class PedidosController extends Controller {
                     //zona de conflicto!
                     $insumosArticulos = InsumoArticulo::where('articulo_id', $clave['articulo_id'])->get();
                     //return response()->json(json_encode($insumosArticulos, true));
-                    foreach ($insumosArticulos as $insumoArticulo) {
+                    foreach($insumosArticulos as $insumoArticulo) {
                         $insumo = Insumo::find($insumoArticulo->insumo_id);
                         $cantidad_necesaria_x_articulo = $insumoArticulo->cantidad;
                         $cantidad_a_descontar = ($clave['cantidad'] * $cantidad_necesaria_x_articulo);  #OK
@@ -166,16 +171,14 @@ class PedidosController extends Controller {
                     $movimiento->concepto = $conceptoMovimiento;
                     $movimiento->save();
                 }
-                /*
-                 * Una vez completado el proceso se procede con redireccionar a la pantalla de pedidos.
-                 */
+                /** Una vez completado el proceso se procede con redireccionar a la pantalla de pedidos.*/
                 if (($request->pagado == "true") && ($request->entregado == "true")) {
-                    return response()->json("�La venta fue registrada con exito!");
+                    return response()->json("¡La venta fue registrada con exito!");
                 } else {
-                    return response()->json("�El pedido fue registrado con exito!");
+                    return response()->json("¡El pedido fue registrado con exito!");
                 }
             }
-            return view('admin.pedidos.createPedido'); // se devuelve la caja en cuestion.
+            return view('admin.pedidos.createPedido'); // Menu principal de 'Pedidos'
         }
     }
 
@@ -199,7 +202,7 @@ class PedidosController extends Controller {
         $pedido = Venta::find($id);
         $fecha = \Carbon\Carbon::now('America/Buenos_Aires');
         if ($request->pagado) {
-            $caja = Caja::where('cerrado', false)->first(); //Aca se busca el primer registro de caja que este activo (supuestamente debería ser el único, igual se pone asi para que no siga buscando al pedo)
+            $caja = Caja::where('cerrado', false)->first(); //Aca se busca el primer registro de caja que este activo (supuestamente deberÃ­a ser el Ãºnico, igual se pone asi para que no siga buscando al pedo)
             if ($caja === null) { //al llegar aca preguta si enncontro algo(si $caja no es un objeto vacio o null)
                 return view('admin.cajas.create'); //se devuelve la vista para abrir una caja
             } else {

@@ -18,18 +18,16 @@
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-select/css/bootstrap-select.min.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-select/css/bootstrap-select.css') }}">
 
-    {{--
-    <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker.css') }}">
-	<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker3.css') }}">
-	<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
-	<script src="{{ asset('plantillas/KAdmin-Dark/script/bootstrap2-toogle.css') }}"></script>
-    --}}
+		<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker.css') }}">
+		<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker3.css') }}">
+
 
     <link href="{{ asset('plantillas/parsley/src/parsley.css') }}" rel='stylesheet' type='text/css'>
     <link href="{{ asset('plantillas/DataTables/media/css/jquery.dataTables.css') }}" rel='stylesheet' type='text/css'>
     <link href="{{ asset('plantillas/DataTables/extensions/Responsive/css/dataTables.responsive.css') }}" rel='stylesheet' type='text/css'>
 
-    <!--JQuery Steps agregado-->
-    {{--
-    <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/steps.css') }} ">
-    --}}
+    <!--
+    <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
+   -->
+
+    <script src="{{ asset('plantillas/KAdmin-Dark/script/bootstrap2-toogle.css') }}"></script>
