@@ -7,15 +7,125 @@
  * si al registrar estoy en la pág 1, el 11º registro será ignorado.
  */
 /*
-$('#fecha_entrega_date').on('click', function () {
-    var fecha_entrega_estimada;
-    fecha_entrega_estimada = $("#fecha_entrega_date").val();
-    //alert(fecha_entrega_estimada);
-    $('#fecha_entrega_date').datepicker({minDate: -7});
-});
-*/
+ $('#fecha_entrega_date').on('click', function () {
+ var fecha_entrega_estimada;
+ fecha_entrega_estimada = $("#fecha_entrega_date").val();
+ //alert(fecha_entrega_estimada);
+ $('#fecha_entrega_date').datepicker({minDate: -7});
+ });
+ */
 
-//alert(id_cliente_pedidosPendientes);
+var miWizard = $("#example-basic").show();
+
+$("#example-basic").steps({
+    headerTag: "h2",
+    bodyTag: "section",
+    transitionEffect: "slide",
+    autoFocus: true,
+    /* Labels */
+    labels: {
+        cancel: "Cancel",
+        current: "current step:",
+        pagination: "Pagination",
+        next: 'Siguiente',
+        previous: 'Anterior',
+        finish: 'Confirmar'
+    },
+    onStepChanged: function(e, currentIndex, priorIndex) {
+        // You don't need to care about it
+        // It is for the specific demo
+        adjustIframeHeight();
+    },
+
+
+    /* validaicon de pagina de Cliente */
+    onStepChanging: function (event, currentIndex, newIndex)
+    {
+        // Allways allow previous action even if the current form is not valid!
+        if (currentIndex > newIndex)
+        {
+            return true;
+        }
+        // Forbid next action on "Warning" step if the user is to young
+        //if (newIndex === 3 && Number($("#age-2").val()) < 18)
+        if(($("#responiva_select").val()!==""))
+        {
+            return true;
+            //miWizard.steps("next");
+        }
+        /* validacion de pagina de Modo de Pago */
+         if($("#chkEfectivo").is(":checked") || $("#chkCheque").is(":checked")){
+            return true;
+         //miWizard.steps("next");
+         }
+        else{
+             return false;
+         }
+
+        // Necesario en algunos casos cuando se vuelve atras (limpiar)
+        /*
+        if (currentIndex < newIndex)
+        {
+            // To remove error styles
+            form.find(".body:eq(" + newIndex + ") label.error").remove();
+            form.find(".body:eq(" + newIndex + ") .error").removeClass("error");
+        }
+        */
+        //form.validate().settings.ignore = ":disabled,:hidden";
+        //return form.valid();
+    },
+/*
+    onStepChanged: function (event, currentIndex, priorIndex)
+    {
+        // Used to skip the "Warning" step if the user is old enough.
+        if (currentIndex === 2 && Number($("#age-2").val()) >= 18)
+        {
+
+        }
+        // Used to skip the "Warning" step if the user is old enough and wants to the previous step.
+        if (currentIndex === 2 && priorIndex === 3)
+        {
+            form.steps("previous");
+        }
+    },
+    */
+    onFinishing: function (event, currentIndex)
+    {
+        miWizard.validate().settings.ignore = ":disabled";
+        return miWizard.valid();
+    },
+    onFinished: function (event, currentIndex)
+    {
+        alert("Submitted!");
+    }
+    /*
+}).validate({
+    errorPlacement: function errorPlacement(error, element) { element.before(error); },
+    rules: {
+        confirm: {
+            equalTo: "#password-2"
+        }
+    }*/
+});
+
+
+
+
+
+
+
+
+var handleBootstrapWizards = function () {
+    "use strict";
+    $("#wizard").bwizard();
+};
+
+var FormWizard = function () {
+    "use strict";
+    return{init: function () {
+        handleBootstrapWizards()
+    }}
+}
 
 $('#iva_select').prop('disabled',true);
 $('#precioU_number').prop('disabled',true);
@@ -80,6 +190,7 @@ function cargarDatosCheque(){                           //valida y carga los dat
     fecha_emision = $('#fecha_emision').val();
     fecha_cobro = $('#fecha_cobro').val();
     alert('Se cargaron datos del cheque para el pago');
+    $('#msjChequeCargado').removeClass("hide");
     pagoCheque = true;
 }
 
@@ -228,7 +339,6 @@ function limpiar()
     $('#cantidad_number').val(""); $('#precioU_number').val(""); $('#importe_number').val("");
 }
 /*
-
  * Este método jquery captura el evento de cuando se suelta la tecla despues de presionarla sobre
  * el campo "Precio unitario" y lanza el método que se encarga de calcular el contenido para el campo "Importe".
  */
@@ -358,14 +468,14 @@ function enviarPedido(pagado, entregado)
     var numLi = 0;
     var lineas = [];
     var factura = {
-            iva: $('#iva').val(),
-            tipo_cbte: 'B',
-            nro_doc: $('#cuit').val(),
-            nombre_cliente: $('#nombreCliente').val(),
-            domicilio_cliente: $('#direccion').val(),
-            imp_total: $('#montoTotal').val(),
-            items: [],
-        };
+        iva: $('#iva').val(),
+        tipo_cbte: 'B',
+        nro_doc: $('#cuit').val(),
+        nombre_cliente: $('#nombreCliente').val(),
+        domicilio_cliente: $('#direccion').val(),
+        imp_total: $('#montoTotal').val(),
+        items: [],
+    };
     $('#tblListaProductos tbody tr').each(function () {
         var dataFila = $('#tblListaProductos').DataTable().row(this).data();
         var linea = {articulo_id: dataFila[1], articulo_nombre: dataFila[2], cantidad: dataFila[3], precio_unitario: dataFila[4], importe: dataFila[5]};
@@ -427,7 +537,7 @@ function enviarPedido(pagado, entregado)
     }
     /** persistir venta o pedido */
     $.ajax({
-        dataType: 'json', url: "/admin/pedidos/create", type: 'get',
+        dataType: 'json', url: "/admin/pedidos/create",
         data: {
             renglones: lineas,
             pagado: pagado,
@@ -443,15 +553,16 @@ function enviarPedido(pagado, entregado)
         },
         success: function (data) {
             /* Una vez completado el proceso se muestra el mensaje de exito */
+            console.log('Lo de abajo se obtuvo por ajax desde PedidosController:');
             console.log(data);
             emitirTicket(informacion_de_cliente);                 /**llamar a emitir nota de pedido (comprobante de transaccion para el cliente)*/
-            $('#mensajeExito').html(data);
+            $('#mensajeExito').html();
             $('#botonExito').click();
             email_notificacion_stockBajo();       /**llamar a email stock bajo*/
 
             /*bardo con el email_info_pedido_cliente? */
             if(entregado == false){             /**si el pedido no fue entregado en el acto, llamara enviar email con info de compra*/
-                email_info_pedido_cliente(lineas, montoPedido, montoTotal_Absoludo, $('#usuarioPedido').val());
+            email_info_pedido_cliente(lineas, montoPedido, montoTotal_Absoludo, $('#usuarioPedido').val());
             }
         }
     });
@@ -508,13 +619,13 @@ function registrarCliente()
  * enviarlos al archivo php que se encarga de realizar la facturación electrónica. (al convertir un pedido en una venta)*/
 function generarFactura() {
     $('#form-crear').submit();
-            $('#tblListaItems tbody tr').each(function () {
-            var dataFila = $('#tblListaItems').DataTable().row(this).data();
-            var item = {cantidad: dataFila[2], importe: dataFila[4], precio_unitario: dataFila[3], articulo: dataFila[1]};
-            //factura.items [cantidadProductos] = item;
-            cantidadProductos++;
-        });
-        var nada ="nada";
+    $('#tblListaItems tbody tr').each(function () {
+        var dataFila = $('#tblListaItems').DataTable().row(this).data();
+        var item = {cantidad: dataFila[2], importe: dataFila[4], precio_unitario: dataFila[3], articulo: dataFila[1]};
+        //factura.items [cantidadProductos] = item;
+        cantidadProductos++;
+    });
+    var nada ="nada";
     $.ajax({    //en esta peticion se busca obtener los datos del cliente para confecc. la factura
         dataType: 'json', url: "/admin/clientes",
         data: {
@@ -557,21 +668,21 @@ $(document).ready(function () {
         // Allow: backspace, delete, tab, escape, enter and .
         if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
                 // Allow: Ctrl+A
-                        (e.keyCode == 65 && e.ctrlKey === true) ||
-                        // Allow: Ctrl+C
-                                (e.keyCode == 67 && e.ctrlKey === true) ||
-                                // Allow: Ctrl+X
-                                        (e.keyCode == 88 && e.ctrlKey === true) ||
-                                        // Allow: home, end, left, right
-                                                (e.keyCode >= 35 && e.keyCode <= 39)) {
-                                    // let it happen, don't do anything
-                                    return;
-                                }
-                                // Ensure that it is a number and stop the keypress
-                                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                                    e.preventDefault();
-                                }
-                            });
+            (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: Ctrl+C
+            (e.keyCode == 67 && e.ctrlKey === true) ||
+                // Allow: Ctrl+X
+            (e.keyCode == 88 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+            // let it happen, don't do anything
+            return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
 });
 $(document).ready(function () {
     $("#nro_serie").keydown(function (e) {
@@ -597,34 +708,34 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $("#fecha_entrega_date").keydown(function (e) {
-            e.preventDefault();
+        e.preventDefault();
     });
 });
 
 
 /** Este eveto se dispara al cambiar el valor del iva en la venta y actualiza el valor del iva
-         * en todos los importes incluyendo a los de los items. */  //NO VA EN LA TESIS, SOLO PARA LA GRAFICA
+ * en todos los importes incluyendo a los de los items. */  //NO VA EN LA TESIS, SOLO PARA LA GRAFICA
 /*
-        $('#iva').on('change', function () {
-            if (montoTotal > 0) {
-                montoTotal = montoPedido + montoPedido * parseFloat($('#iva').val()) / 100; //valor con iva incluido
-                var impNetoFila = 0;
-                var Filas = 0;
-                $('#tblListaProductos tbody tr').each(function () {
-                    impNetoFila = 0;
-                    var dataPla = $('#tblListaProductos').DataTable().row(this).data();
-                    impNetoFila = parseFloat(dataPla[5]) + parseFloat(dataPla[5]) * parseFloat($('#iva').val()) / 100;
-                    $('#tblListaProductos').DataTable().cell(Filas, 6).data(impNetoFila);
-                    Filas++;
-                });
-                $('#mt').html(montoTotal);
-            }
-        });
-        $("#modal-exito").on("hidden.bs.modal", function () {
-            generarFactura();
-            //window.location = "/admin/pedidos";
-        });
-*/
+ $('#iva').on('change', function () {
+ if (montoTotal > 0) {
+ montoTotal = montoPedido + montoPedido * parseFloat($('#iva').val()) / 100; //valor con iva incluido
+ var impNetoFila = 0;
+ var Filas = 0;
+ $('#tblListaProductos tbody tr').each(function () {
+ impNetoFila = 0;
+ var dataPla = $('#tblListaProductos').DataTable().row(this).data();
+ impNetoFila = parseFloat(dataPla[5]) + parseFloat(dataPla[5]) * parseFloat($('#iva').val()) / 100;
+ $('#tblListaProductos').DataTable().cell(Filas, 6).data(impNetoFila);
+ Filas++;
+ });
+ $('#mt').html(montoTotal);
+ }
+ });
+ $("#modal-exito").on("hidden.bs.modal", function () {
+ generarFactura();
+ //window.location = "/admin/pedidos";
+ });
+ */
 /** Al elegir un articulo, se ejecuta una funcion que busca el precio de venta y disponibilidad de insumos*/
 $('#articulo_select').on('change',function(){
     $('#insumos_necesarios').empty();
@@ -710,35 +821,39 @@ function mostrarInfoTributaria(cliente_id){
 }
 /** Al presionar 'Pagar con Cheque' cargar el cheque con la info del cliente y el pedido si no paga con seña ni es "Consumidor Final"*/
 function rellenarModalCheque(){
-    if(pagarTotal == true){                       //si no se va a señar, permitir Pagar con Cheque
-        var cliente_id = $('#cliente').val();
-        $.ajax({
-            url: "/admin/clientes",
-            data: {
-                id:cliente_id,
-            },
-            dataType: 'json',
-            success: function (data) {
-                console.log(data);
-                var respuesta = JSON.parse(data);
-                console.log(respuesta);
-                if(respuesta.responiva == 'Consumidor Final'){
-                    alert('No se permite el pago con cheque a clientes en carácter de "Consumidor Final"');
-                }
-                else{
-                    $('#nombre_cheque').val(respuesta.n);
-                    $('#apellido_cheque').val(respuesta.a);
-                    $('#empresa_cheque').val(respuesta.empresa);
-                    $('#cuit_cheque').val(respuesta.dni);
-                    $('#monto_cheque').val(montoTotal);
-                    $("#modal-create-cheque").modal();              //Abrir el modal de cheque
-                }
+    //if(pagarTotal == true){                       //si no se va a señar, permitir Pagar con Cheque
+    var cliente_id = $('#cliente').val();
+    $.ajax({
+        url: "/admin/clientes",
+        data: {
+            id:cliente_id,
+        },
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            var respuesta = JSON.parse(data);
+            console.log(respuesta);
+            if(respuesta.responiva == 'Consumidor Final'){
+                alert('No se permite el pago con cheque a clientes en carácter de "Consumidor Final"');
             }
-        });
-    }
-    else{
-        alert('No se puede pagar con cheque una seña, solo totalidad');
-    }
+            else{
+                $('#nombre_cheque').val(respuesta.n);
+                $('#apellido_cheque').val(respuesta.a);
+                $('#empresa_cheque').val(respuesta.empresa);
+                $('#cuit_cheque').val(respuesta.dni);
+                if(($('#sena').val()>0) && ($('#sena').is(':visible')) && ($('#sena').val()<montoTotal)){
+                    $('#monto_cheque').val($('#sena').val());
+                }else{
+                    $('#monto_cheque').val(montoTotal);
+                }
+                $("#modal-create-cheque").modal();              //Abrir el modal de cheque
+            }
+        }
+    });
+    //}
+    //else{
+    //  alert('No se puede pagar con cheque una seña, solo totalidad');
+    //}
 }
 
 /** Envia el email de notificacion de stock bajo **/
@@ -764,17 +879,17 @@ function email_notificacion_stockBajo(){
                 }
             }
             if(hayStockBajo == true){       /**Si hay stock bajo de cualquier insumo del articulo, enviar email notificando*/
-                $.ajax({
-                    url: "/admin/mail", dataType: 'json',
-                    data: {
-                        mensaje:mensaje,
-                        email_stockBajo:true,
-                    },
-                    success: function(data) {
-                        var respuesta = JSON.parse(data);
-                        alert(respuesta);
-                    }
-                })
+            $.ajax({
+                url: "/admin/mail", dataType: 'json',
+                data: {
+                    mensaje:mensaje,
+                    email_stockBajo:true,
+                },
+                success: function(data) {
+                    var respuesta = JSON.parse(data);
+                    alert(respuesta);
+                }
+            })
             }
         }
     });
@@ -897,13 +1012,13 @@ function articuloYaEstabaEnLaTabla(articulo_id){
 /**validar si la tabla Articulos esta vacia*/
 function laTablaArticulosEstaVacia(){
     if($('#tblListaProductos tbody tr').length == 0) {
-            return true;
-        }
-        else{
+        return true;
+    }
+    else{
 
-            return false;
-        }
-    };
+        return false;
+    }
+};
 
 
 /*
@@ -922,7 +1037,9 @@ function laTablaArticulosEstaVacia(){
  var dataFila = $('#tblListaProductos').DataTable().row(this).data();
  var linea = {articulo_id: dataFila[1], articulo_nombre: dataFila[2], cantidad: dataFila[3], precio_unitario: dataFila[4], importe: dataFila[5]};
  lineas [numLi] = linea;
-
  numLi++;
  });
  */
+
+
+

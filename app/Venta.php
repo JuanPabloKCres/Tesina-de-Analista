@@ -26,7 +26,7 @@ class Venta extends Model
 
     public function cheque()
     {
-        return $this->hasOne('App\Cheque');
+        return $this->belongsTo('App\Cheque');
     }
 
     public function articulos_ventas()

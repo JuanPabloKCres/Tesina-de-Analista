@@ -40,6 +40,14 @@
 <script src="{{ asset('plantillas/KAdmin-Dark/script/charts-highchart-pie.js') }}"></script>
 <script src="{{ asset('plantillas/KAdmin-Dark/script/charts-highchart-more.js') }}"></script>
 <script src="{{ asset('plantillas/KAdmin-Dark/script/animation.js') }}"></script>
+<!--JQuery steps (esta referenciado en admin.pedidps.createPedido el css y el js-->
+{{--
+--}}
+<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/plugins/jquery-steps-master/css/main.css') }}  ">
+
+<!-- jQuery UI 1.11.4 -->
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<!--/JQuery steps-->
 
 <script src="{{ asset('js/plugins.js') }}"></script>
 <script src="{{ asset('js/busqueda.js') }}"></script>
