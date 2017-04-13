@@ -10,7 +10,7 @@
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/bootstrap.min.css') }}  ">
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/animate.css') }} ">
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/all.css') }} ">
-    <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/main.css') }} ">
+    <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/main.css') }} " type='text/css'>
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/style-responsive.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/zabuto_calendar.min.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/pace.css') }} ">
@@ -18,16 +18,34 @@
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-select/css/bootstrap-select.min.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-select/css/bootstrap-select.css') }}">
 
-		<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker.css') }}">
-		<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker3.css') }}">
+    {{--
+    <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker.css') }}">
+	<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker3.css') }}">
+	<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
+	<script src="{{ asset('plantillas/KAdmin-Dark/script/bootstrap2-toogle.css') }}"></script>
+    --}}
 
+	<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker.css') }}">
+	<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker3.css') }}">
 
     <link href="{{ asset('plantillas/parsley/src/parsley.css') }}" rel='stylesheet' type='text/css'>
     <link href="{{ asset('plantillas/DataTables/media/css/jquery.dataTables.css') }}" rel='stylesheet' type='text/css'>
     <link href="{{ asset('plantillas/DataTables/extensions/Responsive/css/dataTables.responsive.css') }}" rel='stylesheet' type='text/css'>
 
-    <!--
-    <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
-   -->
 
-    <script src="{{ asset('plantillas/KAdmin-Dark/script/bootstrap2-toogle.css') }}"></script>
+    <!--JQuery Steps agregado en createPedido-->
+    {{--
+    <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/steps.css') }} ">
+    --}}
+
+
+    <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
+
+
+    <link src="{{ asset('plantillas/KAdmin-Dark/script/bootstrap2-toogle.css') }}" rel="stylesheet" type='text/css'>
+
+    <!-- Para el Toggle Button en Roles -->
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <!-- -->
+
+

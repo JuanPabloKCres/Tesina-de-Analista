@@ -19,7 +19,8 @@ class Email_NotificacionesController extends Controller
     public function index(Request $request)     /**Para notificacion automatica de stock bajo a administrador**/
     {
         if($request->ajax()){
-            if($request->email_info_pedido){
+            if($request->email_info){
+                /*
                 $cliente = Cliente::find($request->id_cliente);
                 $nombre_y_apellido = "fulano";//$cliente->nombre." ".$cliente->apellido;
                 Mail::send('emails.datos_pedido', ['cliente'=>$nombre_y_apellido, 'total'=>$request->total, 'fecha_hoy'=>$request->fecha_hoy, 'fecha_entrega'=>$request->fecha_entrega, 'items'=>$request->items], function($msj){
@@ -28,6 +29,20 @@ class Email_NotificacionesController extends Controller
                 });
                 Flash::overlay('Se ha enviado email con la info del pedido');
                 return response()->json(json_encode("Se envio el email del pedido, desde MailController.php", true));
+                */
+                try{
+                    Mail::send('emails.infopedido', ['cliente'=>null], function($msj){
+                        $msj->subject('GN Informacion Pedido');
+                        $msj->to('jpaulnava@gmail.com');
+                    });
+                    Flash::overlay('Se ha notificado al cliente');
+                    //Flash::overlay('Se ha enviado email con la info del pedido');
+                    return response()->json(json_encode("Se envio el email con info de su pedido desde MailController.php", true));
+                    //return view('emails.datos_pedido');
+                }catch (Exception $e){
+                    $respuesta = array("excepcion"=>$e);
+                    return response()->json(json_encode($respuesta, true));
+                }
             }
             if($request->email_stockBajo){
                 Mail::send('emails.stock_bajo', ['mensaje'=>$request->mensaje], function($msj){

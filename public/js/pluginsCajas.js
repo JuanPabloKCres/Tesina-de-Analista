@@ -47,7 +47,6 @@ function reporte_caja(){
 
 /** Reporte cierre de caja */
 $("#form-actualizar").submit(function (e) {
-    e.preventDefault();
     reporte_cierre_caja();
 });
 

@@ -134,7 +134,7 @@ class CajasController extends Controller
 
         Flash::success("Se ha realizado el cierre del registro de caja.");
 
-        return redirect()->route('admin.cajas.show', $id)->with('cerrada',$caja->cerrado);
+        return redirect()->route('admin.cajas.show', $id);
     }
 
 

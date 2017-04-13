@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Venta extends Model
 {
     protected $table =  "ventas";
-    protected $fillable = ['fecha_pedido', 'hora_pedido', 'fecha_entrega_estimada', 'fecha_venta', 'hora_venta','pagado', 'entregado', 'senado', 'forma_pago', 'cheque_id', 'userPedido_id', 'userVenta_id', 'cliente_id'];
+    protected $fillable = ['fecha_pedido', 'hora_pedido', 'fecha_entrega_estimada', 'fecha_venta', 'hora_venta',
+                            'fecha_facturacion','hora_facturacion', 'nro_cae', 'nro_facturero',
+                            'pagado', 'entregado', 'senado', 'forma_pago', 'cheque_id', 'userPedido_id', 'userVenta_id', 'cliente_id'];
+    //si la venta tiene nro_cae o nro_facturero (papel) el pago total ha sido facturado
 
     public function usuarioPedido()
     {

@@ -50,26 +50,24 @@ class ArticulosController extends Controller
                 $id = $request->id;
                 $insumosArticulo= InsumoArticulo::where('articulo_id', $id)->get();          //devuelve los insumos_articulo vinculados a un Articulo
                 foreach($insumosArticulo as $ia){
-                    $cantidadNecesaria = ($ia->cantidad)*($request->cantidadArticuloSolicitado);
+                    $cantidadNecesaria = ($ia->cantidad)*($request->cantidadArticuloSolicitado);    //cantidad necesaria x insumo que requiere articulo
                     $insumo = Insumo::find($ia->insumo_id);
-                    $stockDisponible = $insumo->stock;
+                    $stockDisponible = $insumo->stock;              //stock que se dispone x insumo
                     if($stockDisponible < $cantidadNecesaria){
-                        $aceptarPedido = false;
-                        $faltante = $cantidadNecesaria - $stockDisponible;
                         //no se tiene suficiente insumo para aceptar el pedido
-                        $respuesta = array("mensaje"=>'No hay stock suficiente para cubrir el pedido (faltan ', "faltante"=>$faltante, "permitir"=>false, "insumo"=>$insumo->nombre, "unidad"=>$insumo->unidad_medida->unidad);
-                        return response()->json(json_encode($respuesta, true));
+                        $faltante = $cantidadNecesaria - $stockDisponible;
+                        $listado_insumos_faltantes[] = array("mensaje"=>'No hay stock suficiente para cubrir el pedido (faltan ', "faltante"=>$faltante, "permitir"=>false, "insumo"=>$insumo->nombre, "unidad"=>$insumo->unidad_medida->unidad);
+                        $aceptarPedido = false;
                     }
                     else{
-                        //se deberia aceptar el articulo
-                        $aceptarPedido = true;
+                        $aceptarPedido = true;            //se deberia aceptar el articulo
                     }
                 }
                 if($aceptarPedido == true){
                     $respuesta = array("mensaje"=>'se acepta el insumo', "permitir"=>true);
                     return response()->json(json_encode($respuesta, true));
                 }else{
-                    return response()->json(json_encode($respuesta, true));
+                    return response()->json(json_encode($listado_insumos_faltantes, true));
                 }
             }
             elseif($request->informarStockRestante){             //bandera antes de consultar

@@ -1,0 +1,9 @@
+.pink > a {
+    background-color: pink !important;
+    background-image:none !important;
+}
+
+.green > a {
+    background-color: green !important;
+    background-image: none !important;
+}

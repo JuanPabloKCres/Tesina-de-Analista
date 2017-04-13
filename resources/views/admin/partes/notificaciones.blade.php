@@ -6,15 +6,16 @@
 
     if(strlen ($mes)==1){                       #si mes tiene un digito anteponer un 0 al mes
         if(strlen ($dia)==1){                       #si dia tambien tiene un digito anteponer un 0 al dia
-            $fecha_hoy = $año.'-0'.$mes.'-0'.$dia;
+            //$fecha_hoy = $año.'-0'.$mes.'-0'.$dia;
+            $fecha_hoy = '0'.$dia.'/0'.$mes.'/'.$año;
         }else{
-            $fecha_hoy = $año.'-0'.$mes.'-'.$dia;
+            $fecha_hoy = $dia.'/0'.$mes.'/'.$año;
         }
     }else{
         if(strlen ($dia)==1){                       #si dia tiene un digito anteponer un 0 al dia
-            $fecha_hoy = $año.'-'.$mes.'-0'.$dia;
+            $fecha_hoy = '0'.$dia.'/'.$mes.'/0'.$año;
         }else{
-            $fecha_hoy = $año.'-'.$mes.'-'.$dia;
+            $fecha_hoy = $dia.'/'.$mes.'/'.$año;
         }
     }
 ?>

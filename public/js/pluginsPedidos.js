@@ -24,17 +24,12 @@ $("#example-basic").steps({
     autoFocus: true,
     /* Labels */
     labels: {
-        cancel: "Cancel",
+        cancel: "Cancelar",
         current: "current step:",
         pagination: "Pagination",
         next: 'Siguiente',
         previous: 'Anterior',
         finish: 'Confirmar'
-    },
-    onStepChanged: function(e, currentIndex, priorIndex) {
-        // You don't need to care about it
-        // It is for the specific demo
-        adjustIframeHeight();
     },
 
 
@@ -48,14 +43,20 @@ $("#example-basic").steps({
         }
         // Forbid next action on "Warning" step if the user is to young
         //if (newIndex === 3 && Number($("#age-2").val()) < 18)
-        if(($("#responiva_select").val()!==""))
+        if((currentIndex === 0) && ($("#responiva_select").val()!==""))
         {
             return true;
             //miWizard.steps("next");
         }
         /* validacion de pagina de Modo de Pago */
-         if($("#chkEfectivo").is(":checked") || $("#chkCheque").is(":checked")){
-            return true;
+         if((currentIndex===1) && ($("#chkEfectivo").is(":checked") || $("#chkCheque").is(":checked"))){
+             if(($("#chkCheque").is(":checked")) && (pagoCheque==false)){
+                 $("#modal-create-cheque").modal()
+             }
+             else{
+                 return true;
+             }
+
          //miWizard.steps("next");
          }
         else{
@@ -89,14 +90,18 @@ $("#example-basic").steps({
         }
     },
     */
-    onFinishing: function (event, currentIndex)
-    {
-        miWizard.validate().settings.ignore = ":disabled";
-        return miWizard.valid();
-    },
     onFinished: function (event, currentIndex)
     {
-        alert("Submitted!");
+        /*
+        $("#form-pedido").submit(function (e) {
+            e.preventDefault();
+            confirmar();
+        });*/
+        miWizard.hide();
+        $('#volverWizard').removeClass("hide");
+        confirmar();
+
+        //$('#botonMandar').click()
     }
     /*
 }).validate({
@@ -108,24 +113,16 @@ $("#example-basic").steps({
     }*/
 });
 
+//$('#chkCheque').onclick($("#modal-create-cheque").modal());
+/**Quitar el fondo gris en el wizard*/
+$(document).ready(function () {
+    $(".content .clearfix").css("background-color", "#FBFCFC");
+});
 
 
 
 
 
-
-
-var handleBootstrapWizards = function () {
-    "use strict";
-    $("#wizard").bwizard();
-};
-
-var FormWizard = function () {
-    "use strict";
-    return{init: function () {
-        handleBootstrapWizards()
-    }}
-}
 
 $('#iva_select').prop('disabled',true);
 $('#precioU_number').prop('disabled',true);
@@ -156,7 +153,7 @@ var numFila = 0;
 var cantFilas = 0;
 var montoPedido = 0;
 var montoTotal = 0;
-var montoTotal_Absoludo = 0;
+var montoTotal_Absoluto = 0;
 var pagarTotal = true;
 var datos_cheque = null;      //array con datos del cheque
 //Datos del cheque (en blanco)
@@ -224,9 +221,9 @@ function agregarContenido(articulo_select, nombre, cantidad_number, precioU_numb
     montoTotal = montoTotal + valorItemTotal;
     montoTotal = montoTotal.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
     montoTotal = parseFloat(montoTotal);
-    montoTotal_Absoludo = montoTotal_Absoludo + valorItemTotal;
-    montoTotal_Absoludo = montoTotal_Absoludo.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
-    montoTotal_Absoludo = parseFloat(montoTotal_Absoludo);
+    montoTotal_Absoluto = montoTotal_Absoluto + valorItemTotal;
+    montoTotal_Absoluto = montoTotal_Absoluto.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+    montoTotal_Absoluto = parseFloat(montoTotal_Absoluto);
 
     tPro.row.add([
         numFila,
@@ -261,7 +258,7 @@ function borrarFila(d)
             numFilaBorrar = Filas;
             montoPedido = montoPedido - parseFloat(dataPla[5]);
             montoTotal = montoTotal - parseFloat(dataPla[5]);
-            montoTotal_Absoludo = montoTotal_Absoludo - parseFloat(dataPla[5]);
+            montoTotal_Absoluto = montoTotal_Absoluto - parseFloat(dataPla[5]);
         }
         Filas++;
     });
@@ -312,14 +309,18 @@ function comprobar(articulo_select, cantidad_number, precioU_number, importe_num
             success: function (data) {
                 var d = JSON.parse(data);
                 console.log(d);
-                if(d.permitir){
+                if(d.permitir){         //si el servidor decuele que hay insumos para cubrir el pedido
                     agregarContenido(articulo_select, $('#articulo_select option:selected').text(), cantidad_number, precioU_number, importe_number);
                 }
                 else{
-                    alert(d.mensaje + d.faltante+" "+d.unidad+" de "+ d.insumo+")");
                     document.getElementById("cantidad_number").style.color = "red";
                     $('#msjStock').removeClass("hide");
                     $("#cantidad_number").select();
+                    for(var i=0; i<d.length; i++) {
+                        //alert(d[i].mensaje + d[i].faltante+" "+d[i].unidad+" de "+ d[i].insumo+")");
+                        $('#insumo'+i).removeClass("hide");
+                        bootstrap_alert('#insumo'+i, d[i].mensaje + d[i].faltante+" "+d[i].unidad+" de "+ d[i].insumo+")", 10000)
+                    }
                 }
             }
         });
@@ -558,12 +559,13 @@ function enviarPedido(pagado, entregado)
             emitirTicket(informacion_de_cliente);                 /**llamar a emitir nota de pedido (comprobante de transaccion para el cliente)*/
             $('#mensajeExito').html();
             $('#botonExito').click();
-            email_notificacion_stockBajo();       /**llamar a email stock bajo*/
-
             /*bardo con el email_info_pedido_cliente? */
             if(entregado == false){             /**si el pedido no fue entregado en el acto, llamara enviar email con info de compra*/
-            email_info_pedido_cliente(lineas, montoPedido, montoTotal_Absoludo, $('#usuarioPedido').val());
+                email_info_pedido_cliente(lineas, montoPedido, montoTotal_Absoluto);
             }
+            email_notificacion_stockBajo();       /**llamar a email stock bajo*/
+
+
         }
     });
 }
@@ -945,7 +947,7 @@ function emitirTicket(informacion_de_cliente){
             ticket.localidad_cliente = informacion_de_cliente.localidad;   //OK
             ticket.domicilio_cliente = informacion_de_cliente.domicilio;   //OK
             ticket.nro_doc = informacion_de_cliente.dni;                   //OK
-            ticket.imp_total = montoTotal_Absoludo;
+            ticket.imp_total = montoTotal_Absoluto;
             ticket.items = lineas;
             var array = JSON.stringify(ticket);
             console.log(ticket);
@@ -958,12 +960,15 @@ function emitirTicket(informacion_de_cliente){
 }
 
 /** Enviar email con datos de pedido al cliente despues de efectuado el pedido (solo si no se entrega el mismo en el acto) **/
-function email_info_pedido_cliente(lineas, sena, total, user){
+function email_info_pedido_cliente(lineas, sena, total){
     var fecha_entrega_estimada = $('#fecha_entrega_date').val();
     var fecha_hoy = fechahoy();
     console.log('items:');
     console.log(lineas);
-    console.log("fecha entrega estimada"+fecha_entrega_estimada+" seña: "+sena+" total: "+total+" user: "+ user+ "fecha de hoy: "+ fecha_hoy);
+    if(fecha_entrega_estimada==null){
+        fecha_entrega_estimada = 'no se determino';
+    }
+    console.log("cliente: "+$('#cliente').val()+"fecha entrega estimada"+fecha_entrega_estimada+" seña: "+sena+" total: "+total+" user: "+ user+ "fecha de hoy: "+ fecha_hoy);
     $.ajax({
         url: "/admin/mail", dataType: 'json',
         data: {
@@ -971,13 +976,12 @@ function email_info_pedido_cliente(lineas, sena, total, user){
             items:lineas,
             fecha_entrega:fecha_entrega_estimada,
             sena:sena, total:total,
-            user:user ,
             fecha_hoy:fecha_hoy,
-            email_info_pedido: true
+            email_info:true
         },
         success: function (data) {
             var recibido = JSON.parse(data);
-            console.log(recibido);
+            console.log("Fallo al enviar el mail con datos de pedido: "+recibido.excepcion);
         }
     })
 }
@@ -988,7 +992,7 @@ function fechahoy(){
     var mm = hoy.getMonth()+1;      //Enero seria 1
     var yyyy = hoy.getFullYear();
     if(dd<10) {dd='0'+dd}   if(mm<10) {mm='0'+mm}
-    hoy = mm+'/'+dd+'/'+yyyy;
+    hoy = dd+'/'+mm+'/'+yyyy;
     return hoy;
 }
 
@@ -1020,26 +1024,83 @@ function laTablaArticulosEstaVacia(){
     }
 };
 
-
+/**Evento Creado para la fecha de entrega*/
 /*
- var numLi = 0;
- var lineas = [];
- var factura = {
- iva: $('#iva').val(),
- tipo_cbte: $('#factura').val(),
- nro_doc: $('#cuit').val(),
- nombre_cliente: $('#nombreCliente').val(),
- domicilio_cliente: $('#direccion').val(),
- imp_total: $('#montoTotal').val(),
- items: [],
- };
- $('#tblListaProductos tbody tr').each(function () {
- var dataFila = $('#tblListaProductos').DataTable().row(this).data();
- var linea = {articulo_id: dataFila[1], articulo_nombre: dataFila[2], cantidad: dataFila[3], precio_unitario: dataFila[4], importe: dataFila[5]};
- lineas [numLi] = linea;
- numLi++;
- });
- */
+var Event = function(text, className) {
+    this.text = text;
+    this.className = className;
+};
+var events = {};    //array de eventos que se cargan debajo
+events[new Date("04/04/2017")] = new Event("Cita con tu hermana", "pink");
+events[new Date("04/05/2017")] = new Event("Entrega de TP", "green");
+console.dir(events);
+
+// DatePicker para fecha de entrega
+$("#fecha_entrega_tentativa").datepicker({
+    dateFormat: 'dd/mm/yy',   //formato de la fecha que necesito adquirir
+    beforeShowDay: function(date) {
+        var event = events[date];
+        if (event) {
+            return [true, event.className, event.text];
+        }
+        else {
+            return [true, '', ''];
+        }
+    }
+});
+*/
+    //instancio DatePicker
+$("#fecha_entrega_date").datepicker({
+    format: 'dd/mm/yyyy',
+    minDate: 0,
+    maxDate: 0,
+    onSelect: function(date) {
+        alert(date)
+    },
+});
+
+$("#fecha_entrega_date").datepicker({
+    minDate: -2,
+    maxDate: 1,
+});
+$(document).ready(function() {
+    $('#fecha_entrega_date').datepicker( {
+        onSelect: function(date) {
+            alert(date)
+        },
+        startDate: 'today',
+        firstDay: 1,
+    });
+});
 
 
+
+/**Buscar pedidos para el Calentario **/
+    function buscarCantidadPedidos() {
+        var dia_a_revisar = $("#fecha_entrega_date").val();
+        $.ajax({
+            url: "/admin/pedidos/create", dataType: 'json',
+            data: {
+                buscar_datepicker: true,
+                dia: dia_a_revisar
+            },
+            success: function (data) {
+                var recibido = JSON.parse(data);
+                console.log(recibido);
+                //mi magia para que aparezca el popup con los datos del pedido
+                bootstrap_alert('#alertBox', 'Tiene pendientes ' + recibido.cantidad + ' pedidos, con un total de '+recibido.articulos+' articulos que entregar para el '+ dia_a_revisar, 9000)
+            }
+        })
+}
+
+$('#item-publish').click(function () {
+    buscarCantidadPedidos();
+});
+
+/**si radio button de cheque se presiona..*/
+if($("#chkCheque").is(":checked")){
+
+    alert('se eligio cheque');
+    $("#modal-create-cheque").modal();
+}
 

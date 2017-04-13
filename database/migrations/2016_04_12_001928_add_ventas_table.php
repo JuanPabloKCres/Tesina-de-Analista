@@ -18,6 +18,12 @@ class AddVentasTable extends Migration {
             $table->string('fecha_entrega_estimada')->nullable();   //Fecha en la que se terminaria de producir el pedido del cliente
             $table->string('fecha_venta')->nullable();
             $table->string('hora_venta')->nullable();
+
+            $table->string('fecha_facuracion')->nullable();
+            $table->string('hora_facturacion')->nullable();
+            $table->string('nro_cae')->nullable();          //te lo da AFIP via Factura electronica
+            $table->string('nro_facturero')->nullable();    //lo asigna el usuario segun su factura manual en papel
+
             $table->boolean('pagado');
             $table->boolean('entregado');
             $table->double('senado');

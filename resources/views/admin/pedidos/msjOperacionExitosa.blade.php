@@ -11,8 +11,8 @@
                     <p id="mensajeExito"></p>
                 </div>                                     
             </div>   
-               <div class="modal-footer">                              
-                   <button type="button" data-dismiss="modal"  class="btn btn-white" href="{{ route('admin.pedidos.index')}}">Cerrar</button>
+               <div class="modal-footer">
+                   <a data-toggle="tooltip" data-placement="bottom" href="{{ route('admin.pedidos.index') }}" title="Ir al resumen de pedidos"  class="btn btn-white"> <span aria-hidden="true"></span> Cerrar</a>
             </div>  
         </div>
     </div>
