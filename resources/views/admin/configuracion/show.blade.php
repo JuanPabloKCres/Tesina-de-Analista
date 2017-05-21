@@ -72,7 +72,23 @@
                                                             <tr>
                                                                 <td><h4 class="box-heading">Correo:</h4></td>
                                                                 <td><h4>{{ $configuracion->email }}</h4></td>
-                                                            </tr>                                                                                                                                     
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Se permite pago c/ cheque a Consumidor Final:</h4></td>
+                                                                @if($configuracion->pago_cheque_cf == true)
+                                                                    <td><h4>Si</h4></td>
+                                                                @else
+                                                                    <td><h4>No</h4></td>
+                                                                @endif
+                                                            </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Se permite la venta sin stock de insumos:</h4></td>
+                                                                @if($configuracion->ventas_sin_stock == true)
+                                                                    <td><h4>Si</h4></td>
+                                                                @else
+                                                                    <td><h4>No</h4></td>
+                                                                @endif
+                                                            </tr>
                                                         </tbody>
                                                     </table>                            
                                                 </div>

@@ -1722,7 +1722,7 @@ class ComposerStaticInit132f1eb12e94b60629236f4883b26398
         'MigracionAuditorias' => __DIR__ . '/../..' . '/database/migrations/2016_09_15_152832_migracion_auditorias.php',
         'MigracionCaja' => __DIR__ . '/../..' . '/database/migrations/2016_04_13_143531_migracion_caja.php',
         'MigracionConfigs' => __DIR__ . '/../..' . '/database/migrations/2016_04_18_153148_migracion_configs.php',
-        'MigracionMovimiento' => __DIR__ . '/../..' . '/database/migrations/2016_04_13_143553_migracion_movimiento.php',
+        'MigracionMovimiento' => __DIR__ . '/../..' . '/database/migrations/2016_04_13_143554_migracion_movimiento.php',
         'MigracionRoles' => __DIR__ . '/../..' . '/database/migrations/2014_09_15_152832_migracion_roles.php',
         'MigracionRubros' => __DIR__ . '/../..' . '/database/migrations/2016_04_08_165249_migracion_rubros.php',
         'Mni\\FrontYAML\\Bridge\\CommonMark\\CommonMarkParser' => __DIR__ . '/..' . '/mnapoli/front-yaml/src/Bridge/CommonMark/CommonMarkParser.php',

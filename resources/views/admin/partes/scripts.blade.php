@@ -1,9 +1,13 @@
 <script src="{{ asset('plantillas/KAdmin-Dark/script/modernizr.min.js') }}"></script>
+
 <script src="{{ asset('plantillas/KAdmin-Dark/script/jplist.min.js') }}"></script>
 <script src="{{ asset('plantillas/KAdmin-Dark/script/jplist.js') }}"></script>
+
 <script src="{{ asset('plantillas/KAdmin-Dark/script/jquery-1.10.2.min.js') }}"></script>
 <script src="{{ asset('plantillas/KAdmin-Dark/script/jquery-migrate-1.2.1.min.js') }}"></script>
 <script src="{{ asset('plantillas/KAdmin-Dark/script/jquery-ui.js') }}"></script>
+<script src="{{ asset('plantillas/jquery-ui-1.12.1/jquery-ui.js') }}"></script>
+
 <script src="{{ asset('plantillas/KAdmin-Dark/script/bootstrap.min.js') }}"></script>
 <script src="{{ asset('plantillas/KAdmin-Dark/script/bootstrap-hover-dropdown.js') }}"></script>
 <!-- Para el Toggle Button en Roles -->
@@ -30,7 +34,12 @@
 <script src="{{ asset('plantillas/KAdmin-Dark/script/jquery.flot.fillbetween.js') }}"></script>
 <script src="{{ asset('plantillas/KAdmin-Dark/script/jquery.flot.stack.js') }}"></script>
 <script src="{{ asset('plantillas/KAdmin-Dark/script/jquery.flot.spline.js') }}"></script>
+{{--
+--}}
+
+<!-- No se por que pero si no está esto no funciona el DataTable ? -->
 <script src="{{ asset('plantillas/KAdmin-Dark/script/zabuto_calendar.min.js') }}"></script>
+
 <script src="{{ asset('plantillas/KAdmin-Dark/script/index.js')}} "></script>
 <script src="{{ asset('plantillas/KAdmin-Dark/script/highcharts.js') }}"></script>
 <script src="{{ asset('plantillas/KAdmin-Dark/script/data.js') }}"></script>
@@ -62,7 +71,7 @@
 <script src="{{ asset('plantillas/bootstrap-select/js/bootstrap-select.js') }}"></script>
 <script src="{{ asset('plantillas/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
 
-<script src="{{ asset('plantillas/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+
 
 
 <script src="{{ asset('plantillas/parsley/dist/i18n/es.js') }}"></script>

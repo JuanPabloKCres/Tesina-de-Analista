@@ -93,13 +93,4 @@
             </div>
          </div>
     </div>
-
-@endsection
-@section('script')
-    <script>
-        var listSidebar = "li8";
-        var elemFaltante = "nada";
-    </script>
-
-
 @endsection

@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Localidad;
 use App\Provincia;
 use App\Cliente;
+use App\CuentaCorriente;
 use App\Venta;
 use App\Responiva;
 use Carbon\Carbon;
@@ -31,46 +32,57 @@ class ClientesController extends Controller {
             dd("Usted NO tiene permisos para acceder a este subsistema");
             return view('admin.partes.noAutorizado');
         }
-
     }
 
     public function index(Request $request) {
         if ($request->ajax()) {
-            $cliente = Cliente::find($request->id);
-            $nombre = $cliente->apellido . " " . $cliente->nombre;
-            $n = $cliente->nombre;
-            $a = $cliente->apellido;
-            $responiva = $cliente->responiva->nombre;
-            $iva = $cliente->responiva->iva;
-            $empresa = $cliente->empresa;
-            $dni = "";
-            $direccion = "";
-            $localidad = "";
-            $provincia = "";
-            $email = $cliente->email;
-            $tipo_cbte = $cliente->responiva->factura;
-            if ($cliente->cuit) {
-                $dni = $cliente->cuit;
-            } else {
-                $dni = $cliente->dni;
-            }
-            if ($cliente->direccion) {
-                $direccion = $cliente->direccion;
-            } else {
-                $domicilio = "No registrado";
-            }
-            if ($cliente->localidad) {
-                $localidad = $cliente->localidad->nombre;
-            } else {
-                $localidad = "No registrado";
-            }
-            //if ($cliente->localidad->provincia->nombre) {
-                $provincia = $cliente->localidad->provincia->nombre;
-            //} else {
-              //  $provincia = "No registrado";
-            //}
+                $cliente = Cliente::find($request->id);
+                $nombre = $cliente->apellido . " " . $cliente->nombre;
+                $n = $cliente->nombre;
+                $a = $cliente->apellido;
+                $responiva = $cliente->responiva->nombre;
+                $iva = $cliente->responiva->iva;
+                $empresa = $cliente->empresa;
+                $dni = "";
+                //$tieneCC = $cliente->cuentaCorriente()->activa;
 
-            $datosValidados = array("nombre" => $nombre, "email" => $email, "n" => $n, "a" => $a, "empresa"=>$empresa, "dni" => $dni, "domicilio" => $direccion, "localidad" => $localidad, "provincia" => $provincia, "tipo_cbte" => $tipo_cbte, "responiva"=>$responiva, "iva"=>$iva);
+                $direccion = "";
+                $localidad = "";
+                $provincia = "";
+                $email = $cliente->email;
+                $tipo_cbte = $cliente->responiva->factura;
+                if ($cliente->cuit) {
+                    $dni = $cliente->cuit;
+                } else {
+                    $dni = $cliente->dni;
+                }
+                if ($cliente->direccion) {
+                    $direccion = $cliente->direccion;
+                } else {
+                    $domicilio = "No registrado";
+                }
+                if ($cliente->localidad) {
+                    $localidad = $cliente->localidad->nombre;
+                } else {
+                    $localidad = "No registrado";
+                }
+                //if ($cliente->localidad->provincia->nombre) {
+                $provincia = $cliente->localidad->provincia->nombre;
+                //} else {
+                //  $provincia = "No registrado";
+                //}
+
+            //$cc = CuentaCorriente::where('cliente_id', $request->id);
+
+            if(is_null($cliente->cuentaCorriente)){
+                $tieneCC = 0;
+            }else{
+                $tieneCC = 1;
+            }
+
+            $datosValidados = array("nombre" => $nombre, "email" => $email, "n" => $n, "a" => $a, "empresa"=>$empresa,
+                "dni" => $dni, "domicilio" => $direccion, "localidad" => $localidad, "provincia" => $provincia,
+                "tipo_cbte" => $tipo_cbte, "responiva"=>$responiva, "iva"=>$iva, "tieneCC" => $tieneCC);
             return response()->json(json_encode($datosValidados, true));
         }
         $clientes = Cliente::all();

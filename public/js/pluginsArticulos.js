@@ -356,6 +356,7 @@ function enviarPedido()
     var costoArticulo= $('#costoArticulo_text').val();      var margen= $('#gananciaPorcent_number').val();
     var gananciaArticulo= $('#gananciaDinero_text').val();      var precioVta= $('#precioVta_text').val();
     var iva_id= $('#iva_select').val();    var montoIva= $('#montoIva_number').val();
+    var horas_produccion = $('#horas_produccion').val();
     //console.log("user_id"+user_id+" nombre "+nombre+" alto "+alto+" ancho "+ancho+" tipo_id: "+tipo_id+" talle_id: "+talle_id+" color_id: "+color_id+" costoArticulo: "+costoArticulo+ "margen: "+margen+" ganancia: "+gananciaArticulo+" iva_id: "+iva_id+" montoIva: "+montoIva+" precioVta: "+precioVta);
     $.ajax({
         dataType: 'JSON', url: "/admin/articulos/create",
@@ -373,10 +374,11 @@ function enviarPedido()
             gananciaArticulo: gananciaArticulo,
             iva_id: iva_id,
             montoIva: montoIva,
-            precioVta: precioVta
+            precioVta: precioVta,
+            horas_produccion: horas_produccion
         },
-        success: function (data) {
-            $('#mensajeExito').html(data);
+        success: function () {
+            $('#mensajeExito').html();
             $('#botonExito').click();
         }
     });

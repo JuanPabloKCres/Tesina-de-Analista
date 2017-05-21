@@ -46,9 +46,10 @@
                                               <th>Fecha y hora de la venta</th>
                                               <th>Importe</th>
                                               <th>Cantidad señada</th>
+                                              <th>Forma de pago</th>
                                               <th class="text-center">Usuario que tomó el pedido</th>
-                                              <th class="text-center">Usuario que realizó la venta</th>
-                                              <th class="text-center">Acciones</th>
+                                              <th class="text-center">Usuario que concreto venta</th>
+                                              <th class="text-center">Ver</th>
                                           </tr>
                                       </thead>
                                       <tbody>
@@ -63,6 +64,7 @@
                                               @else
                                                   <td class="text-center">${{ $pedido->senado }}</td>
                                               @endif
+                                              <td class="text-center">{{ $pedido->forma_pago}}</td>
                                               <td class="text-center">{{ $pedido->usuarioPedido->name }}</td>
                                               <td class="text-center">{{ $pedido->usuarioVenta->name }}</td>
                                               <td class="text-center">

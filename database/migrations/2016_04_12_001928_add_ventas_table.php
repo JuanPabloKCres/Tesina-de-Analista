@@ -35,6 +35,10 @@ class AddVentasTable extends Migration {
             $table->foreign('userVenta_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('cliente_id')->unsigned();
             $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade');
+
+            $table->double('horas_produccion');
+            $table->double('progreso');
+
             $table->timestamps();
         });
     }

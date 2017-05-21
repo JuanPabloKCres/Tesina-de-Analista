@@ -1,5 +1,4 @@
-<form class="form-horizontal" id="form-agregar">
-
+<form class="form-horizontal" {{--id="form-agregar"--}}>
     <div class="row text-center">
         <div class="col-lg-12">
             <h3>Artículos</h3>
@@ -62,5 +61,5 @@
             <hr/>
         </div>
     </div>
-    <button type="submit" class="btn btn-orange btn-block"> Agregar</button>
+    <button type="button" id="formagregar" onclick="comprobarYagregar()" class="btn btn-orange btn-block"> Agregar</button>
 </form>

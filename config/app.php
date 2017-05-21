@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'timezone' => 'America/Buenos_Aires',
+    'timezone' => 'America/Argentina/Buenos_Aires',
 
     /*
     |--------------------------------------------------------------------------

@@ -63,8 +63,10 @@ class ArticulosController extends Controller
                         $aceptarPedido = true;            //se deberia aceptar el articulo
                     }
                 }
+                //*datos de horas de produccion por articulo
+                $horas_produccion = Articulo::find($id)->horas_produccion;
                 if($aceptarPedido == true){
-                    $respuesta = array("mensaje"=>'se acepta el insumo', "permitir"=>true);
+                    $respuesta = array("mensaje"=>'se acepta el insumo', "permitir"=>true, "horas_produccion"=>$horas_produccion);
                     return response()->json(json_encode($respuesta, true));
                 }else{
                     return response()->json(json_encode($listado_insumos_faltantes, true));
@@ -123,6 +125,8 @@ class ArticulosController extends Controller
             $articulo->estado = 'se fabrica';
             $articulo->descripcion = 'no hay';
             $articulo->cantidad_insumos = 1;
+            //↓ nuevo
+            $articulo->horas_produccion = $request->horas_produccion;
             //
             $articulo->iva_id = $request->iva_id;             #ok
             $articulo->montoIva = $request->montoIva;

@@ -5,6 +5,7 @@
     <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700">
     <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Oswald:400,700,300">
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/jquery-ui-1.10.4.custom.min.css') }}">
+
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/font-awesome.css') }}  ">
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/font-awesome.min.css') }}  ">
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/bootstrap.min.css') }}  ">
@@ -23,8 +24,9 @@
 	<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker3.css') }}">
 	<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
 	<script src="{{ asset('plantillas/KAdmin-Dark/script/bootstrap2-toogle.css') }}"></script>
-    --}}
 
+    --}}
+    <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/jquery-ui-1.12.1/jquery-ui.css') }}  ">
 	<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker.css') }}">
 	<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker3.css') }}">
 

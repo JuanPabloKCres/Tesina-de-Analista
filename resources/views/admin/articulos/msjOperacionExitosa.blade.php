@@ -11,9 +11,9 @@
                     <p id="mensajeExito"></p>
                 </div>                                     
             </div>   
-               <div class="modal-footer">                              
-                   <button type="button" data-dismiss="modal"  class="btn btn-white">Cerrar</button>                        
-            </div>  
+                <div class="modal-footer">
+                    <a data-toggle="tooltip" data-placement="bottom" href="{{ route('admin.articulos.index') }}" title="Ir al listado de articulos"  class="btn btn-white"> <span aria-hidden="true"></span> Cerrar</a>
+                </div>
         </div>
     </div>
 </div>

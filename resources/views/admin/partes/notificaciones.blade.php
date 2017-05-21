@@ -21,13 +21,14 @@
 ?>
 
 
-<li role="presentation" class="dropdown">
+<li role="presentation" class="dropdown animated bounce">
     <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
         <i class="fa fa-envelope-o"></i>
         <span class="badge bg-red">
             <?php $i=0; ?>
             @foreach($pedidos as $pedido)
-                @if($pedido->fecha_entrega_estimada == $fecha_hoy)
+                <?php $fecha_entrega = strtotime($pedido->fecha_entrega_estimada); ?>
+                @if( $fecha_entrega <= strtotime($fecha_hoy))
                         <?php $i++; ?>
                 @endif
             @endforeach

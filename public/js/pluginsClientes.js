@@ -113,7 +113,6 @@ $(document).ready(function () {
 });
 
 /**** Cuando se selecciona un pais, desplegar las provincias que le corresponden ****/
-
 $('select#pais_select').on('change',function () {
     $('select#provincia_select').empty();
     $('select#localidad_select').empty();
@@ -156,6 +155,5 @@ function buscarLocalidades(){
             }
         }
     });
-
 }
 

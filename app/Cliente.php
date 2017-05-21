@@ -17,6 +17,10 @@ class Cliente extends Model {
         return $this->hasMany('App\Cheque');
     }
 
+    public function cuentaCorriente() {
+        return $this->hasOne('App\CuentaCorriente');
+    }
+
     public function comprobantes() {
         return $this->hasMany('App\Comprobante');
     }

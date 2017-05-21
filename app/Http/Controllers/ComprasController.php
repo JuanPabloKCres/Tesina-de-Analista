@@ -32,12 +32,11 @@ class ComprasController extends Controller {
         else{
             dd("Usted NO tiene permisos para acceder a este subsistema");
             return view('admin.partes.noAutorizado');
-
         }
     }
 
     public function index() {
-        $compras = Compra::searchRecibido(0)    //se considerara compra mostrable solo la que fue recibida
+        $compras = Compra::searchRecibido(1)    //se considerara compra mostrable solo la que fue recibida
                 ->orderBy('id', 'ASC')
                 ->paginate();
         return view('admin.compras.tablaPedidos')->with('compras', $compras);
@@ -164,7 +163,7 @@ class ComprasController extends Controller {
                             $articulo->save();              //Guardamos la actualizacion de Articulo
                      }
                 }
-                /** En este sector se completan los campos y se registra el movimiento en la caja.*/
+                /** En este sector se completan los campos y se registra el movimientos en la caja.*/
                 if ($compra->monto > 0) {
                     $movimiento->caja_id = $caja->id;
                     $movimiento->tipo = 'salida';

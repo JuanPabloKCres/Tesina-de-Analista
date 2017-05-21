@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CuentaCorriente;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -52,15 +53,24 @@ class MovimientosController extends Controller
     public function store(Request $request)
     {
         $movimiento = new Movimiento($request->all());
-        $caja = Caja::find($request->caja_id);
-        if(($caja->totalMovimientos() < $movimiento->monto) && ($movimiento->tipo == 'salida')){
-            Flash::success('No se puede sacar un monto mayor al existente en caja.');
-            return redirect()->route('admin.cajas.index');
-        }
-        else{
+        if($request->cc_id){
+            $cuentacorriente = CuentaCorriente::find($request->cc_id);
+            $movimiento->forma = 'CC';
+            $movimiento->ccorriente_id = $request->cc_id;
             $movimiento->save();
-            Flash::success('El movimiento ha sido registrado de forma existosa.');
-            return redirect()->route('admin.cajas.index');
+            Flash::success('El movimientos ha sido registrado de forma existosa.');
+            return redirect()->route('admin.ccorrientes.show',$request->cc_id);
+        }
+        else {
+            $caja = Caja::find($request->caja_id);
+            if (($caja->totalMovimientos() < $movimiento->monto) && ($movimiento->tipo == 'salida')) {
+                Flash::success('No se puede sacar un monto mayor al existente en caja.');
+                return redirect()->route('admin.cajas.index');
+            } else {
+                $movimiento->save();
+                Flash::success('El movimientos ha sido registrado de forma existosa.');
+                return redirect()->route('admin.cajas.index');
+            }
         }
     }
 
@@ -73,7 +83,7 @@ class MovimientosController extends Controller
     public function show($id)
     {
         $movimiento = Movimiento::find($id);
-        return view('admin.movimientos.show')->with('movimiento',$movimiento);
+        return view('admin.movimientos.show')->with('movimientos',$movimiento);
     }
 
     /**

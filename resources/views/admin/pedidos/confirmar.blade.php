@@ -117,7 +117,7 @@
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="input-icon right">
-                                            {!! Form::checkbox('entregado', '2') !!}
+                                            {!! Form::checkbox('entregado', '-1') !!}
                                         </div>
                                     </div>
                                 </div>
@@ -128,11 +128,11 @@
                <br>
                <hr/>
                <br>                              
-               {!! Form::submit('Registrar acción', ['class' => 'btn btn-warning btn-block hide']) !!}
-                @if ($pedido->pagado)
+               {!! Form::submit('Registrar acción', ['class' => 'btn btn-warning btn-block']) !!}
+                @if ($pedido->pagado || $pedido->factura=='1')
                     <button class="btn btn-success btn-block" type="button" onclick="generarFactura()">Registrar acción</button>
-                @else
-                   <button class="btn btn-warning btn-block" type="button" onclick="generarFactura()">Registrar acción</button>
+                @elseif($pedido->entregado == '-1') {{--  Si se cancelo el pedido "entregado" = -1   --}}
+                   <button class="btn btn-warning btn-block" type="button" onclick="cancelarPedido({{ $pedido->id }})">Registrar acción</button>
                 @endif                               
                <button type="button" data-dismiss="modal" class="btn btn-white btn-block">Cerrar</button>
             {!! Form::close() !!}

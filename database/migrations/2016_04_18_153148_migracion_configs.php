@@ -26,6 +26,8 @@ class MigracionConfigs extends Migration
             $table->integer('localidad_id')->unsigned();            
 
             $table->foreign('localidad_id')->references('id')->on('localidades')->onDelete('cascade');
+            $table->boolean('permitir_cheque_consumidor_final');
+            $table->boolean('permitir_ventas_sin_stock');
             $table->timestamps();
         });
     }

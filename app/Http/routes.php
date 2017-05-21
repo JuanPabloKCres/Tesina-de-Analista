@@ -40,6 +40,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
    Route::resource('proveedores','ProveedoresController');
    Route::resource('configuraciones','ConfigController');
    Route::resource('cajas','CajasController');
+   Route::resource('ccorrientes','CCorrientesController');     //**nuevo
+   //Route::get('ccorrientes/registrosCC', 'CCorrientesController@registrosCC');
+   Route::get('tablaRegistros', ['uses' => 'CCorrientesController@registrosCC', 'as' => 'admin.cuentasCorrientes.registrosCC']);
+
    Route::resource('movimientos','MovimientosController');
    Route::resource('pedidos','PedidosController');             //Pedidos para ventas de Articulos (se debitan insumos del stock)
 

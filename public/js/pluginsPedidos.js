@@ -14,6 +14,27 @@
  $('#fecha_entrega_date').datepicker({minDate: -7});
  });
  */
+/*** Instanciar variables Globales ***/
+var horas_produccion = 0;
+
+var numFila = 0;
+var cantFilas = 0;
+var montoPedido = 0;
+var montoTotal = 0;
+var montoTotal_Absoluto = 0;
+var pagarTotal = true;
+var datos_cheque = null;      //array con datos del cheque
+//Datos del cheque (en blanco)
+var pagoCheque = false;
+var pagoEnCC = false;
+var nro_serie;
+var banco;
+var sucursal_banco;
+var fecha_emision;
+var fecha_cobro;
+
+var tieneCC;
+/************************************ */
 
 var miWizard = $("#example-basic").show();
 
@@ -32,85 +53,67 @@ $("#example-basic").steps({
         finish: 'Confirmar'
     },
 
-
     /* validaicon de pagina de Cliente */
     onStepChanging: function (event, currentIndex, newIndex)
     {
-        // Allways allow previous action even if the current form is not valid!
+        // ASiempre permitir volver para atras
         if (currentIndex > newIndex)
         {
             return true;
         }
-        // Forbid next action on "Warning" step if the user is to young
-        //if (newIndex === 3 && Number($("#age-2").val()) < 18)
         if((currentIndex === 0) && ($("#responiva_select").val()!==""))
         {
+            alert(tieneCC);
             return true;
-            //miWizard.steps("next");
+        }
+        //Validacion de seccion "Articulos"
+        if((currentIndex === 1) && (cantFilas>0))
+        {
+            return true;
         }
         /* validacion de pagina de Modo de Pago */
-         if((currentIndex===1) && ($("#chkEfectivo").is(":checked") || $("#chkCheque").is(":checked"))){
-             if(($("#chkCheque").is(":checked")) && (pagoCheque==false)){
-                 $("#modal-create-cheque").modal()
-             }
-             else{
-                 return true;
-             }
+        if((currentIndex===2) && ($("#chkEfectivo").is(":checked") || $("#chkCheque").is(":checked")) || $("#chkCC").is(":checked")){
+            if(($("#chkCheque").is(":checked"))){    //si pago con cheque
+                if(pagoCheque == false) {       //si no se le permite el pago con cheque a este cliente
+                    if ($('#btn-pagarConCheque').prop('disabled', true)) {
+                        alert('A clientes en razón de Consumidor Final no se les permite abonar con cheques');
+                    } else {
+                        $("#modal-create-cheque").modal();
+                    }
+                }
+                else{
+                    sugerirFechaDeEntrega();
+                    return true;
+                }
+            }
+            else if($("#chkCC").is(":checked")){     //si paga con Cuenta Corriente
+                if(tieneCC == true){
+                    alert("El cliente tiene una CC activa");
+                    pagoEnCC = true;
+                    sugerirFechaDeEntrega();
+                    return true;
+                }
+                else{
+                    alert("El cliente no tiene una CC activa");
+                    return false;
+                }
+            }
+            else if($("#chkEfectivo").is(":checked")){
+                sugerirFechaDeEntrega();
+                return true;
 
-         //miWizard.steps("next");
-         }
+            }
+        }
         else{
-             return false;
-         }
-
-        // Necesario en algunos casos cuando se vuelve atras (limpiar)
-        /*
-        if (currentIndex < newIndex)
-        {
-            // To remove error styles
-            form.find(".body:eq(" + newIndex + ") label.error").remove();
-            form.find(".body:eq(" + newIndex + ") .error").removeClass("error");
-        }
-        */
-        //form.validate().settings.ignore = ":disabled,:hidden";
-        //return form.valid();
-    },
-/*
-    onStepChanged: function (event, currentIndex, priorIndex)
-    {
-        // Used to skip the "Warning" step if the user is old enough.
-        if (currentIndex === 2 && Number($("#age-2").val()) >= 18)
-        {
-
-        }
-        // Used to skip the "Warning" step if the user is old enough and wants to the previous step.
-        if (currentIndex === 2 && priorIndex === 3)
-        {
-            form.steps("previous");
+            return false;
         }
     },
-    */
     onFinished: function (event, currentIndex)
     {
-        /*
-        $("#form-pedido").submit(function (e) {
-            e.preventDefault();
-            confirmar();
-        });*/
         miWizard.hide();
         $('#volverWizard').removeClass("hide");
         confirmar();
-
-        //$('#botonMandar').click()
     }
-    /*
-}).validate({
-    errorPlacement: function errorPlacement(error, element) { element.before(error); },
-    rules: {
-        confirm: {
-            equalTo: "#password-2"
-        }
-    }*/
 });
 
 //$('#chkCheque').onclick($("#modal-create-cheque").modal());
@@ -118,10 +121,6 @@ $("#example-basic").steps({
 $(document).ready(function () {
     $(".content .clearfix").css("background-color", "#FBFCFC");
 });
-
-
-
-
 
 
 $('#iva_select').prop('disabled',true);
@@ -149,24 +148,9 @@ $('#btn-pagarConCheque').prop('color', 'grey');
  *                   Es calculada a partir de los importes de los renglones.
  */
 $('#sena').val("0");
-var numFila = 0;
-var cantFilas = 0;
-var montoPedido = 0;
-var montoTotal = 0;
-var montoTotal_Absoluto = 0;
-var pagarTotal = true;
-var datos_cheque = null;      //array con datos del cheque
-//Datos del cheque (en blanco)
-var pagoCheque = false;
-var nro_serie;
-var banco;
-var sucursal_banco;
-var fecha_emision;
-var fecha_cobro;
-
 
 function validarFormCheque(){
-    nro_serie = document.forms["form-crear"]["nro_serie"].value;
+    nro_serie = document.forms["form-crear"]['nro_serie'].value;
     banco = document.forms["form-crear"]["banco"].value;
     sucursal = document.forms["form-crear"]["sucursal"].value;
     fecha_emision = document.forms["form-crear"]["fecha_emision"].value;
@@ -191,6 +175,7 @@ function cargarDatosCheque(){                           //valida y carga los dat
     pagoCheque = true;
 }
 
+
 //var nro_serie_cheque = $('#nro_serie').val();
 //var banco_cheque = $('#banco').val();
 //var sucursal_banco_cheque = $('#sucursal').val();
@@ -198,7 +183,7 @@ function cargarDatosCheque(){                           //valida y carga los dat
 //var fecha_cobro_cheque = $('#fecha_cobro').val();
 
 
-/*
+/**
  * Funtion agregarContenido: Este método recibe parámetros para crear renglones () y crea
  * una nueva linea en la tabla de artículos. También agrega otros valores útiles para otros métodos
  * como el número de fila que se inserta y un link que dispara el método para borrar esa fila.
@@ -207,7 +192,7 @@ function cargarDatosCheque(){                           //valida y carga los dat
  *
  * parseFloat: método de javascript para convertir a decimal la variable y usarla para el pertinente cálculo.
  */
-function agregarContenido(articulo_select, nombre, cantidad_number, precioU_number, importe_number)
+function agregarContenido(articulo_select, nombre, cantidad_number, precioU_number, importe_number, horas_produccion_articulo)
 {
     var tPro = $('#tblListaProductos').DataTable();
     cantFilas++;
@@ -225,6 +210,8 @@ function agregarContenido(articulo_select, nombre, cantidad_number, precioU_numb
     montoTotal_Absoluto = montoTotal_Absoluto.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
     montoTotal_Absoluto = parseFloat(montoTotal_Absoluto);
 
+    horas_produccion = horas_produccion + (horas_produccion_articulo * cantidad_number);    //nuevo → 1 de Mayo
+
     tPro.row.add([
         numFila,
         articulo_select,
@@ -232,8 +219,10 @@ function agregarContenido(articulo_select, nombre, cantidad_number, precioU_numb
         cantidad_number,
         precioU_number,
         importe_number,
+        horas_produccion_articulo*cantidad_number,
+        ' <a href="javascript:borrarFila(' + numFila + ');" data-toggle="modal"><i class="fa fa-lg fa-trash-o"></i> Borrar</a>   ',
         //valorItemTotal,       #comentado el 19/01 15:21
-        ' <a href="javascript:borrarFila(' + numFila + ');" data-toggle="modal"><i class="fa fa-lg fa-trash-o"></i> Borrar</a>   '
+
     ]).draw();
     $('#mp').html(montoPedido);
     $('#mt').html(montoTotal);
@@ -259,6 +248,7 @@ function borrarFila(d)
             montoPedido = montoPedido - parseFloat(dataPla[5]);
             montoTotal = montoTotal - parseFloat(dataPla[5]);
             montoTotal_Absoluto = montoTotal_Absoluto - parseFloat(dataPla[5]);
+            horas_produccion = horas_produccion - parseFloat(dataPla[6]);
         }
         Filas++;
     });
@@ -266,6 +256,12 @@ function borrarFila(d)
     $('#mp').html(montoPedido);
     $('#mt').html(montoTotal);
     cantFilas--;
+    if($('#tblListaProductos tbody tr').length == 0) {
+        montoTotal = 0;
+        montoPedido = 0;
+        monoTotal_Absoluto = 0;
+        horas_produccion = 0;
+    }
 }
 
 /*
@@ -310,7 +306,7 @@ function comprobar(articulo_select, cantidad_number, precioU_number, importe_num
                 var d = JSON.parse(data);
                 console.log(d);
                 if(d.permitir){         //si el servidor decuele que hay insumos para cubrir el pedido
-                    agregarContenido(articulo_select, $('#articulo_select option:selected').text(), cantidad_number, precioU_number, importe_number);
+                    agregarContenido(articulo_select, $('#articulo_select option:selected').text(), cantidad_number, precioU_number, importe_number, d.horas_produccion);
                 }
                 else{
                     document.getElementById("cantidad_number").style.color = "red";
@@ -418,10 +414,15 @@ function completarPrecio(n, iva)
  * Este método jquery captura el evento de submit del formulario "Artículos"
  * y lanza el método que se encarga de crear un renglón en la tabla.
  */
+function comprobarYagregar() {
+    comprobar($('#articulo_select').val(), $('#cantidad_number').val(), $('#precioU_number').val(), $('#importe_number').val());
+}
+/*
 $("#form-agregar").submit(function (e) {
     e.preventDefault();
     comprobar($('#articulo_select').val(), $('#cantidad_number').val(), $('#precioU_number').val(), $('#importe_number').val());
 });
+*/
 
 /** Este método jquery captura el evento de submit del peuqeño formulario que posee los campos
  * seña y cliente y lanza el método que solicita confirmación de los datos ingresados.*/
@@ -505,7 +506,7 @@ function enviarPedido(pagado, entregado)
                 factura.tipo_cbte = informacion_de_cliente.tipo_cbte;   //OK
                 factura.nro_doc = informacion_de_cliente.dni;           //OK
                 if(informacion_de_cliente.empresa==null){   /**Si el cliente no tiene empresa*/
-                factura.nombre_cliente = informacion_de_cliente.nombre;         //grabar su nombre para la factura
+                    factura.nombre_cliente = informacion_de_cliente.nombre;         //grabar su nombre para la factura
                 }else{
                     factura.nombre_cliente = informacion_de_cliente.empresa;         //sino grabar nombre de la empresa para la factura, descartar nombre de representante
                 }
@@ -520,9 +521,8 @@ function enviarPedido(pagado, entregado)
             }
         }
     });
-    //console.log(lineas);
-    console.log("la seña es: "+montoPedido);
 
+    console.log("la seña es: "+montoPedido);
     if(entregado){
         fecha_entrega_estimada = fechahoy();
     }
@@ -551,6 +551,8 @@ function enviarPedido(pagado, entregado)
             usuarioPedido: $('#usuarioPedido').val(),
             cliente: $('#cliente').val(),
             sena: montoTotal,
+            horas_produccion: horas_produccion,
+            paga_en_cuentacorriente: pagoEnCC,
         },
         success: function (data) {
             /* Una vez completado el proceso se muestra el mensaje de exito */
@@ -799,17 +801,21 @@ $('#cliente').on('change',function(){
     var cliente_id = $('#cliente').val();
     mostrarInfoTributaria(cliente_id);      //obtener responsabilidad IVA y % IVA
 });
+
+/** mostrarInfoTributaria devuelve todos los datos de CLIENTE, tambien si tiene una Cuenta Corriente para poder usarla */
 function mostrarInfoTributaria(cliente_id){
     $.ajax({
         url: "/admin/clientes",
         data: {
-            id:cliente_id,
+            id: cliente_id,
         },
         dataType: 'json',
         success: function (data) {
             console.log(data);
             var respuesta = JSON.parse(data);
             console.log(respuesta);
+            alert(respuesta.tieneCC);
+            tieneCC = respuesta.tieneCC;
             //$('#cliente').val($('#cliente').val() + respuesta.dni);
             $('#responiva_select').val(respuesta.responiva+" (Factura "+respuesta.tipo_cbte+")");
             if(respuesta.responiva == 'Consumidor Final'){
@@ -903,6 +909,7 @@ function emitirTicket(informacion_de_cliente){
     var ticket = {                          /*El ticket es una 'nota de pedido'*/
         nro_comprobante: comprobante,
         iva: $('#iva').val(),
+        usuario:null,
         nro_doc: $('#cuit').val(),
         nombre_cliente: $('#nombreCliente').val(),
         domicilio_cliente: $('#direccion').val(),
@@ -943,6 +950,7 @@ function emitirTicket(informacion_de_cliente){
                 ticket.nombre_cliente = informacion_de_cliente.empresa;         //sino grabar nombre de la empresa para la factura, descartar nombre de representante
             }
 
+            ticket.usuario = respuesta.usuario; // !!!!
             ticket.provincia_cliente = informacion_de_cliente.provincia;   //OK
             ticket.localidad_cliente = informacion_de_cliente.localidad;   //OK
             ticket.domicilio_cliente = informacion_de_cliente.domicilio;   //OK
@@ -1050,57 +1058,146 @@ $("#fecha_entrega_tentativa").datepicker({
 });
 */
     //instancio DatePicker
-$("#fecha_entrega_date").datepicker({
-    format: 'dd/mm/yyyy',
-    minDate: 0,
-    maxDate: 0,
-    onSelect: function(date) {
-        alert(date)
-    },
-});
-
-$("#fecha_entrega_date").datepicker({
-    minDate: -2,
-    maxDate: 1,
-});
-$(document).ready(function() {
-    $('#fecha_entrega_date').datepicker( {
-        onSelect: function(date) {
-            alert(date)
-        },
-        startDate: 'today',
+/*
+jQuery(function($){
+    $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '<Ant',
+        nextText: 'Sig>',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
         firstDay: 1,
-    });
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''};
+    $.datepicker.setDefaults($.datepicker.regional['es']);
+});*/
+
+$("#fecha_entrega_date").datepicker({
+
 });
 
 
+// Setter
+$("#fecha_entrega_date").datepicker( "option", "monthNamesShort", ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'] );
+$("#fecha_entrega_date").datepicker( "option", "monthNames", ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']);
+$("#fecha_entrega_date").datepicker( "option", "dayNames", ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']);
+$("#fecha_entrega_date").datepicker( "option", "dayNamesMin", ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb']);
+$("#fecha_entrega_date").datepicker( "option", "minDate", 0);
+$("#fecha_entrega_date").datepicker( "option", "dateFormat", 'dd/mm/yy');
+$("#fecha_entrega_date").datepicker( "option", "theme", 'customTheme');
+$("#fecha_entrega_date").datepicker( "option", "onSelect", function buscarCantidadPedidos() {
+    var dia_a_revisar = $("#fecha_entrega_date").val();
+    $.ajax({
+        url: "/admin/pedidos/create", dataType: 'json',
+        data: {
+            buscar_datepicker: true,
+            dia: dia_a_revisar
+        },
+        success: function (data) {
+            var recibido = JSON.parse(data);
+            console.log(recibido);
+            //mi magia para que aparezca el popup con los datos del pedido
+            bootstrap_alert('#alertBox', 'Tiene pendientes ' + recibido.cantidad + ' pedidos, con un total de '+recibido.articulos+' articulos que entregar para el '+ dia_a_revisar, 9000)
+        }
+    })
+});
 
-/**Buscar pedidos para el Calentario **/
-    function buscarCantidadPedidos() {
-        var dia_a_revisar = $("#fecha_entrega_date").val();
-        $.ajax({
-            url: "/admin/pedidos/create", dataType: 'json',
-            data: {
-                buscar_datepicker: true,
-                dia: dia_a_revisar
-            },
-            success: function (data) {
-                var recibido = JSON.parse(data);
-                console.log(recibido);
-                //mi magia para que aparezca el popup con los datos del pedido
-                bootstrap_alert('#alertBox', 'Tiene pendientes ' + recibido.cantidad + ' pedidos, con un total de '+recibido.articulos+' articulos que entregar para el '+ dia_a_revisar, 9000)
-            }
-        })
+//$("#fecha_entrega_date").datepicker( "option", "onSelect", function(dateText){ alert(dateText);
+
+//$("#fecha_entrega_date" ).datepicker( "setDate", "10/12/2017" );
+/**Buscar pedidos para el Calentario (el mismo ya se llama cuando se selecciona una fecha en el calendario)**/
+
+function buscarCantidadPedidos() {
+    var dia_a_revisar = $("#fecha_entrega_date").val();
+    $.ajax({
+        url: "/admin/pedidos/create", dataType: 'json',
+        data: {
+            buscar_datepicker: true,
+            dia: dia_a_revisar
+        },
+        success: function (data) {
+            var recibido = JSON.parse(data);
+            console.log(recibido);
+            //mi magia para que aparezca el popup con los datos del pedido
+            bootstrap_alert('#alertBox', 'Tiene pendientes ' + recibido.cantidad + ' pedidos, con un total de '+recibido.articulos+' articulos que entregar para el '+ dia_a_revisar, 9000)
+        }
+    })
 }
 
 $('#item-publish').click(function () {
     buscarCantidadPedidos();
 });
 
-/**si radio button de cheque se presiona..*/
+/**si radio button de cheque se selecciona..*/
 if($("#chkCheque").is(":checked")){
 
     alert('se eligio cheque');
     $("#modal-create-cheque").modal();
 }
 
+/**Al pasar al llegar al step de Fecha Entrega → sugerir una fecha para entregar pedidos **/
+function sugerirFechaDeEntrega() {
+    var dia_a_revisar = fechahoy();//$("#fecha_entrega_date").val();
+    $.ajax({
+        url: "/admin/pedidos/create", dataType: 'json',
+        data: {
+            sugerir_fecha_entrega: true,
+            horas_produccion: horas_produccion,
+            dia: dia_a_revisar
+        },
+        success: function (data) {
+            var recibido = JSON.parse(data);
+            console.log(recibido);
+            //mi magia para que aparezca el popup con los datos del pedido
+            if (recibido.dias == 0) {
+                bootstrap_alert('#recomendacion', "Casi no hay entregas en lista de espera, el pedido puede encargarse para ser entregado hoy o mañana.", 9000)
+            }
+            else {
+                bootstrap_alert('#recomendacion', "Se sugiere un plazo de entrega minimo de acá a " + recibido.dias + "días habiles", 9000)
+
+            }
+        }
+    })
+}
+
+function cancelarPedido(id){
+    $.ajax({
+        url: "/admin/pedidos/update", dataType: 'json',
+        data: {
+            pedido_id: id,
+            cancelarPedido: true,
+        },
+        success: function (data) {
+            var recibido = JSON.parse(data);
+            console.log(recibido);
+        }
+    })
+}
+
+/** esta funcion revisa si el cliente seleccionado tiene una CC actualmente activa */
+/*
+function tieneCCactiva(){
+    var tieneCC = false;
+    $.ajax({
+        url: "/admin/clientes", dataType: 'json',
+        data: {
+            revisar_CC_cliente: true,
+            id : $('#cliente').val(),
+        },
+        success: function (data) {
+            var recibido = JSON.parse(data);
+            console.log(recibido);
+            tieneCC = recibido.tieneCC;
+            alert(tieneCC);
+            return tieneCC;
+        }
+    })
+}
+    */

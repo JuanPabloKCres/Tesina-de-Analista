@@ -39,9 +39,15 @@ class User extends Authenticatable
         return $this->hasMany('App\Caja', 'foreign_key', 'userCierre_id');
     }
 
+
     public function aperturas()
     {
         return $this->hasMany('App\Caja', 'foreign_key', 'userApertura_id');
+    }
+
+    public function aperturaCC()
+    {
+        return $this->hasMany('App\CuentaCorriente', 'foreign_key', 'userApertura_id');
     }
 
     public function scopeSearchRoles($query, $rol_id)

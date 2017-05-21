@@ -1372,7 +1372,7 @@ return array(
     'MigracionAuditorias' => $baseDir . '/database/migrations/2016_09_15_152832_migracion_auditorias.php',
     'MigracionCaja' => $baseDir . '/database/migrations/2016_04_13_143531_migracion_caja.php',
     'MigracionConfigs' => $baseDir . '/database/migrations/2016_04_18_153148_migracion_configs.php',
-    'MigracionMovimiento' => $baseDir . '/database/migrations/2016_04_13_143553_migracion_movimiento.php',
+    'MigracionMovimiento' => $baseDir . '/database/migrations/2016_04_13_143554_migracion_movimiento.php',
     'MigracionRoles' => $baseDir . '/database/migrations/2014_09_15_152832_migracion_roles.php',
     'MigracionRubros' => $baseDir . '/database/migrations/2016_04_08_165249_migracion_rubros.php',
     'Mni\\FrontYAML\\Bridge\\CommonMark\\CommonMarkParser' => $vendorDir . '/mnapoli/front-yaml/src/Bridge/CommonMark/CommonMarkParser.php',

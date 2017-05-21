@@ -7,15 +7,15 @@
 
         if(strlen ($mes)==1){                       #si mes tiene un digito anteponer un 0 al mes
             if(strlen ($dia)==1){                       #si dia tambien tiene un digito anteponer un 0 al dia
-                $fecha_hoy = $año.'-0'.$mes.'-0'.$dia;
+                $fecha_hoy = '0'.$dia.'/0'.$mes.'/'.$año;
             }else{
-                $fecha_hoy = $año.'-0'.$mes.'-'.$dia;
+                $fecha_hoy = $dia.'/0'.$mes.'/'.$año;//$año.'-0'.$mes.'-'.$dia;
             }
         }else{
             if(strlen ($dia)==1){                       #si dia tiene un digito anteponer un 0 al dia
-                $fecha_hoy = $año.'-'.$mes.'-0'.$dia;
+                $fecha_hoy = '0'.$dia.'/'.$mes.'/'.$año;// $año.'-'.$mes.'-0'.$dia;
             }else{
-                $fecha_hoy = $año.'-'.$mes.'-'.$dia;
+                $fecha_hoy = $dia.'/'.$mes.'/'.$año;//$año.'-'.$mes.'-'.$dia;
             }
         }
 
@@ -109,12 +109,19 @@ $fecha_elegida=null; //la declaro global para usarla en el popup
 <button id="botonModalidad" class="btn btn-primary btn-block" title="Haga click para fijar un monto de Seña al pedido, de lo contrario se abona la totalidad del mismo." > Quiero señar el pedido</button>
 
 --}}
+<div id="recomendacion" class="alert alert-success animated rubberBand" style="display:none;">
+    <!-- boton para quitar el popup
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    -->
+    <h4><span class="alertMessage"></span></h4>
+</div>
 <div id="alertBox" class="alert alert-warning animated rollIn" style="display:none;">
     <!-- boton para quitar el popup
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     -->
     <h4><span class="alertMessage"></span></h4>
 </div>
+
 
 <a class="btn gray mini mr5" id="item-publish">
     <span class="popuptext"></span>
@@ -179,6 +186,11 @@ $fecha_elegida=null; //la declaro global para usarla en el popup
             </div>
         </section>
 
+        <h2>Articulos</h2>
+        <section>
+            @include('admin.articuloVenta.contenidoForm')
+        </section>
+
         <h2>Modalidad de Pago</h2>
         <section>
             {{-- Seña / Pago Total --}}
@@ -189,8 +201,10 @@ $fecha_elegida=null; //la declaro global para usarla en el popup
                         <div class="col-sm-3">
                             <form id="radioGroupPago">
                                 <input type="radio" name="chkefectivo" value="" checked="checked" id="chkEfectivo">Efectivo
-                                &nbsp; &nbsp; &nbsp; &nbsp;
+                                &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
                                 <input type="radio" name="chkefectivo" id="chkCheque">Cheque
+                                &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+                                <input type="radio" name="chkefectivo" id="chkCC">Cuenta Corriente
                             </form>
                         </div>
                     </div>
@@ -232,28 +246,24 @@ $fecha_elegida=null; //la declaro global para usarla en el popup
             --}}
             {{-- /ENTREGA --}}
 
+            {{-- ENTREGA --}}
             <div class="form-group"><label class="col-sm-3 control-label">FECHA ENTREGA ESTIMADA:</label>
                 <div class="col-sm-8 controls">
                     <div class="row">
                         <div class="col-xs-4">
                             <div class="input-icon right">
-                                <input class="DateFrom" type="text" id="fecha_entrega_date" name="fecha_entrega_date" value="" {{--min="{{$fecha_hoy}}"--}}>
+                                <input class="datepicker" type="text" id="fecha_entrega_date" name="fecha_entrega" {{--min="{{$fecha_hoy}}"--}}>
                             </div>
                         </div>
-
-
-
                     </div>
                 </div>
             </div>
-
+            {{-- /ENTREGA --}}
         </section>
     </div>
 </form>
 <input  class="hide" id="botonMandar" type="submit" value="Submit">
 <button id="volverWizard" class="btn btn-primary btn-block hide" title="Haga click para volver al asistente." > Volver al asistente de pedido</button>
-
-
 
 
 
@@ -266,26 +276,18 @@ $fecha_elegida=null; //la declaro global para usarla en el popup
         document.getElementById("chkEfectivo").checked = false;
     }
 
-
-
-
 </script>
 {{--Estilo del popup --}}
 <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/popup.css') }}">
 {{--/Estilo del popup --}}
 
-
-
 <script>
-
-
     function mostrarPopup() {
         alert($('#fecha_entrega_date').val());
         var popup = document.getElementById("myPopup");
         popup.classList.toggle("show");
     }
     /** */
-
 
     function bootstrap_alert(elem, message, timeout) {
         $(elem + " .alertMessage").text(message)
@@ -299,9 +301,5 @@ $fecha_elegida=null; //la declaro global para usarla en el popup
     };
 
 
-
-</script>
-
-<script>
 
 </script>

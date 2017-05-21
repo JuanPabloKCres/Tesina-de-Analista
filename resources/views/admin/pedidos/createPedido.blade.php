@@ -111,6 +111,9 @@ Pedidos - Generar presupuesto
                         </div>
                     </div>
                 </div>
+                <!-- Fin Fila con datos de hora, montos -->
+
+                @include('admin.articuloVenta.tablaRegistros')
                 <div class="col-lg-12 text-center">
                     <div class="row">
                         <div class="row mtl">
@@ -124,6 +127,7 @@ Pedidos - Generar presupuesto
                                             </div>
                                         </div>
                                     </div>
+                                    {{--
                                     <div class="col-md-12">
                                         <div class="panel">
                                             <div class="panel-body">
@@ -131,6 +135,7 @@ Pedidos - Generar presupuesto
                                             </div>
                                         </div>
                                     </div>
+                                    --}}
                                 </div>
                             </div>
 
@@ -138,7 +143,7 @@ Pedidos - Generar presupuesto
                                 @include('admin.pedidos.msjTablaVacia')
                                 @include('admin.pedidos.msjSenaExepcion')
                                 @include('admin.pedidos.msjStockExepcion')
-                                @include('admin.articuloVenta.tablaRegistros')
+
                                 <button id="botonExito" type="button" data-hover="tooltip" data-toggle="modal" data-target="#modal-exito"  class="btn hide"></button>
                             </div>
                     </div>

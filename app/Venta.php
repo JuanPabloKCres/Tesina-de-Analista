@@ -9,7 +9,8 @@ class Venta extends Model
     protected $table =  "ventas";
     protected $fillable = ['fecha_pedido', 'hora_pedido', 'fecha_entrega_estimada', 'fecha_venta', 'hora_venta',
                             'fecha_facturacion','hora_facturacion', 'nro_cae', 'nro_facturero',
-                            'pagado', 'entregado', 'senado', 'forma_pago', 'cheque_id', 'userPedido_id', 'userVenta_id', 'cliente_id'];
+                            'pagado', 'entregado', 'senado', 'forma_pago', 'cheque_id', 'userPedido_id', 'userVenta_id', 'cliente_id',
+                            'horas_produccion', 'progreso'];
     //si la venta tiene nro_cae o nro_facturero (papel) el pago total ha sido facturado
 
     public function usuarioPedido()
@@ -114,5 +115,15 @@ class Venta extends Model
     public function scopeSearchMenorFechaFin($query, $fechaFin)
     {
       return $query->where('fecha_venta','<', $fechaFin);
+    }
+
+    public static function horasTrabajoPendientesEntrega($pedidos)
+    {
+        $sumatoria_horas = 0;
+        foreach ($pedidos as $pedido) {
+            $sumatoria_horas = $sumatoria_horas + $pedido->horas_produccion;
+        }
+
+        return $sumatoria_horas;
     }
 }

@@ -20,7 +20,6 @@
                                 <span class="menu-title">Roles</span></a>
                         </li>
 
-
                         <!--
                         <li id="li3">
                             <a data-toggle="tooltip" data-placement="top title="Visualizar los registros de rubros de proveedores" >
@@ -31,7 +30,6 @@
                             </a>
                         </li>
                         -->
-
 
                     <li id="li4">
                         <a data-toggle="tooltip" data-placement="top" title="Editar parámetros de la gráfica" href="{{ route('admin.materiales.index') }}">
@@ -149,6 +147,14 @@
                         </a>
                     </li>
 
+                    <li id="li15">
+                        <a data-toggle="tooltip" data-placement="top" title="Abrir Cuentas" href="{{ route('admin.ccorrientes.index') }}">
+                            <i class="fa fa-calculator">
+                                <div class="icon-bg bg-orange"></div>
+                            </i>
+                            <span class="menu-title">Cuentas Corrientes</span>
+                        </a>
+                    </li>
 
                     <li id="li13">
                         <a data-toggle="collapse" href="#dropdown-administrarFront" data-placement="top" title="Gestión de contenido de la web de GN Soluciones">

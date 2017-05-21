@@ -9,7 +9,7 @@ class Articulo extends Model
 {
 
 	protected $table =  "articulos";
-    protected $fillable = ['nombre','alto','ancho', 'tipo_id', 'talle_id', 'color_id' , 'cantidad_insumos', 'costo', 'margen','ganancia','iva_id','montoIva', 'precioVta','descripcion', 'estado', 'user_id'];
+    protected $fillable = ['nombre','alto','ancho', 'tipo_id', 'talle_id', 'color_id' , 'cantidad_insumos', 'costo', 'margen','ganancia','iva_id','montoIva', 'precioVta', 'horas_produccion', 'descripcion', 'estado', 'user_id'];
 
 
     public function articulos_venta()

@@ -21,7 +21,7 @@ class ComposerServiceProvider extends ServiceProvider
 
             'App\Http\ViewComposers\ArticuloComposer' => ['admin.articulos.contenidoForm', 'admin.articulos.cabeceraTabla', 'front.articulos.cabeceraTabla'],
             'App\Http\ViewComposers\ProveedorComposer' => ['admin.proveedores.contenidoForm', 'admin.proveedores.cabeceraTabla'],
-            'App\Http\ViewComposers\ClienteComposer' => ['admin.clientes.contenidoForm', 'admin.clientes.cabeceraTabla'],
+            'App\Http\ViewComposers\ClienteComposer' => ['admin.clientes.contenidoForm', 'admin.clientes.cabeceraTabla', 'admin.cuentasCorrientes.contenidoForm',],
             'App\Http\ViewComposers\ClientesComposer' => ['admin.pedidos.clienteSelect'],
             'App\Http\ViewComposers\ArticulosComposer' => ['admin.articuloVenta.contenidoForm'],
             'App\Http\ViewComposers\ProductoComposer' => ['admin.productos.contenidoForm', 'admin.productos.cabeceraTabla', 'front.productos.cabeceraTabla'],
@@ -31,7 +31,6 @@ class ComposerServiceProvider extends ServiceProvider
             'App\Http\ViewComposers\ProductoFrontIndexComposer' => 'front.partes.productos',
             'App\Http\ViewComposers\TipoFrontIndexComposer' => 'front.partes.tipos',
             'App\Http\ViewComposers\TipoParaFrontComposer' => 'front.partes.tipos',
-
             /** Noviembre 19**/
             'App\Http\ViewComposers\InsumoComposer' => ['admin.insumos.contenidoForm', 'admin.insumos.cabeceraTabla', 'front.insumos.cabeceraTabla'],
             /** Noviembre 24 **/
@@ -40,6 +39,8 @@ class ComposerServiceProvider extends ServiceProvider
 
             /** Enero 20 **/
             'App\Http\ViewComposers\BancoComposer' => ['admin.pedidos.createCheque'],
+            /** Mayo 8 **/
+
         ]);
     }
 

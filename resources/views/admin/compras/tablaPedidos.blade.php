@@ -45,6 +45,7 @@
                                               <th class="text-center">Fecha y hora de compra</th>
                                               <th class="text-center">Importe</th>
                                               <th class="text-center">Se pagó</th>
+                                              <th class="text-center">Se recibió</th>
                                               <th class="text-center">Usuario que computo la compra</th>
                                               <th class="text-center">Detalle</th>
                                           </tr>
@@ -56,6 +57,11 @@
                                               <td class="text-center">{{ $compra->fecha_compra }} - {{ $compra->hora_compra }}</td>
                                               <td class="text-center">${{ $compra->importe }}</td>
                                               @if ($compra->pagado)
+                                                  <td class="text-center">Si</td>
+                                              @else
+                                                  <td class="text-center">No</td>
+                                              @endif
+                                              @if ($compra->recibido)
                                                   <td class="text-center">Si</td>
                                               @else
                                                   <td class="text-center">No</td>

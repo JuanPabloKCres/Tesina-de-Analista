@@ -102,7 +102,31 @@
             </div>
         </div>
     </div>
-</div>                       
+</div>
+<div class="form-group"><label class="col-sm-3 control-label">Permitir pago c/ cheque a Consumidor Final</label>
+    <div class="col-sm-9 controls">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="input-icon right">
+                    <i class="fa fa-envelope"></i>
+                    {!! Form::email('permitir_cheque', false, ['class' => 'form-control', 'placeholder' => 'campo opcional']) !!}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group"><label class="col-sm-3 control-label">Permitir venta de articulos sin stock de insumos</label>
+    <div class="col-sm-9 controls">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="input-icon right">
+                    <i class="fa fa-envelope"></i>
+                    {!! Form::email('ventas_sin_stock', false, ['class' => 'form-control', 'placeholder' => 'campo opcional']) !!}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <br>
 <hr/>
 <br>        

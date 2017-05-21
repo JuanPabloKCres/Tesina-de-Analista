@@ -14,8 +14,6 @@
             <div class="page-title">Historial de ventas</div>
         </div>
 
-
-
         <div class="page-header pull-right">
             <div class="page-toolbar">
               <div class="row ">
