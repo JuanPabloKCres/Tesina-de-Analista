@@ -5,16 +5,15 @@
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/datepikerpersonalizado.css') }}  ">
     <script src="{{ asset('plantillas/KAdmin-Dark/plugins/jquery.steps.min.js') }}"></script>
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/plugins/bootstrap-wizard/css/bwizard.css') }}  ">
-<script>
-var listSidebar = "li8";
-var elemFaltante = "nada";
-</script>
+    <script>
+        var listSidebar = "li8";
+        var elemFaltante = "nada";
+    </script>
     <script src="{{ URL::asset('js/pluginsPedidos.js') }}"></script>
 @endsection
 
-
 @section('title')
-Pedidos - Generar presupuesto
+Pedidos | Generar presupuesto
 @endsection
 
 @section('sidebar')
@@ -22,24 +21,29 @@ Pedidos - Generar presupuesto
 @endsection
 
 
-    @section('content')
 
 @section('content')
-
+    {{-- OCULTO --}}
+    <input class="form-control hide" value="{{ $configuracion->ingresar_precio_venta }}" id="permitir_ingresar_precio" />
+    <input class="form-control hide" value="{{ $configuracion->ventas_sin_stock }}" id="ventas_sin_stock" />
+    <input class="form-control hide" value="{{ $configuracion->pago_cheque_cf }}" id="pago_cheque_cf" />
+    {{-- /OCULTO --}}
+    @include('admin.pedidos.ingresarCAE')
     @include('admin.pedidos.msjOperacionExitosa')
     @include('admin.pedidos.createCliente')
     @include('admin.pedidos.createCheque')
+    @include('admin.pedidos.createCC')
     <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
         <div class="page-header pull-left">
-            <div class="page-title">Pedidos / Generar presupuesto</div>
+            <div class="page-title">Toma de Pedidos | </div>
         </div>
         <div class="page-header pull-right">
             <div class="page-toolbar">
                 <a data-toggle="tooltip" data-placement="bottom" href="{{  route('admin.pedidos.index') }}" title="Volver a los registros de pedidos"  class="btn btn-blue"> <span class="fa fa-arrow-circle-o-left" aria-hidden="true"></span> Volver</a>
-                <button data-placement="bottom" title="Registrar un nuevo cliente" type="button" data-hover="tooltip" data-toggle="modal" data-target="#modal-create"  class="btn btn-blue">
+                <button data-placement="bottom" title="Registrar un nuevo cliente" type="button" data-hover="tooltip" data-toggle="modal" data-target="#modal-create-cliente"  class="btn btn-blue">
                     <span class="fa fa-user-plus" aria-hidden="true"></span> Registrar Cliente
                 </button>
-                <a data-toggle="tooltip" data-placement="bottom" href="{{  route('admin.articulos.create') }}" title="Ir a la pantalla de confacci�n de articulo, util para armar prespuesto"  class="btn btn-blue"> <span class="fa fa-arrow-circle-o-left" aria-hidden="true"></span> Presupuestar Articulo</a>
+                <a data-toggle="tooltip" data-placement="bottom" href="{{  route('admin.articulos.create') }}" title="Ir a la pantalla de confecciónn de articulo, util para armar prespuesto"  class="btn btn-blue"> <span class="fa fa-arrow-circle-o-left" aria-hidden="true"></span> Presupuestar Articulo</a>
                 <a data-toggle="tooltip" data-placement="bottom" href="{{  route('admin.insumos.index') }}" title="Ir a la pantalla de compra de insumos"  class="btn btn-blue"> <span class="fa fa-puzzle-piece" aria-hidden="true"></span>  Insumos</a>
 
                 <button data-placement="bottom" title="Cargar un cheque" id="btn-pagarConCheque" type="button" data-hover="tooltip" onclick="rellenarModalCheque()" data-toggle="modal"   class="btn btn-blue">
@@ -50,7 +54,6 @@ Pedidos - Generar presupuesto
         </div>
 
         <div class="clearfix"></div>
-
     </div>
     <div class="page-content" align="center">
         <div id="tab-general">
@@ -81,7 +84,7 @@ Pedidos - Generar presupuesto
                                             <tbody>
                                             <tr>
                                                 <td><h4 class="box-heading"><label>Hora:</label></h4></td>
-                                                <td><h4><b>{!! \Carbon\Carbon::now('America/Buenos_Aires')->format('H:i') !!} Hs</b></h4></td>
+                                                <td><h4><b id="hora_actual">{!! \Carbon\Carbon::now('America/Buenos_Aires')->format('H:i') !!} Hs</b></h4></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -112,8 +115,8 @@ Pedidos - Generar presupuesto
                     </div>
                 </div>
                 <!-- Fin Fila con datos de hora, montos -->
-
                 @include('admin.articuloVenta.tablaRegistros')
+
                 <div class="col-lg-12 text-center">
                     <div class="row">
                         <div class="row mtl">
@@ -121,12 +124,12 @@ Pedidos - Generar presupuesto
                                 <div class="row">
                                     <div class="col-md-12" align="right">
                                         <div class="panel">
-
                                             <div class="panel-body">
                                                 @include('admin.pedidos.contenidoFormClienteySena')
                                             </div>
                                         </div>
                                     </div>
+
                                     {{--
                                     <div class="col-md-12">
                                         <div class="panel">
@@ -146,21 +149,23 @@ Pedidos - Generar presupuesto
 
                                 <button id="botonExito" type="button" data-hover="tooltip" data-toggle="modal" data-target="#modal-exito"  class="btn hide"></button>
                             </div>
+
+                        </div>
                     </div>
+
                 </div>
+
             </div>
         </div>
-    </div>
+
     </div>
 
     @include('admin.pedidos.confirmarPedido')
     @include('admin.pedidos.confirmarVenta')
 
 
-
     @include('admin.pedidos.confirmarPedido')
     @include('admin.pedidos.confirmarVenta')
 @endsection
 
-@endsection
 

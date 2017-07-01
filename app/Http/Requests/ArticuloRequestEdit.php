@@ -25,6 +25,12 @@ class ArticuloRequestEdit extends Request
     {
         return [
             'nombre' => 'required|max:50|unique:articulos,nombre,'.$this->route->getParameter('articulos'),
+            'horas_produccion' => 'min:0|numeric',
+            'precioVta' => 'min:0|numeric',
+            'montoIva' => 'min:0|numeric',
+            'ganancia' => 'min:0|numeric',
+            'margen' => 'min:0|numeric',
+            'costo' => 'min:0|numeric',
         ];
     }
 }

@@ -378,8 +378,8 @@ function enviarPedido()
             horas_produccion: horas_produccion
         },
         success: function () {
-            $('#mensajeExito').html();
-            $('#botonExito').click();
+            $('#modal-exito').modal();
+            //$('#botonExito').click();
         }
     });
 }

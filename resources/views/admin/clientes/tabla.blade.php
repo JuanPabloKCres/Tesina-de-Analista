@@ -47,11 +47,14 @@
                                                 <th class="text-center">Nombre</th>
                                                 <th class="text-center">Responsabilidad ante IVA</th>
                                                 <th class="text-center">Representante</th>
+                                                {{--
                                                 <th class="text-center">CUIT</th>
                                                 <th class="text-center">DNI</th>
+                                                --}}
                                                 <th class="text-center">Localidad y dirección</th>
                                                 <th class="text-center">Teléfono</th>
-                                                <th class="text-center">Acciones</th>
+                                                <th class="text-center">Fecha de ultimo movimiento</th>
+                                                <th class="text-center">Ver / editar</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -69,29 +72,35 @@
                                                 @else
                                                     <td class="text-center">{{ "-" }}</td>
                                                 @endif
-
-                                                  @if ( $cliente->cuit)
-                                                     <td class="text-center">{{ $cliente->cuit }}</td>
-                                                  @else
-                                                     <td class="text-center">{{ "No se registró" }}</td>
-                                                  @endif
-                                                  @if ( $cliente->dni)
+                                                {{--
+                                                @if ( $cliente->cuit)
+                                                    <td class="text-center">{{ $cliente->cuit }}</td>
+                                                @else
+                                                    <td class="text-center">{{ "No se registró" }}</td>
+                                                @endif
+                                                @if ( $cliente->dni)
                                                      <td class="text-center">{{ $cliente->dni }}</td>
-                                                  @else
+                                                @else
                                                      <td class="text-center">{{ "No se registró" }}</td>
-                                                  @endif
+                                                @endif
+                                                    --}}
                                                 <td class="text-center">{{ $cliente->localidad->nombre}} -
-                                                  @if ( $cliente->direccion)
+                                                @if ( $cliente->direccion)
                                                      {{ $cliente->direccion }}
-                                                  @else
-                                                        {{ "No se registró" }}
-                                                  @endif
+                                                @else
+                                                     {{ "No se registró" }}
+                                                @endif
                                                 </td>
-                                                  @if ( $cliente->telefono)
+                                                @if ( $cliente->telefono)
                                                      <td class="text-center">{{ $cliente->telefono }}</td>
-                                                  @else
-                                                     <td class="text-center">{{ "No se registró" }}</td>
-                                                  @endif
+                                                @else
+                                                     <td class="text-center">No se registró</td>
+                                                @endif
+                                                @if ( $cliente->updated_at)
+                                                    <td class="text-center">{{ $cliente->updated_at->format('d/m/Y')}} ({{$cliente->updated_at->diffForHumans() }})</td>
+                                                @else
+                                                    <td class="text-center">No tiene movimiento</td>
+                                                @endif
                                                 <td class="text-center">
                                                     <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá acceder acciones como edición y eliminación del mismo" href="{{ route('admin.clientes.show', $cliente->id) }}" class="btn btn-info"> <span class="fa fa-pencil" aria-hidden="true"></span></a>
                                                 </td>

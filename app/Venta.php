@@ -3,12 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Venta extends Model
 {
     protected $table =  "ventas";
     protected $fillable = ['fecha_pedido', 'hora_pedido', 'fecha_entrega_estimada', 'fecha_venta', 'hora_venta',
-                            'fecha_facturacion','hora_facturacion', 'nro_cae', 'nro_facturero',
+                            'fecha_facturacion','hora_facturacion', 'nro_cae', 'fecha_vencimiento_cae', 'nro_facturero',
                             'pagado', 'entregado', 'senado', 'forma_pago', 'cheque_id', 'userPedido_id', 'userVenta_id', 'cliente_id',
                             'horas_produccion', 'progreso'];
     //si la venta tiene nro_cae o nro_facturero (papel) el pago total ha sido facturado
@@ -125,5 +126,12 @@ class Venta extends Model
         }
 
         return $sumatoria_horas;
+    }
+
+    public function diasDeDemora($fecha_entrega_estimada){
+        //  Parse date with carbon
+        $carbonated_date = Carbon::parse($fecha_entrega_estimada);
+        $dias_diferencia= $carbonated_date->diffForHumans(Carbon::now('America/Buenos_Aires'));
+        return $dias_diferencia->format('d/m/Y');
     }
 }

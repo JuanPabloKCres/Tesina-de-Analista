@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Compra extends Model
 {
     protected $table =  "compras";
-    protected $fillable = ['concepto', 'fecha_pedidoCompra','hora_pedidoCompra', 'fecha_compra','hora_compra', 'confirmado', 'pagado', 'recibido', 'userCompra_id', 'importe_insumos', 'importe_costo_envio', 'importe'];
+    protected $fillable = ['concepto', 'fecha_pedidoCompra','hora_pedidoCompra', 'fecha_compra','hora_compra',
+                            'confirmado', 'pagado', 'recibido', 'userCompra_id', 'importe_insumos',
+                            'importe_costo_envio', 'importe', 'nro_cte_asociado' ];
 
     public function usuarioCompra()
     {

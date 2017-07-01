@@ -64,6 +64,7 @@
 <script src="{{ asset('js/busqueda.js') }}"></script>
 <script src="{{ asset('js/masked-input.min.js') }}"></script>
 
+<!-- DataTables -->
 <script src="{{ asset('plantillas/DataTables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('plantillas/DataTables/extensions/Responsive/js/dataTables.responsive.min.js') }}"></script>
 

@@ -26,8 +26,9 @@ class MigracionConfigs extends Migration
             $table->integer('localidad_id')->unsigned();            
 
             $table->foreign('localidad_id')->references('id')->on('localidades')->onDelete('cascade');
-            $table->boolean('permitir_cheque_consumidor_final');
-            $table->boolean('permitir_ventas_sin_stock');
+            $table->boolean('permitir_cheque_consumidor_final');    //si esta en 'true' se permite pagar con cheques a consumidores finales
+            $table->boolean('permitir_ventas_sin_stock');   //si esta en 'true' no se controla si hay stock de insumos para tomar un pedido
+            $table->boolean('ingresar_preciovta');  //si esta en 'true' no se busca el precio de venta de un articulo en toma de pedidos, se ingresa manualmente
             $table->timestamps();
         });
     }

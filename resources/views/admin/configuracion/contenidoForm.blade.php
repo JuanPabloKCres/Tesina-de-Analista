@@ -102,14 +102,14 @@
             </div>
         </div>
     </div>
-</div>
+</div><br>
 <div class="form-group"><label class="col-sm-3 control-label">Permitir pago c/ cheque a Consumidor Final</label>
     <div class="col-sm-9 controls">
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-6">
                 <div class="input-icon right">
-                    <i class="fa fa-envelope"></i>
-                    {!! Form::email('permitir_cheque', false, ['class' => 'form-control', 'placeholder' => 'campo opcional']) !!}
+
+                    <input type="checkbox" data-toggle="toggle" value="1" name="permitir_cheque_cf" id="permitir_cheque_cf" data-on="Si" data-off="No">
                 </div>
             </div>
         </div>
@@ -118,10 +118,22 @@
 <div class="form-group"><label class="col-sm-3 control-label">Permitir venta de articulos sin stock de insumos</label>
     <div class="col-sm-9 controls">
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-6">
+                <div class="input-icon left">
+                    <input type="checkbox" data-toggle="toggle" value="1" name="ventas_sin_stock" id="ventas_sin_stock" data-on="Si" data-off="No">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group"><label class="col-sm-3 control-label">Permitir ingresar precio venta articulos en toma de pedidos a cliente</label>
+    <div class="col-sm-9 controls">
+        <div class="row">
+            <div class="col-xs-6">
                 <div class="input-icon right">
-                    <i class="fa fa-envelope"></i>
-                    {!! Form::email('ventas_sin_stock', false, ['class' => 'form-control', 'placeholder' => 'campo opcional']) !!}
+
+                        <input type="checkbox" data-toggle="toggle" value="1" name="permitir_ingresar_precio" id="permitir_ingresar_precio" data-on="Si" data-off="No">
+                    <br>
                 </div>
             </div>
         </div>

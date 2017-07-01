@@ -16,23 +16,10 @@
     <div class="col-sm-9 controls">
         <div class="row">
             <div class="col-xs-12">
-                {{--
-                <select  id="cliente_id" value="Selecciona un cliente..." class="form-control selectBoot" data-live-search="true">
-                    <option selected disabled>Seleccione un cliente registrado...</option>
-                    @foreach($clientes as $cliente)
-                        @if($cliente->cuit)
-                            @if($cliente->empresa)
-                                <option value="{{ $cliente->id }}">{{$cliente->empresa}} -  CUIT: {{ $cliente->cuit }} &nbsp;&nbsp;&nbsp;(representante: {{ $cliente->apellido }}, {{ $cliente->nombre }})  </option>
-                            @else
-                                <option value="{{ $cliente->id }}">{{ $cliente->apellido }}, {{ $cliente->nombre }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(CUIT: {{ $cliente->cuit }})  </option>
-                            @endif
-                        @else
-                            <option value="{{ $cliente->id }}">{{ $cliente->apellido }}, {{ $cliente->nombre }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(DNI: {{ $cliente->dni }})  </option>
-                        @endif
-                    @endforeach
-                </select>
-                --}}
-                {{ Form::select('cliente_id', $clientesApellido, ['class' => 'form-control', 'readonly' => 'readonly']) }}
+                <div class="input-icon right date">
+                    <i class="fa fa-user"></i>
+                    {!! Form::select('cliente_id', $clientesApellido, ['class' => 'form-control selectBoot', 'data-live-search' => 'true', 'readonly' => 'readonly']) !!}
+                </div>
             </div>
         </div>
     </div>

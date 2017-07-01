@@ -25,6 +25,10 @@ class User extends Authenticatable
         return $this->hasMany('App\Auditoria');
     }
 
+    public function cheques(){
+        return $this->hasMany('App\Cheque');
+    }
+
     public function comprobantes(){
         return $this->hasMany('App\Comprobante');
     }

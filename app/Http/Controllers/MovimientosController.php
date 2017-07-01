@@ -29,34 +29,28 @@ class MovimientosController extends Controller
     public function index($id)  //la solicitud se realiza utilizando ajax se devuelven los registros únicamente a la tabla.
     {
         $movimientos = Movimiento::where('caja_id', $id)
-        ->orderBy('nombre','ASC')
+        ->orderBy('id','ASC')
         ->paginate();
         return response()->json(view('admin.movimientos.tablaRegistros',compact('movimientos'))->render());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('admin.movimientos.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(Request $request) //agregar movimiento a CC y/o a Caja
     {
         $movimiento = new Movimiento($request->all());
+        if($request->tipo == 'entrada'){                //esto esta para revisar que si un movimiento es entrada CC tambien se cargue ese efectivo a la caja abierta.
+            $caja = Caja::where('cerrado',0)->first();
+            $movimiento->caja_id = $caja->id;
+        }
         if($request->cc_id){
             $cuentacorriente = CuentaCorriente::find($request->cc_id);
             $movimiento->forma = 'CC';
             $movimiento->ccorriente_id = $request->cc_id;
+            $movimiento->cuenta_corriente_id = $request->cc_id; //*VER
             $movimiento->save();
             Flash::success('El movimientos ha sido registrado de forma existosa.');
             return redirect()->route('admin.ccorrientes.show',$request->cc_id);

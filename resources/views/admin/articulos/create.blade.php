@@ -18,6 +18,7 @@ Articulos - Registrar Articulo
 @endsection
 
 @section('content')
+    @include('admin.articulos.msjOperacionExitosa')
 <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
     <div class="page-header pull-left">
         <div class="page-title">Confección de un Articulo para su comercialización</div>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/Http/Controllers/PedidosController.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/resources/views/admin/cheques/create.blade.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/resources/views/admin/cheques/editar-cheque.blade.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/resources/views/admin/cheques/index.blade.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/resources/views/admin/cheques/show.blade.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/resources/views/admin/cuentasCorrientes/create.blade.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/resources/views/admin/cuentasCorrientes/index.blade.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/resources/views/admin/cuentasCorrientes/show.blade.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/resources/views/admin/movimientos/tablaRegistros.blade.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/resources/views/admin/pedidos/createPedido.blade.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/resources/views/emails/infopedido.blade.php" charset="UTF-8" />
+  </component>
+</project>

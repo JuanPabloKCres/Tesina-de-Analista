@@ -16,6 +16,46 @@ class CuentaCorriente extends Model
         return $this->belongsTo('App\User', 'userApertura_id');
     }
 
+    public static function salidas()
+    {
+        $movimientos = Movimiento::with('caja_id',null)->with('tipo',"entrada");
+        $total = 0;
+        foreach ($movimientos as $movimiento) {
+            $total = $total + $movimiento->monto;
+        }
+        return $total;
+    }
+
+    public static function sumatoriaDebesCuentasCorrientes(){   /**Debes de la Gráfica en cuentas corrientes */
+    $deudas_x_cobrar = 0;
+        $cuentascorrientes = CuentaCorriente::all();
+        foreach($cuentascorrientes as $cc){
+            if($cc->activa == 1){
+                foreach ($cc->movimientos as $movimiento) {
+                    if ( ($movimiento->tipo == 'salida') && ($movimiento->forma == 'CC') ){
+                        $deudas_x_cobrar = $deudas_x_cobrar + $movimiento->monto;
+                    }
+                }
+            }
+        }
+        return $deudas_x_cobrar;
+    }
+
+    public static function sumatoriaHaberesCuentasCorrientes(){   /**Haberes de la Gráfica en cuentas corrientes */
+        $deudas_x_cobrar = 0;
+        $cuentascorrientes = CuentaCorriente::all();
+        foreach($cuentascorrientes as $cc){
+            if($cc->activa == 1){
+                foreach ($cc->movimientos as $movimiento) {
+                    if ( ($movimiento->tipo == 'entrada') && ($movimiento->forma == 'CC') ){
+                        $deudas_x_cobrar = $deudas_x_cobrar + $movimiento->monto;
+                    }
+                }
+            }
+        }
+        return $deudas_x_cobrar;
+    }
+
     public function usuarioCierre()   
     {
         return $this->belongsTo('App\User', 'userCierre_id');
@@ -29,6 +69,11 @@ class CuentaCorriente extends Model
     public function cliente()
     {
         return $this->belongsTo('App\Cliente');
+    }
+
+    public function cheques()
+    {
+        return $this->hasMany('App\Cheque');
     }
 
     public function totalEntrada()
@@ -66,21 +111,12 @@ class CuentaCorriente extends Model
         return $total;
     }
 
-    public function totalSalida()
+
+
+    public function debe_cc()   /**calcula deuda en una CuentaCorriente */
     {
         $total = 0;
         foreach ($this->movimientos as $movimiento) {
-            if ($movimiento->tipo == 'salida'){
-                $total = $total + $movimiento->monto;               
-            } 
-        }
-        return $total;
-    }
-
-    public function debe_cc($cuentacorriente)
-    {
-        $total = 0;
-        foreach ($cuentacorriente->movimientos as $movimiento) {
             if ( ($movimiento->tipo == 'salida') && ($movimiento->forma == 'CC') ){
                 $total = $total + $movimiento->monto;
             }

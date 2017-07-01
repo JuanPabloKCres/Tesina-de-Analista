@@ -22,6 +22,8 @@ class AddVentasTable extends Migration {
             $table->string('fecha_facuracion')->nullable();
             $table->string('hora_facturacion')->nullable();
             $table->string('nro_cae')->nullable();          //te lo da AFIP via Factura electronica
+            $table->string('f_ven_cae')->nullable();          //te lo da AFIP via Factura electronica
+
             $table->string('nro_facturero')->nullable();    //lo asigna el usuario segun su factura manual en papel
 
             $table->boolean('pagado');

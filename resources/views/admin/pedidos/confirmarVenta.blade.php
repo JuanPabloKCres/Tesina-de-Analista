@@ -34,9 +34,11 @@
                 <button type="button" data-dismiss="modal" class="btn btn btn-success" onclick="enviarPedido(true, false);">
                     Registrar como pedido
                 </button>
+
+
                 <button type="button" data-dismiss="modal" class="btn btn btn-info" onclick="enviarPedido(true, true);">
-                    Registrar como venta
-                </button>
+                   Registrar como venta
+                 </button>
             </div>
 
         </div>

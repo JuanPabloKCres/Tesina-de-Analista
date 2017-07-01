@@ -10,7 +10,7 @@
             <div class="modal-body">
                 @include('admin.partes.listaErrores')
                 {!! Form::model($articulo, ['route' => ['admin.articulos.update', $articulo], 'id' =>'form-actualizar',  'method' => 'PUT', 'class' => 'form-horizontal']) !!}
-                @include('admin.articulos.contenidoForm')
+                    @include('admin.articulos.contenidoForm')
                 {!! Form::submit('Actualizar registro', ['class' => 'btn btn-warning btn-block']) !!}
                 <button type="button" data-dismiss="modal" class="btn btn-white btn-block">
                     Cerrar</button>

@@ -1,5 +1,6 @@
 
                 <div class="col-lg-12">
+
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="panel panel-yellow">
@@ -24,6 +25,7 @@
                                       </thead>
                                       <tbody>
                                       @foreach($pedidos as $pedido)
+
                                           <tr>
                                               <td class="text-center">{{ $pedido->id }}</td>
                                               <td>{{ $pedido->cliente->apellido }} {{ $pedido->cliente->nombre }}</td>

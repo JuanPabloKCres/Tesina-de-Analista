@@ -9,6 +9,6 @@
 <p><strong>"{{$mensaje}}"</strong></p>
 <br>
 
--Este mensaje es autogenerado. No requiere contestación.
+*Este mensaje es autogenerado. No requiere contestación.
 </body>
 </html>

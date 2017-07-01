@@ -21,8 +21,7 @@ class Email_NotificacionesController extends Controller
         if($request->ajax()){
             if($request->email_info){
                 /*
-                $cliente = Cliente::find($request->id_cliente);
-                $nombre_y_apellido = "fulano";//$cliente->nombre." ".$cliente->apellido;
+
                 Mail::send('emails.datos_pedido', ['cliente'=>$nombre_y_apellido, 'total'=>$request->total, 'fecha_hoy'=>$request->fecha_hoy, 'fecha_entrega'=>$request->fecha_entrega, 'items'=>$request->items], function($msj){
                     $msj->subject('Información de su pedido');
                     $msj->to('jpcaceres.nea@gmail.com');
@@ -30,8 +29,10 @@ class Email_NotificacionesController extends Controller
                 Flash::overlay('Se ha enviado email con la info del pedido');
                 return response()->json(json_encode("Se envio el email del pedido, desde MailController.php", true));
                 */
+                $cliente = Cliente::find($request->id_cliente);
+                $nombre_y_apellido = $cliente->nombre;
                 try{
-                    Mail::send('emails.infopedido', ['cliente'=>null], function($msj){
+                    Mail::send('emails.infopedido', ['cliente'=>$nombre_y_apellido, 'sena'=>$request->sena, 'total'=>$request->total, 'items'=>$request->items], function($msj){
                         $msj->subject('GN Informacion Pedido');
                         $msj->to('jpaulnava@gmail.com');
                     });

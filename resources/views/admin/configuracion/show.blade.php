@@ -89,6 +89,14 @@
                                                                     <td><h4>No</h4></td>
                                                                 @endif
                                                             </tr>
+                                                            <tr>
+                                                                <td><h4 class="box-heading">Se permite ingresar precio de venta de articulo (toma pedido):</h4></td>
+                                                                @if($configuracion->ingresar_precio_venta == true)
+                                                                    <td><h4>Si</h4></td>
+                                                                @else
+                                                                    <td><h4>No</h4></td>
+                                                                @endif
+                                                            </tr>
                                                         </tbody>
                                                     </table>                            
                                                 </div>

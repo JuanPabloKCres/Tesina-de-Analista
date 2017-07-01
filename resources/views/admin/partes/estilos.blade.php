@@ -22,7 +22,6 @@
     {{--
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker.css') }}">
 	<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-datepicker/css/datepicker3.css') }}">
-	<link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
 	<script src="{{ asset('plantillas/KAdmin-Dark/script/bootstrap2-toogle.css') }}"></script>
 
     --}}
@@ -40,7 +39,6 @@
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/styles/steps.css') }} ">
     --}}
 
-
     <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
 
 
@@ -50,4 +48,4 @@
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <!-- -->
 
-
+    <link type="text/css" rel="stylesheet" href="{{ asset('plantillas/KAdmin-Dark/fonts/font.css') }}  ">

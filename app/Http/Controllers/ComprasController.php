@@ -51,6 +51,9 @@ class ComprasController extends Controller {
              * Si la solicitud se realiza a través de ajax quiere decir que que se quiere impactar en caja una nueva compra.
              * En caso contrario se devuelve la pantalla para realizar una compra */
             if ($request->ajax()) {
+                if($caja->totalMovimientos() < ($request->costo_envio + $request->montoPedido)){
+                    return response()->json("No tiene suficiente dinero registrado en caja para efectuar el pedido.");
+                }
                 /** Primero se recoge en una variable el array de renglones y se crea y persiste el registro de pedido/compra */
                 $arrayRenglones = $request->renglones;
                 $fecha = \Carbon\Carbon::now('America/Buenos_Aires');
@@ -83,6 +86,7 @@ class ComprasController extends Controller {
                     $compra->hora_compra = $fecha->format('H:i');
                     $conceptoMovimiento = "Compra de insumos por un monto de $" . $compra->importe;
                 }
+                $compra->nro_cte_asociado = $request->nro_cte_asociado;
                 $compra->save();
                 /** Auditoria almacena compra */
                 $auditoria = new Auditoria();
@@ -111,7 +115,12 @@ class ComprasController extends Controller {
 
                     /** Incrementar stock por insumo comprado */
                     $insumo = Insumo::find($clave['insumo_id']);    //busco el insumo que quiero actualizar
-                    $insumo->incrementarStock($clave['cantidad']);
+                    if ($request->no_act_stock == "true") {
+                        #no hacer nada
+                    }else{
+                        #incrementar stock
+                        $insumo->incrementarStock($clave['cantidad']);
+                    }
                     /** Actializar costo de insumo al comprar */
                     $insumo->costo_anterior = $insumo->costo;
                     $insumo->actualizarCosto($clave['costo_unitario']);
@@ -134,8 +143,8 @@ class ComprasController extends Controller {
                             $articulo->costo = $nuevoCostoProduccion;
                             $nvoPrecioVta = ($articulo->precioVta) + ($diferenciasCostosInsumo);    #_OK
                             $articulo->precioVta = $nvoPrecioVta;                                   #_OK
-                            //
-                            $nvoMontoIva = (($articulo->iva) / 100) * ($articulo->precioVta);         #_OK
+
+                            $nvoMontoIva = (($articulo->iva->iva) / 100) * ($articulo->precioVta);
                             $articulo->montoIva = $nvoMontoIva;                                     #_OK
                             //
                             $importe_neto_articulo = ($nvoPrecioVta) - ($nvoMontoIva);     //el total sin el iva
@@ -164,17 +173,17 @@ class ComprasController extends Controller {
                      }
                 }
                 /** En este sector se completan los campos y se registra el movimientos en la caja.*/
-                if ($compra->monto > 0) {
-                    $movimiento->caja_id = $caja->id;
-                    $movimiento->tipo = 'salida';
-                    $movimiento->monto = $compra->importe;
-                    $movimiento->compra_id = $compra->id;
-                    $movimiento->user_id = $request->usuarioPedido;
-                    $movimiento->hora = $fecha->format('H:i');
-                    $movimiento->fecha = $fecha->format('d-m-Y');
-                    $movimiento->concepto = $conceptoMovimiento;
-                    $movimiento->save();
-                }
+
+                $movimiento->caja_id = $caja->id;
+                $movimiento->tipo = 'salida';
+                $movimiento->monto = $compra->importe;
+                $movimiento->compra_id = $compra->id;
+                $movimiento->user_id = $request->usuarioPedido;
+                $movimiento->hora = $fecha->format('H:i');
+                $movimiento->fecha = $fecha->format('d-m-Y');
+                $movimiento->concepto = $conceptoMovimiento;
+                $movimiento->save();
+
                 /*
                  * Una vez completado el proceso se procede con redireccionar a la pantalla de compras.
                  */

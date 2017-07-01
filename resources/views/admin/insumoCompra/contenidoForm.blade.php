@@ -27,7 +27,8 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group"><label class="col-sm-3 control-label">Proveedor</label>
+{{--
+            <div class="form-group" id="form-proveedor"><label class="col-sm-3 control-label">Proveedor</label>
                 <div class="col-sm-9 controls">
                     <div class="row">
                         <div class="col-xs-12">
@@ -39,7 +40,8 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group"><label class="col-sm-3 control-label">Costo unitario</label>
+--}}
+            <div class="form-group"><label class="col-sm-3 control-label">Costo unitario ($):</label>
                 <div class="col-sm-9 controls">
                     <div class="row">
                         <div class="col-xs-12">
@@ -52,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group"><label class="col-sm-3 control-label">Monto Insumo</label>
+            <div class="form-group"><label class="col-sm-3 control-label">Monto Insumo ($):</label>
                 <div class="col-sm-9 controls">
                     <div class="row">
                         <div class="col-xs-12">

@@ -1,4 +1,4 @@
-<div id="modal-create" class="modal fade">
+<div id="modal-create-cliente" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -23,7 +23,7 @@
                 @endif
                 <form class = 'form-horizontal'>
                 @include('admin.clientes.contenidoForm')
-                <button type="button" onclick="registrarCliente();" class="btn btn-success btn-block">Crear registro</button>
+                <button type="button" onclick="registrarCliente()" class="btn btn-success btn-block">Crear registro</button>
                 <button type="button" data-dismiss="modal" class="btn btn-white btn-block">Cerrar</button>
                   </form>
             </div>

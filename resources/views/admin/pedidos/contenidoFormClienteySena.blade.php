@@ -1,4 +1,3 @@
-
 <?php
         $array_fecha = getdate();
         $año = $array_fecha['year'];
@@ -110,15 +109,9 @@ $fecha_elegida=null; //la declaro global para usarla en el popup
 
 --}}
 <div id="recomendacion" class="alert alert-success animated rubberBand" style="display:none;">
-    <!-- boton para quitar el popup
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    -->
     <h4><span class="alertMessage"></span></h4>
 </div>
 <div id="alertBox" class="alert alert-warning animated rollIn" style="display:none;">
-    <!-- boton para quitar el popup
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    -->
     <h4><span class="alertMessage"></span></h4>
 </div>
 
@@ -126,14 +119,6 @@ $fecha_elegida=null; //la declaro global para usarla en el popup
 <a class="btn gray mini mr5" id="item-publish">
     <span class="popuptext"></span>
 </a>
-{{--
-<div class="popup" onclick="mostrarPopup()">Fecha de entrega
-    <span class="popuptext" id="myPopup">
-            ***la fecha elegida era: ***
-        Hay {{$i}} que esperan ser entregados para esa fecha 😓
-    </span>
-</div>
---}}
 
 {{--Steps--}}
 <form role="form" id="form-pedido" class="clearfix">
@@ -252,12 +237,13 @@ $fecha_elegida=null; //la declaro global para usarla en el popup
                     <div class="row">
                         <div class="col-xs-4">
                             <div class="input-icon right">
-                                <input class="datepicker" type="text" id="fecha_entrega_date" name="fecha_entrega" {{--min="{{$fecha_hoy}}"--}}>
+                                <input class="datepicker" type="text" id="fecha_entrega_date" name="fecha_entrega" value="fecha_entrega">📅
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             {{-- /ENTREGA --}}
         </section>
     </div>
@@ -299,7 +285,5 @@ $fecha_elegida=null; //la declaro global para usarla en el popup
             }, timeout);
         }
     };
-
-
 
 </script>

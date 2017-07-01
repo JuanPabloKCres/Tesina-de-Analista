@@ -104,3 +104,26 @@ function reporte_cierre_caja(){
         }
     });
 }
+
+
+//triggered when modal is about to be shown
+$('#modal-editar-cheque').on('show.bs.modal', function(e) {
+    //get data-id attribute of the clicked element
+    var cheque_id = $(e.relatedTarget).data('cheque-id');
+    //populate the textbox
+    $(e.currentTarget).find('input[name="cheque_id"]').val(cheque_id);
+});
+
+/** Actualizar Cheque **/
+function registrarPagoCheque(cheque_id){
+    $.ajax({
+        dataType: 'json', url: "/admin/cheques",
+        data: {
+            cheque_id: cheque_id,
+        },
+        success: function (data) {
+            console.log(data);
+            $('#modal-exito').modal();
+        }
+    });
+}

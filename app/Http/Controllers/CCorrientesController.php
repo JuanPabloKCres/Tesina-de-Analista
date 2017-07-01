@@ -21,7 +21,6 @@ use Illuminate\Routing\Route;
 
 class CCorrientesController extends Controller
 {
-
     public function __construct()
     {
         Carbon::setlocale('es'); // Instancio en Español el manejador de fechas de Laravel
@@ -32,7 +31,6 @@ class CCorrientesController extends Controller
         else{
             dd("Usted NO tiene permisos para acceder a este subsistema");
             return view('admin.partes.noAutorizado');
-
         }
     }
     /**
@@ -85,7 +83,7 @@ class CCorrientesController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'cliente_id' => 'required|max:50|unique:cuentas_corrientes',
+            'cliente_id' => 'required|max:50|unique:ccorrientes',
             'saldo' => 'required',
             'fecha_apertura' => 'required',
             'hora_apertura' => 'required'

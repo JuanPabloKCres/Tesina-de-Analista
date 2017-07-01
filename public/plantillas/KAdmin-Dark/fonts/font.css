@@ -1,0 +1,11 @@
+@font-face {
+	font-family: 'MonsieurPomme';
+	src: url('./MonsieurPomme.eot');
+	src: local('MonsieurPomme'), url('./MonsieurPomme.woff') format('woff'), url('./MonsieurPomme.ttf') format('truetype');
+}
+/* use this class to attach this font to any element i.e. <p class="fontsforweb_fontid_78041">Text with this font applied</p> */
+.fontDescargada {
+	font-family: 'MonsieurPomme' !important;
+}
+
+/* Font downloaded from FontsForWeb.com */

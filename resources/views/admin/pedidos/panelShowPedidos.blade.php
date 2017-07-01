@@ -1,3 +1,5 @@
+@include('admin.pedidos.editarProgreso')
+
 <div class="panel-body">
     <h3>Detalle del presupuesto y pago</h3>
     <br>
@@ -24,7 +26,7 @@
         </div>
     </div>
     <div class="row mtl">
-        <div class="col-md-6">
+        <div class="col-md-3">
             <table class="table table-striped table-hover">
                 <tbody>
                 <tr>
@@ -34,12 +36,39 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
             <table class="table table-striped table-hover">
                 <tbody>
                 <tr>
-                    <td><h4 class="box-heading">Restan abonar:</h4></td>
-                    <td><h4>${{ $pedido->importe() - $pedido->senado }}</h4></td>
+                    <td><h4 class="box-heading">Progreso del pedido:</h4></td>
+                    <td onclick="$('#modal-editar-progreso').modal()"><h4>{{ $pedido->progreso }}%</h4></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        @if($pedido->pagado == 0)
+            <div class="col-md-3">
+                <table class="table table-striped table-hover">
+                    <tbody>
+                    <tr>
+                        <td><h4 class="box-heading">Restan abonar:</h4></td>
+                        <input type="hidden" name="restaAbonar_oculto" id="restaAbonar_oculto" value="{{ $pedido->importe() - $pedido->senado }}"> {{-- Invisible--}}
+                        <td class="text-yellow"><h4>${{ $pedido->importe() - $pedido->senado }}</h4></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        @endif
+        <div class="col-md-3">
+            <table class="table table-striped table-hover">
+                <tbody>
+                <tr>
+                    <td><h4 class="box-heading">Factura Autorizada:</h4></td>
+                    @if($pedido->nro_cae)
+                        <td><h4>✔️</h4></td>
+                    @else
+                        <td><h4>❌️</h4></td>
+                    @endif
                 </tr>
                 </tbody>
             </table>
@@ -62,7 +91,7 @@
                     <tbody>
                     <tr class="success">
                         <td><h4 class="box-heading">Fecha de entrega establecida:</h4></td>
-                        <td><h4>{{ $pedido->fecha_entrega_estimada }}</h4></td>
+                        <td><h4>{{ $pedido->fecha_entrega_estimada }} {{-- (hace {{ $pedido->diasDeDemora($pedido->fecha_entrega_estimada) }} días)--}}</h4></td>
                     </tr>
                     </tbody>
                 </table>
@@ -99,7 +128,7 @@
 
     {{-- Si pago con cheque → Mostrar datos del cheque--}}
     @if($pedido->cheque)
-        <h3>Datos del Cheque</h3>
+        <h3>Datos del Cheque  🏛 </h3>
         <div class="row mtl">
             <div class="col-md-3">
                 <table class="table table-striped table-hover">
@@ -115,7 +144,7 @@
                 <table class="table table-striped table-hover">
                     <tbody>
                     <tr class="success">
-                        <td><h4 class="box-heading">Banco:</h4></td>
+                        <td><h4 class="box-heading">Banco: </h4></td>
                         <td><h4>{{ $pedido->cheque->banco->nombre }} (Sucursal {{ $pedido->cheque->sucursal }})</h4></td>
                     </tr>
                     </tbody>

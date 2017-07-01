@@ -39,13 +39,11 @@ $("#form-pedido").submit(function (e) {
 });
 
 
-
 /**  comprobar: Este método devuelve true si detecta que algún valor (insumo_id, cantidad, importe, precio_unitario)
  * se encuentra sin completar. Este método comienza con verificaciones, prosigue solicitando
  * a la controladora a través de la id del artículo el nombre del mismo y si es suficiente el stock
  * para luego pasar el nombre al método que se encarga de agregar el contenido en la tabla.
  */
-
 function comprobar(insumo_select, cantidad_number, proveedor_select, costo_number, d4)  //d4 es la casilla de costo neto
 {
     if ((insumo_select !== '') && (cantidad_number !== '') && (proveedor_select !== '') && (costo_number !== '') && (d4 !== '')) {
@@ -139,7 +137,10 @@ function enviarPedido(pagado, entregado, confirmado)
     });
 
     var proveedor_id = $('#proveedor_select').val();
+    /**agregado 24/jun/17**/
+    var nro_cte_asociado = $('#ncte').val();
     var costo_envio = $('#costo_envio').val();
+    /** **/
     /*persistir compra o pedido*/
     $.ajax({
         dataType: 'JSON', url: "/admin/compras/create",
@@ -150,15 +151,22 @@ function enviarPedido(pagado, entregado, confirmado)
             pagado: pagado,
             entregado: entregado,
             recibido: recibido,
+            no_act_stock: $('#no_act_stock').val(),
             usuarioPedido: usuario_id,
             costo_envio: costo_envio,
+            nro_cte_asociado: nro_cte_asociado,
             montoPedido: montoPedido
         },
         success: function (data) {
-            $('#mensajeExito').html(data);      /* Una vez completado el proceso se muestra el mensaje de exito*/
-            $('#botonExito').click();
-            /* 1# Proveedor 2# DetalledeInsumos 3--6# Estados #7 UsuarioQueOrdenoCompra #8 $Envio #9TOTAL*/
-            recibo_compra_insumos(proveedor_id, lineas, confirmado, pagado, entregado, recibido,  usuario_id, costo_envio, montoPedido);
+            if((data=="No tiene suficiente dinero registrado en caja para efectuar el pedido.") && ($('#no_act_stock').val()=='false')){
+                alert(data);
+            }else{
+                $('#mensajeExito').html(data);      /* Una vez completado el proceso se muestra el mensaje de exito*/
+                $('#botonExito').click();
+                /* 1# Proveedor 2# DetalledeInsumos 3--6# Estados #7 UsuarioQueOrdenoCompra #8 $Envio #9TOTAL*/
+                recibo_compra_insumos(proveedor_id, lineas, confirmado, pagado, entregado, recibido,  usuario_id, costo_envio, montoPedido);
+            }
+
         }
     });
 }
@@ -376,6 +384,7 @@ function recibo_compra_insumos(proveedor_id, lineas, confirmado, pagado, entrega
     var nro_comprobante;
     var recibo = {                          /*El ticket es una 'nota de pedido'*/
         nro_comprobante: null,
+        nro_cte_asociado: null,
         usuario: null,
         proveedor: proveedor, proveedor_email: proveedor_email, proveedor_telefono: proveedor_telefono,
         costo_envio: costo_envio,
@@ -401,6 +410,7 @@ function recibo_compra_insumos(proveedor_id, lineas, confirmado, pagado, entrega
             usuario = respuesta.usuario;
             /*Una vez que se obtiene el id de comprobante grabado arriba, se rellena el recibo por pantalla */
             recibo.nro_comprobante = nro_comprobante;      //OK
+            recibo.nro_cte_asociado = $('#ncte').val();
             recibo.proveedor = proveedor;
             recibo.usuario = usuario;
             recibo.proveedor_email = proveedor_email;
@@ -433,4 +443,12 @@ function mostrarStockRemanente(insumo_id){        //devuelve los insumos que que
             console.log(respuesta);
         }
     });
+}
+/**Habilitar o no el registro post-compra**/
+if($("#post-compra").is(":checked")){
+    $("#proveedor_select").prop('disabled',true);
+    alert('se apreto check');
+}
+else{
+    $("#ncte").prop('disabled',false);
 }

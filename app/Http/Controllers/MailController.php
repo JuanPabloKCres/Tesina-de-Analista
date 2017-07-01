@@ -15,24 +15,25 @@ use Illuminate\Support\Facades;
 
 class MailController extends Controller
 {
-    public function index(Request $request)     /**Para notificacion automatica de stock bajo a administrador**/
+    public function index(Request $request)
     {
         if($request->ajax()){
             if($request->email_info_pedido==true){
                 try{
+                    dd($request);
                     Mail::send('emails.infopedido', $request->all(), function($msj){
                         $msj->subject('Información de su pedido');
                         $msj->to('jpnava@gmail.com@gmail.com');
                     });
                     //Flash::overlay('Se ha enviado email con la info del pedido');
-                    return response()->json(json_encode("Se envio el email del pedido, desde MailController.php", true));
+                    return response()->json(json_encode("Se envio el email del pedido", true));
                     //return view('emails.datos_pedido');
                 }catch (Exception $e){
                     $respuesta = array("excepcion"=>$e);
                     return response()->json(json_encode($respuesta, true));
                 }
             }
-            else{
+            elseif($request->email_stockBajo == true){
                 Mail::send('emails.notificacion', $request->all(), function($msj){
                     $msj->subject('Notificacion de stock bajo');
                     $msj->to('jpaulnava@gmail.com');
@@ -41,7 +42,6 @@ class MailController extends Controller
                 return response()->json(json_encode("Se envio el email de notificacion de stock bajo desde MailController.php", true));
             }
         }
-        //return view('emails.datos_pedido');
     }
 
     public function store(Request $request)     /**Para email de contacto desde el Front**/

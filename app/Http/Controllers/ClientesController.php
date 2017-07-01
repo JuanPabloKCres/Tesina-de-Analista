@@ -80,7 +80,7 @@ class ClientesController extends Controller {
                 $tieneCC = 1;
             }
 
-            $datosValidados = array("nombre" => $nombre, "email" => $email, "n" => $n, "a" => $a, "empresa"=>$empresa,
+            $datosValidados = array("nombre" => $nombre, "email" => $email, "n" => $n, "a" => $a, "empresa" => $empresa,
                 "dni" => $dni, "domicilio" => $direccion, "localidad" => $localidad, "provincia" => $provincia,
                 "tipo_cbte" => $tipo_cbte, "responiva"=>$responiva, "iva"=>$iva, "tieneCC" => $tieneCC);
             return response()->json(json_encode($datosValidados, true));
@@ -94,9 +94,14 @@ class ClientesController extends Controller {
     }
 
     public function create(Request $request) {
-        $cliente = new Cliente($request->all());
-        $cliente->save();
-        return response()->json(view('admin.pedidos.clienteSeleccionado', compact('cliente'))->render());
+        if($request->ajax()){
+            $cliente = new Cliente($request->all());
+            $cliente->localidad_id = $request->localidad_id;
+            $cliente->save();
+            $respuesta = array("cliente"=>$cliente);
+            return response()->json(json_encode($respuesta, true));
+            //return response()->json(view('admin.pedidos.clienteSeleccionado', $cliente/*compact('cliente'))->render()*/);
+        }
     }
 
     public function store(Request $request) {

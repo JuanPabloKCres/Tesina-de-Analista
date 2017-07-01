@@ -25,6 +25,7 @@ class ComprasTable extends Migration
             $table->double('importe_costo_envio');  //costo de traer el pedido de insumos a GN Soluciones
             $table->double('importe');
             $table->string('concepto');
+            $table->string('nro_cte_asociado');
             $table->integer('userCompra_id')->unsigned()->nullable();   //usuario que efectua la compra
             $table->foreign('userCompra_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

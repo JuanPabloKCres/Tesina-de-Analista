@@ -9,7 +9,7 @@
                         <div class="col-xs-8">
                             <div class="input-icon right">
                                 <i class="fa fa-pencil"></i>
-                                {!! Form::select('articulo_id', $articulos, null, ['class' => 'form-control selectBoot', 'id' => 'articulo_select','data-live-search' => 'true', 'required']) !!}
+                                {!! Form::select('articulo_id', $articulos + $articulos, null, ['class' => 'form-control selectBoot', 'id' => 'articulo_select','data-live-search' => 'true', 'required']) !!}
                             </div>
                             <div class="input-icon right">
                                 <select class="form-control text-right" id="insumos_necesarios" readonly>

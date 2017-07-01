@@ -19,7 +19,9 @@
                         <th class="text-center">Acción</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+
+                </tbody>
             </table>
         </div>
     </div>

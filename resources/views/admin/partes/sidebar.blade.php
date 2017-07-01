@@ -149,10 +149,18 @@
 
                     <li id="li15">
                         <a data-toggle="tooltip" data-placement="top" title="Abrir Cuentas" href="{{ route('admin.ccorrientes.index') }}">
-                            <i class="fa fa-calculator">
+                            <i class="fa fa-bank">
                                 <div class="icon-bg bg-orange"></div>
                             </i>
                             <span class="menu-title">Cuentas Corrientes</span>
+                        </a>
+                    </li>
+                    <li id="li15">
+                        <a data-toggle="tooltip" data-placement="top" title="Ver Cheques cobrados y por cobrar" href="{{ route('admin.cheques.index') }}">
+                            <i class="fa fa-newspaper-o">
+                                <div class="icon-bg bg-orange"></div>
+                            </i>
+                            <span class="menu-title">Cartera de Cheques</span>
                         </a>
                     </li>
 

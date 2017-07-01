@@ -12,12 +12,12 @@
                     <p>Está a punto de registrar la compra de insumos.
                         Puede optar por entregar el pedido y registrar como una venta a este pedido o proseguir y registrar el pedido para su producción.</p>
                 </div>
-                <div class="form-group">
+                <div class="form-group hide">
                     <h4>                       
                         <label class="col-sm-4 control-label">Emitir comprobante interno de compra</label>
                         <div class="col-sm-4 controls">
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-8">
                                     <div class="input-icon right">
                                         {!! Form::checkbox('factura', '1') !!}
                                     </div>
@@ -30,11 +30,25 @@
                 <div class="form-group">
                     <h4>
                         <label class="col-sm-4 control-label">Ya recibida</label>
-                        <div class="col-sm-4 controls">
+                        <div class="col-sm-2 controls">
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-2">
                                     <div class="input-icon right">
                                         {!! Form::checkbox('recibido', '1') !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h4>
+                </div>
+                <div class="form-group">
+                    <h4>
+                        <label class="col-sm-4 control-label">No actualizar stock</label>
+                        <div class="col-sm-2 controls">
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <div class="input-icon right">
+                                        {!! Form::checkbox('no_act_stock', '1') !!}
                                     </div>
                                 </div>
                             </div>

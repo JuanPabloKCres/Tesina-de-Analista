@@ -110,6 +110,48 @@ Pedidos - Registrar compra Insumos
                                         </div>
                                     </div>
 
+                                    <div class="col-md-16">
+                                        <div class="panel">
+                                            <div class="panel-body">Registrar compra ya hecha a Proveedor
+                                                <input type="checkbox" id="post-compra"></input>
+                                                <div class="form-group">
+                                                    <div class="col-sm-12 controls">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label>Proveedor</label>
+                                                                    <div class="input-group">
+                                                                        {!! Form::select('proveedor_id', $proveedores, null, ['class' => 'form-control', 'id' => 'proveedor_select','data-live-search' => 'true', 'required']) !!}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label>N° Cte Compra</label>
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-addon">#</span>
+                                                                        {!! Form::number('n_cte', null, ['class' => 'form-control', 'id' => 'ncte']) !!}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <label>Costo envio:</label>
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-addon">$</span>
+                                                                        {!! Form::number('costo_envio', null, ['class' => 'text-right form-control', 'id' => 'costo_envio']) !!}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
                                     <div class="col-md-12">
                                         <div class="panel">
                                             <div class="panel-body">
@@ -128,7 +170,7 @@ Pedidos - Registrar compra Insumos
                         </div>
                         <div class="form-group "><label class="col-sm-3 control-label">Costos de envio ($):</label>
                             <div class="col-md-9">
-                                {!! Form::text('costo_envio', null, ['class' => 'text-right', 'id' => 'costo_envio']) !!}
+
                             </div>
                         </div>
 

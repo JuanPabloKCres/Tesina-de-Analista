@@ -34,7 +34,7 @@ class EstadisticasController extends Controller
      {
          $pedidos = Venta::whereNotNull('userVenta_id')
              ->orderBy('id','ASC')
-             ->paginate(Venta::searchEntregado(1)->count());  /** mandar a la vista estadisticas solo los pedidos entregados (ventas) */
+             ->paginate(99999);  /** mandar a la vista estadisticas solo los pedidos entregados (ventas) */
          $fecha1= "";
          $fecha2= "";
          $articulosVendidos = 0;
@@ -45,14 +45,18 @@ class EstadisticasController extends Controller
          if(!is_null($request->fechaInicio)){
              $fecha1= $request->fechaInicio;
              $fecha2= $request->fechaFin;
+
+             //dd($fecha1, $fecha2);
          }else{
              $fechahoy =  \Carbon\Carbon::now('America/Buenos_Aires');
              $fecha1= $fechahoy->format('d-m-Y');
              $fecha2= $fechahoy->format('d-m-Y');
          }
+
          /** Empezamos a juntar los datos necesarios para pasar a la vista. */
          foreach ($pedidos as $pedido) {
              $fechaPedido = date_create($pedido->fecha_venta); //la fecha del pedido es tomada y transformada en una variable de date
+
              if ( ( $fechaPedido >= date_create($fecha1))&&($fechaPedido <= date_create($fecha2))){ //se compara que la fecha del pedido se encuentre entre las fechas que determinan el rango
                  //guardamos la pedido en un listado para pasar a la vista
                  array_push($ventas_entre_fechas, $pedido);

@@ -34,11 +34,11 @@ class ComposerServiceProvider extends ServiceProvider
             /** Noviembre 19**/
             'App\Http\ViewComposers\InsumoComposer' => ['admin.insumos.contenidoForm', 'admin.insumos.cabeceraTabla', 'front.insumos.cabeceraTabla'],
             /** Noviembre 24 **/
-            'App\Http\ViewComposers\ProveedoresComposer' => ['admin.compras.proveedorSelect' , 'admin.insumoCompra.contenidoForm', 'admin.insumoArticulo.contenidoForm'],
+            'App\Http\ViewComposers\ProveedoresComposer' => ['admin.compras.proveedorSelect' , 'admin.insumoCompra.contenidoForm', 'admin.insumoArticulo.contenidoForm', 'admin.compras.createPedido'],
             'App\Http\ViewComposers\InsumosComposer' => ['admin.insumoCompra.contenidoForm' , 'admin.insumoArticulo.contenidoForm'],
 
-            /** Enero 20 **/
-            'App\Http\ViewComposers\BancoComposer' => ['admin.pedidos.createCheque'],
+            /** Junio 25/17 **/
+            'App\Http\ViewComposers\BancoComposer' => ['admin.pedidos.createCheque', 'admin.pedidos.createCheque_segundoPago'],
             /** Mayo 8 **/
 
         ]);

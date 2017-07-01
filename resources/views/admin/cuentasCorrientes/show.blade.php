@@ -11,9 +11,6 @@
 @section('content')
     @include('admin.cuentasCorrientes.movimientos.create')
     <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
-        <div class="page-header pull-left">
-            <div class="page-title">Caja</div>
-        </div>
          <div class="page-header pull-right">
             <div class="page-toolbar">
                 <button data-placement="bottom" title="Registrar un nuevo movimiento de en la caja actual" type="button" data-hover="tooltip" data-toggle="modal" data-target="#modal-movimiento-cc"  class="btn btn-green">
@@ -69,7 +66,7 @@
                                                     <tbody>
                                                     <tr class="danger">
                                                         <td><h4 class="box-heading">Cheques por cobrar:</h4></td>
-                                                        <td><h4>${{ $cuentacorriente->cheques }}</h4></td>
+                                                        <td><h4>${{ \App\Cheque::sinCobrar($cuentacorriente) }}</h4></td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -81,7 +78,7 @@
                                                     <tbody>
                                                     <tr>
                                                         <td><h4 class="box-heading">Debe:</h4></td>
-                                                        <td><h4>{{ $cuentacorriente->debe_cc(($cuentacorriente)) }}</h4></td>
+                                                        <td><h4>$ {{ $cuentacorriente->debe_cc(($cuentacorriente)) }}</h4></td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -91,19 +88,19 @@
                                                     <tbody>
                                                         <tr>
                                                             <td><h4 class="box-heading">Haber:</h4></td>
-                                                            <td><h4>{{ $cuentacorriente->haber_cc($cuentacorriente) }}</h4></td>
+                                                            <td><h4>$ {{ $cuentacorriente->haber_cc($cuentacorriente) }}</h4></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-2">
                                                 <table class="table table-striped table-hover">
                                                     <tbody>
                                                           <tr>
                                                             <td><h4 class="box-heading">Estado:</h4></td>
                                                               @if($cuentacorriente->activa)
-                                                                <td><h4>Activa</h4></td>
+                                                                <td class="text-green"><h4>Activa</h4></td>
                                                               @else
                                                                 <td><h4>Inactiva</h4></td>
                                                               @endif
@@ -121,12 +118,12 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-4">
                                                 <table class="table table-striped table-hover">
                                                     <tbody>
-                                                    <tr class="success">
+                                                    <tr class="info">
                                                         <td><h4 class="box-heading">Saldo final:</h4></td>
-                                                        <td><h4>${{ $cuentacorriente->totalMovimientos() }}</h4></td>
+                                                        <td class="text-dark"><h4>$ {{ $cuentacorriente->totalMovimientos() }}</h4></td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -151,21 +148,33 @@
                                     <table id="tab-movimientosCC" class="dataTable display table table-hover table-striped">
                                         <thead>
                                         <tr>
-                                            <th>Concepto</th>
-                                            <th>Fecha y hora</th>
-                                            <th>Tipo</th>
-                                            <th>Monto</th>
-                                            <th>Usuario</th>
+                                            <th class="text-center">N°</th>
+                                            <th class="text-center">Concepto</th>
+                                            <th class="text-center">Fecha y hora</th>
+                                            <th class="text-center">Tipo</th>
+                                            <th class="text-center">Monto</th>
+                                            <th class="text-center">Usuario</th>
+                                            <th class="text-center">Detalle de Movimiento</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         @foreach($cuentacorriente->movimientos as $movimiento)
                                             <tr>
-                                                <td>{{ $movimiento->concepto }}</td>
-                                                <td>{{ $movimiento->fecha }} - {{ $movimiento->hora }}</td>
-                                                <td>{{ $movimiento->tipo }}</td>
-                                                <td>${{ $movimiento->monto }}</td>
-                                                <td>{{ $movimiento->user->name}}</td>
+                                                <td class="text-center">{{ $movimiento->id }}</td>
+                                                <td class="text-center">{{ $movimiento->concepto }}</td>
+                                                <td class="text-center">{{ $movimiento->fecha }} - {{ $movimiento->hora }}</td>
+                                                <td class="text-center">{{ $movimiento->tipo }}</td>
+                                                <td class="text-center">${{ $movimiento->monto }}</td>
+                                                <td class="text-center">{{ $movimiento->user->name}}</td>
+                                                @if($movimiento->venta)
+                                                    <td class="text-center">
+                                                        <a data-toggle="tooltip" data-placement="top" title="Visualizar registro. Al visualizar este registro podrá tener acceso al detalle de la venta que fue efectuada" href="{{ route('admin.pedidos.edit', $movimiento->venta) }}" class="btn"> <span class="" aria-hidden="true">📑</span></a>
+                                                    </td>
+                                                @else
+                                                    <td class="text-center">
+                                                        <a data-toggle="tooltip" data-placement="top" title="El movimiento no esta relacionado directamente a un pedido/venta" href="" class=""> -</a>
+                                                    </td>
+                                                @endif
                                             </tr>
                                         @endforeach
                                         </tbody>

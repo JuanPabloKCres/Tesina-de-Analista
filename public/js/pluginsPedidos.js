@@ -14,6 +14,9 @@
  $('#fecha_entrega_date').datepicker({minDate: -7});
  });
  */
+//$("#modal-ingresar-cae").modal();
+
+
 /*** Instanciar variables Globales ***/
 var horas_produccion = 0;
 
@@ -26,7 +29,7 @@ var pagarTotal = true;
 var datos_cheque = null;      //array con datos del cheque
 //Datos del cheque (en blanco)
 var pagoCheque = false;
-var pagoEnCC = false;
+var pagoEnCC = "no";
 var nro_serie;
 var banco;
 var sucursal_banco;
@@ -34,7 +37,10 @@ var fecha_emision;
 var fecha_cobro;
 
 var tieneCC;
+var este_pedido_id;
+var cliente_es_cf;
 /************************************ */
+//$('#cantidad_number').val(iii.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
 
 var miWizard = $("#example-basic").show();
 
@@ -63,7 +69,6 @@ $("#example-basic").steps({
         }
         if((currentIndex === 0) && ($("#responiva_select").val()!==""))
         {
-            alert(tieneCC);
             return true;
         }
         //Validacion de seccion "Articulos"
@@ -73,28 +78,45 @@ $("#example-basic").steps({
         }
         /* validacion de pagina de Modo de Pago */
         if((currentIndex===2) && ($("#chkEfectivo").is(":checked") || $("#chkCheque").is(":checked")) || $("#chkCC").is(":checked")){
-            if(($("#chkCheque").is(":checked"))){    //si pago con cheque
-                if(pagoCheque == false) {       //si no se le permite el pago con cheque a este cliente
+            if(($("#chkCheque").is(":checked"))){    //si paga con cheque
+                if((cliente_es_cf == true) && ($("#pago_cheque_cf").val() !='1')) {       //si no se le permite el pago con cheque a este cliente
                     if ($('#btn-pagarConCheque').prop('disabled', true)) {
-                        alert('A clientes en razón de Consumidor Final no se les permite abonar con cheques');
+                        alert('A clientes en razón de Consumidor Final no se les permite abonar con cheques  ✋🏻');
+                        alert('ℹ️ Puede modificar esta opción en la configuracion gral. (arriba-derecha) ℹ️');
                     } else {
                         $("#modal-create-cheque").modal();
                     }
+                    pagoEnCC = "no";
                 }
                 else{
-                    sugerirFechaDeEntrega();
-                    return true;
+                    if(tieneCC == true){
+                        //alert("El cliente tiene una CC activa");
+                        rellenarModalCheque();
+                        $("#modal-create-cheque").modal();
+                        pagoEnCC = "si";
+                        sugerirFechaDeEntrega();
+                        return true;
+                    }
+                    else{
+                        alert(" ✋🏻  El cliente NO tiene aún una CC  ✋🏻");
+                        pagoEnCC = "no";
+                        $("#modal-crearCC").modal();
+                        return false;
+
+                    }
                 }
             }
             else if($("#chkCC").is(":checked")){     //si paga con Cuenta Corriente
                 if(tieneCC == true){
-                    alert("El cliente tiene una CC activa");
-                    pagoEnCC = true;
+                    alert("El cliente tiene una CC activa ✅ ");
+                    pagoEnCC = "si";
                     sugerirFechaDeEntrega();
                     return true;
                 }
                 else{
-                    alert("El cliente no tiene una CC activa");
+                    alert(" ✋🏻  El cliente NO tiene aún una CC  ✋🏻");
+                    pagoEnCC = "no";
+                    $("#modal-crearCC").modal();
                     return false;
                 }
             }
@@ -110,7 +132,7 @@ $("#example-basic").steps({
     },
     onFinished: function (event, currentIndex)
     {
-        miWizard.hide();
+        //miWizard.hide();
         $('#volverWizard').removeClass("hide");
         confirmar();
     }
@@ -125,7 +147,10 @@ $(document).ready(function () {
 
 $('#iva_select').prop('disabled',true);
 $('#precioU_number').prop('disabled',true);
-$('#importe_number').prop('disabled',true);
+if($('#permitir_ingresar_precio').val() == 0){
+    $('#importe_number').prop('disabled',true);
+}
+
 
 $(document).ready(function () {
     $('#tblListaProductos').DataTable({
@@ -137,8 +162,12 @@ $(document).ready(function () {
     });
 });
 /** Desactivar el boton 'pago con cheque' por defecto' */
-$('#btn-pagarConCheque').prop('disabled',true);
-$('#btn-pagarConCheque').prop('color', 'grey');
+if($("#pago_cheque_cf").val() == 0){
+    $('#btn-pagarConCheque').prop('disabled',true);
+    $('#btn-pagarConCheque').prop('color', 'grey');
+}
+
+
 
 /*
  * Variables para cuando se cargan artículos en la tabla.
@@ -161,6 +190,40 @@ function validarFormCheque(){
     }
     else{
         cargarDatosCheque();
+    }
+}
+
+function validarFormCheque_segundoPago(pedido_id){
+    nro_serie = document.forms["form-crear"]['nro_serie'].value;
+    banco = document.forms["form-crear"]["banco"].value;
+    sucursal = document.forms["form-crear"]["sucursal"].value;
+    fecha_emision = document.forms["form-crear"]["fecha_emision"].value;
+    fecha_cobro = document.forms["form-crear"]["fecha_cobro"].value;
+    if (nro_serie == "" && banco =='' && sucursal =='' && fecha_emision =='' && fecha_cobro =='') {
+        alert("No se ha rellenado correctamente el cheque");
+        pagoCheque = false;
+    }
+    else{
+        /**Hacer Pago**/
+        //cargarDatosCheque();
+        $.ajax({
+            dataType: 'json', url: "/admin/pedidos/create", //se manda a create porque update no me anda nunca
+            data: {
+                completar_pago_c_cheque: true,
+                pedido_id: pedido_id,
+                /****** Datos Cheque *****/
+                nro_serie: nro_serie, banco: banco, sucursal_banco:  $('#sucursal').val(), fecha_emision: fecha_emision, fecha_cobro: fecha_cobro,
+                cliente_id: $('#cliente_oculto_id').val(),
+                monto: $('#restaAbonar_oculto').val(),
+        /*********************** */
+            },
+            success: function (data) {
+                var data_recibida = JSON.parse(data);
+                console.log(data);
+                //emitirTicket(informacion_de_cliente);       /**llamar a emitir nota de pedido (comprobante de transaccion para el cliente)*/
+            }
+        });
+
     }
 }
 
@@ -305,7 +368,7 @@ function comprobar(articulo_select, cantidad_number, precioU_number, importe_num
             success: function (data) {
                 var d = JSON.parse(data);
                 console.log(d);
-                if(d.permitir){         //si el servidor decuele que hay insumos para cubrir el pedido
+                if(d.permitir /*|| ($("#ventas_sin_stock").val() == 1)*/){         //si el servidor devuelve que hay insumos para cubrir el pedido o si el cntrol de stock esta desactivado en configuracion
                     agregarContenido(articulo_select, $('#articulo_select option:selected').text(), cantidad_number, precioU_number, importe_number, d.horas_produccion);
                 }
                 else{
@@ -410,6 +473,7 @@ function completarPrecio(n, iva)
         }
     }
 }
+
 /*
  * Este método jquery captura el evento de submit del formulario "Artículos"
  * y lanza el método que se encarga de crear un renglón en la tabla.
@@ -501,11 +565,11 @@ function enviarPedido(pagado, entregado)
             console.log("De ClientesController se obtuvieron estos datos para FE: "+data); console.log("El monto total que se manda a FE es =" + montoTotal);
             var data_cliente = JSON.parse(data);
             informacion_de_cliente = data_cliente;
-            /**factura electrónica -->desde pantalla de 'tomar pedido'*/
+            /**factura electrónica --> (desde pantalla de 'tomar pedido')*/
             if ($('input:checkbox[name=factura]:checked').val()) {
                 factura.tipo_cbte = informacion_de_cliente.tipo_cbte;   //OK
                 factura.nro_doc = informacion_de_cliente.dni;           //OK
-                if(informacion_de_cliente.empresa==null){   /**Si el cliente no tiene empresa*/
+                if(informacion_de_cliente.empresa ==''){   /**Si el cliente no tiene empresa*/
                     factura.nombre_cliente = informacion_de_cliente.nombre;         //grabar su nombre para la factura
                 }else{
                     factura.nombre_cliente = informacion_de_cliente.empresa;         //sino grabar nombre de la empresa para la factura, descartar nombre de representante
@@ -518,6 +582,8 @@ function enviarPedido(pagado, entregado)
                 var array = JSON.stringify(factura);
                 var enlace_factura = 'http://localhost/factura/dinamico-factura.php?&datos_factura=' + encodeURIComponent(array);
                 window.open(enlace_factura);
+                //$("#modal-ingresar-cae").modal();   //**Abrir ventana para que se ingresen datos fe Factura Electronica
+
             }
         }
     });
@@ -555,12 +621,18 @@ function enviarPedido(pagado, entregado)
             paga_en_cuentacorriente: pagoEnCC,
         },
         success: function (data) {
-            /* Una vez completado el proceso se muestra el mensaje de exito */
-            console.log('Lo de abajo se obtuvo por ajax desde PedidosController:');
+            var data_recibida = JSON.parse(data);
+            este_pedido_id = data_recibida.pedido_id;
+            if ($('input:checkbox[name=factura]:checked').val()) {
+                $("#modal-ingresar-cae").modal();
+            }else{
+                $('#mensajeExito').html();
+                $('#botonExito').click();
+            }
             console.log(data);
-            emitirTicket(informacion_de_cliente);                 /**llamar a emitir nota de pedido (comprobante de transaccion para el cliente)*/
-            $('#mensajeExito').html();
-            $('#botonExito').click();
+            emitirTicket(informacion_de_cliente);       /**llamar a emitir nota de pedido (comprobante de transaccion para el cliente)*/
+            //$('#mensajeExito').html();
+            //$('#botonExito').click();
             /*bardo con el email_info_pedido_cliente? */
             if(entregado == false){             /**si el pedido no fue entregado en el acto, llamara enviar email con info de compra*/
                 email_info_pedido_cliente(lineas, montoPedido, montoTotal_Absoluto);
@@ -606,66 +678,117 @@ function registrarCliente()
             responiva_id: $('#responiva_id').val(),
             cuit: $('input:text[name=cuit]').val(),
             dni: $('input:text[name=dni]').val(),
-            localidad_id: $('#localidad_id').val(),
+            localidad_id: $('#localidad_select').val(),
             direccion: $('input:text[name=direccion]').val(),
             telefono: $('input:text[name=telefono]').val(),
             email: $('input:text[name=email]').val(),
             descripcion: $('#descripcion').val()
         },
         success: function (data) {
-            $("#divCliente").html(data);
-            $('#modal-create').modal('hide');
+
+            var data_cliente = JSON.parse(data);
+            console.log(data_cliente);
+            $('#modal-create-cliente').modal('hide');
+            alert('se añadio el nuevo cliente satisfactoriamente ✅ ');
+            var cliente_select = document.getElementById("cliente");
+            var option = document.createElement("option");
+            option.value = data_cliente.id;
+            option.text = ""+data_cliente.apellido+", "+data_cliente.nombre+" (Registrado recientemente)";
+            cliente_select.add(option);
+            cliente_select.appendChild(option);
+        }
+    });
+}
+/**** Cuando se selecciona un pais, desplegar las provincias que le corresponden ****/
+$('select#pais_select').on('change',function () {
+    $('select#provincia_select').empty();
+    $('select#localidad_select').empty();
+    $.ajax({
+        dataType: 'json',
+        url: "/admin/paises",         //ruta que contendra el metodo para obtener lo que necesitamos, dentro del contolador
+        data: {
+            id: $('#pais_select').val()
+        },
+        success: function (data) {
+            //factura.tipo_cbre = data.tipo_cbre;
+            for(i=0; i<data.length; i++){
+                $('select#provincia_select').append("<option value='"+data[i].id+"'> "+data[i].nombre+"</option>");
+            }
+        }
+    });
+    buscarLocalidades();
+});
+
+$('select#provincia_select').on('change',function () {
+    $('select#localidad_select').empty();
+    buscarLocalidades();
+});
+
+/**** Cuando se selecciona una provincia, desplegar las localidades que le corresponden ****/
+function buscarLocalidades(){
+    $('select#localidad_select').empty();
+    $.ajax({
+        dataType: 'json',
+        url: "/admin/provincias",         //ruta que contendra el metodo para obtener lo que necesitamos, dentro del contolador
+        data: {
+            id: $('#provincia_select').val()
+        },
+        success: function (data) {
+            console.log(data);
+            //factura.tipo_cbre = data.tipo_cbre;
+            for(i=0; i<data.length; i++){
+                $('select#localidad_select').append("<option value='"+data[i].id+"'> "+data[i].nombre+"</option>");
+            }
         }
     });
 }
 
 /** Function generarFactura: Este método se encarga de recoger ciertos datos de la vista y
  * enviarlos al archivo php que se encarga de realizar la facturación electrónica. (al convertir un pedido en una venta)*/
-function generarFactura() {
-    $('#form-crear').submit();
-    $('#tblListaItems tbody tr').each(function () {
-        var dataFila = $('#tblListaItems').DataTable().row(this).data();
-        var item = {cantidad: dataFila[2], importe: dataFila[4], precio_unitario: dataFila[3], articulo: dataFila[1]};
-        //factura.items [cantidadProductos] = item;
-        cantidadProductos++;
-    });
-    var nada ="nada";
-    $.ajax({    //en esta peticion se busca obtener los datos del cliente para confecc. la factura
-        dataType: 'json', url: "/admin/clientes",
+function generarFactura(id_cliente, monto_factura) {    //Funciono OK desde pedidos → entregados
+    var factura = {
+        iva: null,
+        tipo_cbte: 'B',
+        nro_doc: $('#cuit').val(),
+        nombre_cliente: $('#nombreCliente').val(),
+        domicilio_cliente: $('#direccion').val(),
+        imp_total: $('#montoTotal').val(),
+        items: [],
+    };
+
+    $.ajax({    //en esta peticion se busca obtener los datos del cliente para confecc los comprobantes
+        dataType: 'json',
+        url: "/admin/clientes",
         data: {
-            id: id_cliente_pedidosPendientes,
+            id: id_cliente
         },
         success: function (data) {
-            console.log("De ClientesController se obtuvieron estos datos para FE: "+data);
-            console.log("El monto total que se manda a la FE es =" + montoTotal);
-
-            var factura = {
-                iva: $('#iva').val(),
-                tipo_cbte: $('#factura').val(),
-                nro_doc: $('#cuit').val(),
-                nombre_cliente: $('#nombreCliente').val(),
-                domicilio_cliente: $('#direccion').val(),
-                imp_total: $('#montoTotal').val(),
-                items: []
-            };
-
-            console.log(factura);
-
-            var data_2 = JSON.parse(data);
-            factura.tipo_cbte = data_2.tipo_cbte;
-            factura.nro_doc = data_2.dni;
-            factura.nombre_cliente = data_2.nombre;
-            factura.provincia_cliente = data_2.provincia;
-            factura.localidad_cliente = data_2.localidad;
-            factura.domicilio_cliente = data_2.domicilio;
-            factura.imp_total = montoTotal;
+            var data_cliente = JSON.parse(data);
+            console.log(data_cliente);
+            informacion_de_cliente = data_cliente;
+            factura.tipo_cbte = informacion_de_cliente.tipo_cbte;
+            factura.nro_doc = informacion_de_cliente.dni;
+            if(informacion_de_cliente.empresa =='' || informacion_de_cliente.empresa == null){   /**Si el cliente no tiene empresa*/
+                factura.nombre_cliente = informacion_de_cliente.nombre;         //grabar su nombre para la factura
+            }else{
+                factura.nombre_cliente = informacion_de_cliente.empresa;         //sino grabar nombre de la empresa para la factura, descartar nombre de representante
+            }
+            factura.provincia_cliente = informacion_de_cliente.provincia;
+            factura.localidad_cliente = informacion_de_cliente.localidad;
+            factura.domicilio_cliente = informacion_de_cliente.domicilio;
+            factura.imp_total = monto_factura;
             var array = JSON.stringify(factura);
             var enlace_factura = 'http://localhost/factura/dinamico-factura.php?&datos_factura=' + encodeURIComponent(array);
             window.open(enlace_factura);
+            $("#modal-ingresar-cae-despues").modal();
         }
+
     });
-    $('#form-crear').submit();      //actualiza el estado del pedido (pago completo, o entrega 'pedidos.update'
 }
+
+
+
+
 /** validar que se ingresen solo numeros en cantidad y en nro_cheque */
 $(document).ready(function () {
     $("#cantidad_number").keydown(function (e) {
@@ -811,14 +934,17 @@ function mostrarInfoTributaria(cliente_id){
         },
         dataType: 'json',
         success: function (data) {
-            console.log(data);
             var respuesta = JSON.parse(data);
             console.log(respuesta);
-            alert(respuesta.tieneCC);
             tieneCC = respuesta.tieneCC;
-            //$('#cliente').val($('#cliente').val() + respuesta.dni);
-            $('#responiva_select').val(respuesta.responiva+" (Factura "+respuesta.tipo_cbte+")");
             if(respuesta.responiva == 'Consumidor Final'){
+                cliente_es_cf = true;
+            }
+            else{
+                cliente_es_cf = false;
+            }
+            $('#responiva_select').val(respuesta.responiva+" (Factura "+respuesta.tipo_cbte+")");
+            if((respuesta.responiva == 'Consumidor Final') && ($("#pago_cheque_cf").val() == 0)){
                 $('#btn-pagarConCheque').prop('disabled',true);
             }else{
                 $('#btn-pagarConCheque').prop('disabled',false);
@@ -829,7 +955,6 @@ function mostrarInfoTributaria(cliente_id){
 }
 /** Al presionar 'Pagar con Cheque' cargar el cheque con la info del cliente y el pedido si no paga con seña ni es "Consumidor Final"*/
 function rellenarModalCheque(){
-    //if(pagarTotal == true){                       //si no se va a señar, permitir Pagar con Cheque
     var cliente_id = $('#cliente').val();
     $.ajax({
         url: "/admin/clientes",
@@ -842,7 +967,8 @@ function rellenarModalCheque(){
             var respuesta = JSON.parse(data);
             console.log(respuesta);
             if(respuesta.responiva == 'Consumidor Final'){
-                alert('No se permite el pago con cheque a clientes en carácter de "Consumidor Final"');
+                alert('✋ No se permite el pago con cheque a clientes en carácter de "Consumidor Final" ✋');
+                alert('ℹ️ Puede modificar esta opción en la configuracion gral. (arriba-derecha) ℹ️');
             }
             else{
                 $('#nombre_cheque').val(respuesta.n);
@@ -944,7 +1070,7 @@ function emitirTicket(informacion_de_cliente){
             comprobante = respuesta.comprobante_id;             //Funciona
             ticket.nro_comprobante = comprobante;
 
-            if(informacion_de_cliente.empresa==""){   /**Si el cliente no tiene empresa*/
+            if(informacion_de_cliente.empresa=="" || informacion_de_cliente.empresa==null){   /**Si el cliente no tiene empresa*/
             ticket.nombre_cliente = informacion_de_cliente.nombre;         //grabar su nombre para la factura
             }else{
                 ticket.nombre_cliente = informacion_de_cliente.empresa;         //sino grabar nombre de la empresa para la factura, descartar nombre de representante
@@ -976,16 +1102,16 @@ function email_info_pedido_cliente(lineas, sena, total){
     if(fecha_entrega_estimada==null){
         fecha_entrega_estimada = 'no se determino';
     }
-    console.log("cliente: "+$('#cliente').val()+"fecha entrega estimada"+fecha_entrega_estimada+" seña: "+sena+" total: "+total+" user: "+ user+ "fecha de hoy: "+ fecha_hoy);
+    //console.log("cliente: "+$('#cliente').val()+"fecha entrega estimada"+fecha_entrega_estimada+" seña: "+sena+" total: "+total+" user: "+ user+ "fecha de hoy: "+ fecha_hoy);
     $.ajax({
         url: "/admin/mail", dataType: 'json',
         data: {
             id_cliente: $('#cliente').val(),
             items:lineas,
-            fecha_entrega:fecha_entrega_estimada,
+            fecha_entrega: fecha_entrega_estimada,
             sena:sena, total:total,
             fecha_hoy:fecha_hoy,
-            email_info:true
+            email_info: true
         },
         success: function (data) {
             var recibido = JSON.parse(data);
@@ -993,6 +1119,7 @@ function email_info_pedido_cliente(lineas, sena, total){
         }
     })
 }
+
 /** Devuelve la fecha de HOY */
 function fechahoy(){
     var hoy = new Date();
@@ -1160,7 +1287,7 @@ function sugerirFechaDeEntrega() {
                 bootstrap_alert('#recomendacion', "Casi no hay entregas en lista de espera, el pedido puede encargarse para ser entregado hoy o mañana.", 9000)
             }
             else {
-                bootstrap_alert('#recomendacion', "Se sugiere un plazo de entrega minimo de acá a " + recibido.dias + "días habiles", 9000)
+                bootstrap_alert('#recomendacion', "Se sugiere un plazo de entrega minimo de acá a " + recibido.dias + " días habiles", 9000)
 
             }
         }
@@ -1181,7 +1308,7 @@ function cancelarPedido(id){
     })
 }
 
-/** esta funcion revisa si el cliente seleccionado tiene una CC actualmente activa */
+//** esta funcion revisa si el cliente seleccionado tiene una CC actualmente activa */
 /*
 function tieneCCactiva(){
     var tieneCC = false;
@@ -1201,3 +1328,122 @@ function tieneCCactiva(){
     })
 }
     */
+
+function guardar_data_afip(){  /** #1   Para usar desde tomar pedido*/
+    var cae = $('#cae').val();
+    var fecha_vencimiento_cae = $('#fecha_vencimiento_cae').val();
+    console.log(cae+", "+fecha_vencimiento_cae+", id_pedido:"+este_pedido_id);
+    $.ajax({
+        dataType: 'json', url: "/admin/pedidos/create",
+        data: {
+            ingresar_cae:true,
+            cae: cae,
+            fecha_vencimiento_cae: fecha_vencimiento_cae,
+            pedido_id: este_pedido_id,
+        },
+        success: function (data) {
+            var recibido = JSON.parse(data);
+            console.log(recibido);
+            if(recibido!=null){
+                $('#modal-ingresar-cae').modal('hide');
+                $('#mensajeExito').html();
+                $('#botonExito').click();
+            }
+        }
+    })
+}
+
+function guardar_data_afip_posteriormente(id_pedido){   /** #2   Para usar desde confirmar entrega pedido (pedido pasa a ser eregado)*/
+    var cae = $('#cae').val();
+    var fecha_vencimiento_cae = $('#fecha_vencimiento_cae').val();
+    console.log(cae+", "+fecha_vencimiento_cae+", id_pedido:"+id_pedido);
+    $.ajax({
+        dataType: 'json', url: "/admin/pedidos/create",
+        data: {
+            ingresar_cae:true,
+            cae: cae,
+            fecha_vencimiento_cae: fecha_vencimiento_cae,
+            pedido_id: id_pedido,
+        },
+        success: function (data) {
+            var recibido = JSON.parse(data);
+            console.log(recibido);
+            if(recibido!=null){
+                $('#modal-ingresar-cae-despues').modal('hide');
+                $('#mensajeExito').html();
+                $('#botonExito').click();
+            }
+        }
+    })
+}
+
+var token = $("#token-edit").val();
+function actualizarProgreso(){
+    $.ajax({
+        dataType: 'JSON', url: "/admin/pedidos/create", /*no se como enviar a edit o update y que ande :(*/
+        data: {
+            headers: {"X-CSRF-TOKEN": token},
+            progreso: $('#progreso').val(),
+            pedido_id: $('#pedido_id').val(),
+        },
+        success: function (data) {
+            var recibido = JSON.parse(data);
+            console.log(recibido);
+            window.location.reload(false);
+
+        }
+    })
+}
+
+/** Al presionar 'Abonar restante con Cheque' cargar el cheque con la info del cliente y el pedido*/
+function rellenarModalCheque_2(){
+    $('#modal-confirmar').modal('hide');
+    var cliente_id = $('#cliente_oculto_id').val();    //campo invisible en 'showPedido.blade'
+    var restaAbonar_oculto = $('#restaAbonar_oculto').val();
+    $.ajax({
+        url: "/admin/clientes",
+        data: {
+            id:cliente_id,
+        },
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            var respuesta = JSON.parse(data);
+            console.log(respuesta);
+            if(respuesta.responiva == 'Consumidor Final'){
+                alert('No se permite el pago con cheque a clientes en carácter de "Consumidor Final"');
+            }
+            else{
+                $('#nombre_cheque').val(respuesta.n);
+                $('#apellido_cheque').val(respuesta.a);
+                $('#empresa_cheque').val(respuesta.empresa);
+                $('#cuit_cheque').val(respuesta.dni);
+                $('#monto_cheque').val(restaAbonar_oculto);
+                $("#modal-create-cheque-2").modal();              //Abrir el modal de cheque
+            }
+        }
+    });
+    //}
+    //else{
+    //  alert('No se puede pagar con cheque una seña, solo totalidad');
+    //}
+}
+
+/**** Actualizar hora constantemente****/
+setInterval(function() {
+    var currentTime = new Date ( );
+    var currentHours = currentTime.getHours ( );
+    var currentMinutes = currentTime.getMinutes ( );
+    var currentSeconds = currentTime.getSeconds ( );
+    currentMinutes = ( currentMinutes < 10 ? "0" : "" ) + currentMinutes;
+    currentSeconds = ( currentSeconds < 10 ? "0" : "" ) + currentSeconds;
+    var timeOfDay = ( currentHours < 12 ) ? "AM" : "PM";
+    currentHours = ( currentHours > 12 ) ? currentHours - 12 : currentHours;
+    currentHours = ( currentHours == 0 ) ? 12 : currentHours;
+    var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
+    document.getElementById("hora_actual").innerHTML = currentTimeString;
+}, 1000);
+
+
+
+

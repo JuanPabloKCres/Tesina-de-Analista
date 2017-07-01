@@ -14,8 +14,10 @@ use App\Http\Requests;
 use App\Http\Requests\ArticuloRequestCreate;
 use App\Http\Requests\ArticuloRequestEdit;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Laracasts\Flash\Flash;
 use Illuminate\Routing\Route;
+
 
 class ArticulosController extends Controller
 {
@@ -32,7 +34,6 @@ class ArticulosController extends Controller
 
         }
     }
-
     /*
     * 	Si la solicitud fue realizada utilizando ajax se busca y se devuelve nombre del articulo solicitado;
     * sino se devuelve la vista con los registros.
@@ -45,8 +46,8 @@ class ArticulosController extends Controller
                 $precio = $articulo->precioVta;
                 return response()->json(json_encode($precio, true));
             }
-            elseif($request->comprobarSiHayInsumosSuficientes){             //bandera antes de consultar
-                $aceptarPedido = false;
+            elseif($request->comprobarSiHayInsumosSuficientes){             //bandera antes de consultar (pluguinsPedidos.js)
+                $aceptarPedido = true;             //se deberia aceptar el articulo, a no ser que se encuentre que ALMENOS UN insumo es insuficiente
                 $id = $request->id;
                 $insumosArticulo= InsumoArticulo::where('articulo_id', $id)->get();          //devuelve los insumos_articulo vinculados a un Articulo
                 foreach($insumosArticulo as $ia){
@@ -58,9 +59,6 @@ class ArticulosController extends Controller
                         $faltante = $cantidadNecesaria - $stockDisponible;
                         $listado_insumos_faltantes[] = array("mensaje"=>'No hay stock suficiente para cubrir el pedido (faltan ', "faltante"=>$faltante, "permitir"=>false, "insumo"=>$insumo->nombre, "unidad"=>$insumo->unidad_medida->unidad);
                         $aceptarPedido = false;
-                    }
-                    else{
-                        $aceptarPedido = true;            //se deberia aceptar el articulo
                     }
                 }
                 //*datos de horas de produccion por articulo
@@ -89,7 +87,7 @@ class ArticulosController extends Controller
                 return response()->json(json_encode($datosValidados, true));
             }
         }
-        $articulos = Articulo::all();
+        $articulos = Articulo::where('estado',"se produce")->get();
         $ventas = Venta::all();
         if ($articulos->count() == 0) { // la funcion count te devuelve la cantidad de registros contenidos en la cadena
             return view('admin.articulos.sinRegistros'); //se devuelve la vista para crear un registro
@@ -122,7 +120,7 @@ class ArticulosController extends Controller
             $articulo->margen = $request->margen;           #ok
             $articulo->ganancia = $request->gananciaArticulo;       #ok
             $articulo->precioVta = $request->precioVta;             #ok
-            $articulo->estado = 'se fabrica';
+            $articulo->estado = 'se produce';
             $articulo->descripcion = 'no hay';
             $articulo->cantidad_insumos = 1;
             //↓ nuevo
@@ -178,6 +176,21 @@ class ArticulosController extends Controller
     public function update(Request $request, $id)
     {
         $articulo = Articulo::find($id);
+        $validator = Validator::make($request->all(), [
+            //'nombre' => 'required|max:50|unique:articulos,nombre,'.$this->route->getParameter('articulos'),
+            'horas_produccion' => 'min:0|numeric',
+            'precioVta' => 'min:0|numeric',
+            'montoIva' => 'min:0|numeric',
+            'ganancia' => 'min:0|numeric',
+            'margen' => 'min:0|numeric',
+            'costo' => 'min:0|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('admin/articulos/'.$id)
+                ->withErrors("El formulario tiene caracteres en campos numericos")
+                ->withInput();
+        }
         $articulo->fill($request->all());
         $articulo->save();
         Flash::success("Se ha realizado la actualización del registro: ".$articulo->nombre.".");
@@ -189,7 +202,9 @@ class ArticulosController extends Controller
     {
         $articulo = Articulo::find($id);
         $dato_anterior = "nombre: ".$articulo->nombre." || alto: ".$articulo->alo." || ancho: ".$articulo->ancho." || tipo_id:".$articulo->tipo_id." ".$articulo->talle_id." || color_id: ".$articulo->color_id." || costo:".$articulo->costo." || margen:".$articulo->margen." || ganancia:".$articulo->ganancia." || precioVta:".$articulo->precioVta." || estado:".$articulo->estado;
-        $articulo->delete();
+        //$articulo->delete();
+        $articulo->estado = "no disponible";
+        $articulo->save();
         /** Auditoria cambio de estado */
         $auditoria = new Auditoria();
         $auditoria->tabla = "articulos";

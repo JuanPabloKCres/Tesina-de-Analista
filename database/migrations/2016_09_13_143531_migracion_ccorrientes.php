@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class MigracionCuentasCorrientes extends Migration
+class MigracionCCorrientes extends Migration
 {
     /**
      * Run the migrations.

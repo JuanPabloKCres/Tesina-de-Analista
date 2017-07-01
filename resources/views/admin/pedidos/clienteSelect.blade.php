@@ -1,5 +1,5 @@
 <div class="form-group ">
-    <label class="col-sm-3 ">Cliente</label>
+    <label class="col-sm-3 ">Cliente:</label>
     <div class="col-sm-8 controls">
         <div class="row">
             <div class="col-xs-8">

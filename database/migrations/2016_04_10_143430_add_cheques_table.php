@@ -23,6 +23,7 @@ class AddChequesTable extends Migration
             $table->double('monto');
             $table->string('fecha_emision');
             $table->string('fecha_cobro');
+            $table->boolean('cobrado');
             $table->timestamps();
         });
     }

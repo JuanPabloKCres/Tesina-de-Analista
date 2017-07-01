@@ -172,29 +172,29 @@
         <!-- TABLA de DETALLE -->
         <div id="tab-lista2" class="tablaResultados2">
             <div class="panel panel-info">
-                <div class="panel-heading">Listado de Insumos del Articulo</div>
+                <div class="panel-heading">Listado de Insumos (que requiere el Articulo para su confección)</div>
                 <div class="panel-body">
                     <br>
                     <table id="tblListaInsumos" class="display table table-hover table-striped">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Insumo</th>
-                            <th>Cantidad</th>
-                            <th>Unidad de cantidad</th>
-                            <th>Precio unitario</th>
-                            <th>Importe total</th>
+                            <th class="text-center">ID</th>
+                            <th class="text-center">Insumo</th>
+                            <th class="text-center">Cantidad</th>
+                            <th class="text-center">Unidad de cantidad</th>
+                            <th class="text-center">Precio unitario</th>
+                            <th class="text-center">Importe total</th>
                         </tr>
                         </thead>
                         <tbody></tbody>
                         @foreach($articulo->insumos_articulos as $insumo)
                          <tr>
                             <td class="text-center">{{ $insumo->insumo->id }}</td>
-                            <td class="text-center">{{ $insumo->insumo->nombre }}</td>
+                            <td class="text-center">{{ $insumo->insumo->nombre }} (stock actual {{ $insumo->insumo->stock }} {{ $insumo->insumo->unidad_medida->unidad }})</td>
                             <td class="text-center">{{ $insumo->cantidad }}</td>
                             <td class="text-center">{{ $insumo->insumo->unidad_medida->unidad }}</td>
-                            <td class="text-center">{{ $insumo->insumo->costo }}</td>
-                            <td class="text-center">{{ $insumo->insumo->costo * $insumo->cantidad }}</td>
+                            <td class="text-center">$ {{ $insumo->insumo->costo }}</td>
+                            <td class="text-center">$ {{ $insumo->insumo->costo * $insumo->cantidad }}</td>
                          </tr>
                         @endforeach
                     </table>

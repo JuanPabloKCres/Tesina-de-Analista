@@ -9,7 +9,19 @@
             </div>
 
             @if($articulo->articulos_venta->count() != 0)
-                 @include('admin.partes.msjRegAsociados')
+                <div class="modal-body">
+                    {!! Form::open(['route' => ['admin.articulos.destroy', $articulo], 'method' => 'DELETE']) !!}
+                    Se modificara el estado del articulo a "No se fabrica"
+                    @include('admin.partes.msjConfirmar')
+                    <hr>
+                    <div class="pull-right">
+                        <button type="button" data-dismiss="modal" class="btn btn-white"> Cerrar</button>
+                        {!! Form::submit('Eliminar registro', ['class' => 'btn btn-danger ']) !!}
+                    </div>
+                    <br>
+                    {!! Form::close() !!}
+                    <br>
+                </div>
             @else
                 <div class="modal-body">
                     {!! Form::open(['route' => ['admin.articulos.destroy', $articulo], 'method' => 'DELETE']) !!}

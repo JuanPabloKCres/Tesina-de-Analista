@@ -45,7 +45,7 @@
                         <div class="col-lg-12">
                             <div class="panel ">
                                     <div class="panel-body">
-                                        <h3>Detalle de caja</h3>
+                                        {{-- <h3>Detalle de caja</h3> --}}
                                         <br>
                                             <div class="row mtl">
                                                 <div class="col-md-6">

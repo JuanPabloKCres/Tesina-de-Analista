@@ -13,11 +13,12 @@ Pedidos - Detalle de un pedido
 <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
     <div class="page-header pull-left">
         @if (($pedido->pagado)&&($pedido->entregado))
-        <div class="page-title">Historial de ventas / Detalle del presupuesto</div>
+            <div class="page-title">Historial de ventas / Detalle del presupuesto</div>
         @else
-        <div class="page-title">Pedidos / Detalle del presupuesto</div>
+            <div class="page-title">Pedidos / Detalle del presupuesto</div>
         @endif
     </div>
+    @include('admin.pedidos.ingresarCAE_despues')
     <div class="page-header pull-right">
         <div class="page-toolbar">
             <a data-toggle="tooltip" data-placement="bottom" href="{{ route('admin.pedidos.index') }}" title="Volver a los registros de pedidos"  class="btn btn-blue"> <span class="fa fa-arrow-circle-o-left" aria-hidden="true"></span> Volver</a>
@@ -51,6 +52,7 @@ Pedidos - Detalle de un pedido
                                             <tbody>
                                                 <tr>
                                                     <td><h4 class="box-heading">Apellido y nombre:</h4></td>
+                                                    <input type="hidden" name="cliente_oculto_id" id="cliente_oculto_id" value="{{ $pedido->cliente->id }}"> {{-- Invisible--}}
                                                     <td><h4 id="nombreCliente">{{ $pedido->cliente->apellido }},  {{ $pedido->cliente->nombre }}</h4></td>
                                                 </tr>
                                             </tbody>
@@ -61,10 +63,10 @@ Pedidos - Detalle de un pedido
                                             <tbody>
                                                 <tr>
                                                     @if ($pedido->cliente->cuit)                                                      
-                                                    <td><h4 class="box-heading">Cuit:</h4></td>
+                                                    <td><h4 class="box-heading">CUIT:</h4></td>
                                                     <td><h4 id="cuit">{{ $pedido->cliente->cuit }}</h4></td>                                                      
                                                     @else
-                                                    <td><h4 class="box-heading">Dni:</h4></td>
+                                                    <td><h4 class="box-heading">DNI:</h4></td>
                                                     <td><h4 id="cuit">{{ $pedido->cliente->dni }}</h4></td>
                                                     @endif
                                                 </tr>
@@ -89,7 +91,7 @@ Pedidos - Detalle de un pedido
                                                 <tr class="info">
                                                     <td><h4 class="box-heading">Teléfono:</h4></td>
                                                     @if ($pedido->cliente->telefono)
-                                                    <td><h4>{{ $pedido->cliente->telefono }}</h4></td>
+                                                    <td><h4>📞 {{ $pedido->cliente->telefono }}</h4></td>
                                                     @else
                                                     <td><h4>No se registró</h4></td>
                                                     @endif
@@ -103,9 +105,9 @@ Pedidos - Detalle de un pedido
                                                 <tr class="warning">
                                                     <td><h4 class="box-heading">Email:</h4></td>
                                                     @if ($pedido->cliente->email)
-                                                    <td><h4>{{  $pedido->cliente->email }}</h4></td>
+                                                        <td><h4>{{  $pedido->cliente->email }}</h4></td>
                                                     @else
-                                                    <td><h4>No se registró</h4></td>
+                                                        <td><h4>No se registró</h4></td>
                                                     @endif
                                                 </tr>
                                             </tbody>
@@ -117,9 +119,9 @@ Pedidos - Detalle de un pedido
                                                 <tr class="warning">
                                                     <td><h4 class="box-heading">Dirección:</h4></td>
                                                     @if ($pedido->cliente->direccion)
-                                                    <td><h4 id="direccion">{{$pedido->cliente->direccion}}</h4></td>
+                                                        <td><h4 id="direccion">{{$pedido->cliente->direccion}}</h4></td>
                                                     @else
-                                                    <td><h4 id="direccion">No se registró</h4></td>
+                                                        <td><h4 id="direccion">No se registró</h4></td>
                                                     @endif
                                                 </tr>
                                             </tbody>

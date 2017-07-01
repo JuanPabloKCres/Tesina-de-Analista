@@ -20,7 +20,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2">
-                            <div class="panel panel-red">
+                            <div class="panel panel-red animated bounceInLeft">
                                 <div class="panel-heading">
                                     GN Soluciones | Login al Sistema de Gestión
                                 </div>

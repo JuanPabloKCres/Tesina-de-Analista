@@ -9,22 +9,35 @@
                     @include('flash::message')   
                     <table id="tab-movimientos" class="dataTable display table table-hover table-striped">
                         <thead>
-                            <tr> 
-                                <th>Concepto</th>                                
-                                <th>Fecha y hora</th>
-                                <th>Tipo</th>   
-                                <th>Monto</th>                             
-                                <th>Usuario</th>    
+                            <tr>
+                                <th class="text-center">N°</th>
+                                <th class="text-center">Concepto</th>
+                                <th class="text-center">Fecha y hora</th>
+                                <th class="text-center">Tipo</th>
+                                <th class="text-center">Monto</th>
+                                <th class="text-center">Usuario</th>
                             </tr>
                         </thead>
                         <tbody>
                         @foreach($caja->movimientos as $movimiento)
-                            <tr>     
-                                <td>{{ $movimiento->concepto }}</td>                                     
-                                <td>{{ $movimiento->fecha }} - {{ $movimiento->hora }}</td>    
-                                <td>{{ $movimiento->tipo }}</td>                         
-                                <td>${{ $movimiento->monto }}</td>                                                                                                          
-                                <td>{{ $movimiento->user->name}}</td>                                 
+                            <tr>
+                                <td class="text-center">{{ $movimiento->id }}</td>
+                                @if($movimiento->ccorriente)
+                                    <td class="text-center text-dark">{{ $movimiento->concepto }} ({{ $movimiento->ccorriente->cliente->nombre}} {{ $movimiento->ccorriente->cliente->apellido}})</td>
+                                @else
+                                    <td class="text-center text-dark">{{ $movimiento->concepto }}</td>
+                                @endif
+                                <td class="text-center">{{ $movimiento->fecha }} - {{ $movimiento->hora }}</td>
+                                @if($movimiento->tipo=="entrada")
+                                    <td class="text-center">Entrada 📈️</td>
+                                @else
+                                    <td class="text-center">Salida &nbsp;&nbsp; 📉️️</td>
+                                @endif
+
+                                <td class="text-center">${{ $movimiento->monto }}</td>
+                                @if($movimiento->monto)
+                                <td class="text-center">{{ $movimiento->user->name}}</td>
+                                @endif
                             </tr>                                                  
                         @endforeach
                         </tbody>

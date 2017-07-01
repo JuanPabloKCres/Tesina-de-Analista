@@ -1,7 +1,7 @@
 @extends('admin.partes.index')
 
 @section('title')
-    Detalle de la caja
+    Cuentas Corrientes
 @endsection
 
 @section('sidebar')
@@ -41,8 +41,9 @@
                         <div class="col-lg-12">
                             <div class="panel ">
                                 <div class="panel-body">
-                                    <h3>Detalle de Cuentas Corrientes</h3>
+                                    <h3>Información gral. de Cuentas Corrientes</h3>
                                     <br>
+                                    {{--
                                     <div class="row mtl">
                                         <div class="col-md-6">
                                             <table class="table table-striped table-hover">
@@ -65,12 +66,13 @@
                                             </table>
                                         </div>
                                     </div>
+                                    --}}
                                     <div class="row mtl">
                                         <div class="col-md-3">
                                             <table class="table table-striped table-hover">
                                                 <tbody>
                                                 <tr class="info">
-                                                    <td><h4 class="box-heading">Debe:</h4></td>
+                                                    <td class="text-center"><h4 class="box-heading">Debe: &nbsp;&nbsp;$ {{ \App\CuentaCorriente::sumatoriaDebesCuentasCorrientes() }}</h4></td>
 
                                                 </tr>
                                                 </tbody>
@@ -80,7 +82,7 @@
                                             <table class="table table-striped table-hover">
                                                 <tbody>
                                                 <tr class="warning">
-                                                    <td><h4 class="box-heading">Haber:</h4></td>
+                                                    <td class="text-center"><h4 class="box-heading">Haber: &nbsp;&nbsp;$ {{ \App\CuentaCorriente::sumatoriaHaberesCuentasCorrientes() }}</h4></td>
 
                                                 </tr>
                                                 </tbody>
@@ -89,10 +91,15 @@
                                         <div class="col-md-3">
                                             <table class="table table-striped table-hover">
                                                 <tbody>
-                                                <tr class="danger">
-                                                    <td><h4 class="box-heading">Saldo:</h4></td>
-
-                                                </tr>
+                                                @if(( \App\CuentaCorriente::sumatoriaHaberesCuentasCorrientes() - \App\CuentaCorriente::sumatoriaDebesCuentasCorrientes() > 0))
+                                                    <tr class="success">
+                                                        <td class="text-center"><h4 class="box-heading">Dinero inyectado: &nbsp;&nbsp;$  {{ \App\CuentaCorriente::sumatoriaHaberesCuentasCorrientes() - \App\CuentaCorriente::sumatoriaDebesCuentasCorrientes() }}</h4></td>
+                                                    </tr>
+                                                @else
+                                                    <tr class="danger">
+                                                        <td class="text-center"><h4 class="box-heading">Dinero por cobrar: &nbsp;&nbsp;$  {{ \App\CuentaCorriente::sumatoriaHaberesCuentasCorrientes() - \App\CuentaCorriente::sumatoriaDebesCuentasCorrientes() }}</h4></td>
+                                                    </tr>
+                                                @endif
                                                 </tbody>
                                             </table>
                                         </div>
@@ -100,7 +107,7 @@
                                             <table class="table table-striped table-hover">
                                                 <tbody>
                                                 <tr class="success">
-                                                    <td><h4 class="box-heading">Cuentas Activas:</h4></td>
+                                                    <td class="text-center"><h4 class="box-heading">Cuentas Activas:  &nbsp;&nbsp;  {{ $cuentascorrientes->where('activa',1)->count() }}</h4></td>
 
                                                 </tr>
                                                 </tbody>

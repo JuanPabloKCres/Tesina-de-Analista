@@ -47,7 +47,7 @@
                                                 <th class="text-center">Fecha de Creación</th>
                                                 <th class="text-center">Fecha de Modificación</th>
                                                 <th class="text-center">id_usuario</th>
-                                                <th class="text-center">Acciones</th>
+                                                <th class="text-center">Ver</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -99,7 +99,8 @@
                                                 @endif
 
                                                 @if($auditoria->usuario_id)
-                                                    <td class="text-center">{{ $auditoria->usuario_id}}</td>
+                                                    <?php $user = \App\User::where('id',$auditoria->usuario_id)->get() ;?>
+                                                    <td class="text-center">{{ $auditoria->usuario_id}} ({{ $user }}</td>
                                                 @else
                                                     <td class="text-center">{{ "No se registro" }}</td>
                                                 @endif
